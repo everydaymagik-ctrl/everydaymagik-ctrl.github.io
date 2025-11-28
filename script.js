@@ -31,24 +31,24 @@ function switchView(viewId) {
 // 2. LIBRARY / PDF READER LOGIC
 // ==========================================
 function openReader(pdfPath) {
+    // 📱 MOBILE LOGIC: Open in new tab immediately
+    if (window.innerWidth <= 768) {
+        window.open(pdfPath, '_blank');
+        return; // Stop execution here so overlay doesn't open
+    }
+
+    // 🖥️ DESKTOP LOGIC: Open in embedded overlay
     const overlay = document.getElementById('pdf-reader-overlay');
     const frame = document.getElementById('pdf-frame');
     
     if(overlay && frame) {
         let params = "";
         
-        // 📱 MOBILE LOGIC:
-        // Strip all parameters. Allow native mobile PDF viewer to handle scroll/zoom naturally.
-        if (window.innerWidth <= 768) {
-            params = ""; 
+        // Custom Zoom Logic for Desktop
+        if (pdfPath.includes('01-book')) {
+            params = "#page=1&zoom=90&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         } else {
-            // 🖥️ DESKTOP LOGIC:
-            // Apply specific zoom and layout locks for a cleaner desktop experience.
-            if (pdfPath.includes('01-book')) {
-                params = "#page=1&zoom=90&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
-            } else {
-                params = "#page=1&zoom=50&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
-            }
+            params = "#page=1&zoom=50&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         }
         
         frame.src = pdfPath + params; 
@@ -71,7 +71,6 @@ function closeReader() {
         document.body.classList.remove('no-scroll');
     }
 }
-
 
 // ==========================================
 // 3. ALIEN CANVAS CLOCK LOGIC
