@@ -1,0 +1,265 @@
+/* FINAL THEME DEFINITION */
+:root {
+    --bg-color: #FFFAFA; /* Default: Light (Milk White) Background */
+    --text-color: #333333; /* Default: Dark Text */
+    --accent-color: #FFD700; /* Default: Golden Yellow Accent */
+    --link-color: #666666; /* Default: Link/Description Text */
+}
+
+/* AUTOMATIC DARK THEME APPLICATION */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #000000; /* True Black Black Background */
+        --text-color: #CCCCCC; /* Light Gray Text */
+        --accent-color: #00FF41; /* Matrix Green Accent */
+        --link-color: #00FF41; /* Link/Description Text (Matches Accent) */
+    }
+}
+
+/* --- BASE BODY & FONT --- */
+body {
+    background-color: var(--bg-color);
+    font-family: 'Playfair Display', serif;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.5s ease;
+}
+
+/* NEW: Animation & Image Opacity Control */
+.hero-image img {
+    transition: opacity 0.05s ease-out; 
+    opacity: 1; 
+}
+
+.flash-out {
+    opacity: 0.1 !important; 
+}
+
+/* NEW: Page Shake Effect */
+.shake {
+    transform: translate(1px, 1px) rotate(0.1deg); 
+}
+
+/* --- HERO SECTION (Outer Flex Container) --- */
+.hero-section {
+    display: flex; 
+    flex-direction: row; 
+    align-items: stretch;
+    width: 100vw;
+    min-height: 100vh;
+    gap: 0;
+    transform: scale(0.9); 
+    transform-origin: center center;
+    transition: transform 0.05s ease-out;
+}
+
+/* --- TEXT CONTENT (50% Split) --- */
+.hero-content {
+    flex: 0 0 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px; 
+    text-align: left;
+}
+
+/* --- IMAGE CONTENT (50% Split) --- */
+.hero-image {
+    flex: 0 0 50%;
+    overflow: hidden;
+}
+
+.hero-image img {
+    width: 100%;
+    height: 100%;
+    display: block; 
+    border-radius: 0;
+    filter: grayscale(30%);
+    object-fit: cover; 
+}
+
+/* --- TYPOGRAPHY --- */
+.main-title {
+    color: var(--text-color); 
+    font-size: 7em;
+    margin: 0; 
+    letter-spacing: 0.25em; 
+    line-height: 0.8; 
+    text-transform: uppercase;
+    font-weight: 700; 
+}
+
+.sub-title {
+    color: var(--accent-color); 
+    font-size: 6em; 
+    margin: 0; 
+    letter-spacing: 0.15em; 
+    line-height: 0.8;
+    text-transform: uppercase;
+    transition: color 0.2s ease;
+}
+
+.description {
+    color: var(--link-color); 
+    font-size: 1.5em;
+    margin-top: 30px;
+    font-style: italic;
+    display: block;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+/* --- CLOCK INTEGRATION --- */
+.clock-container {
+    display: inline-block;
+    margin: 20px 0; 
+    padding: 0;
+}
+
+#digital-clock {
+    width: 150px;
+    height: 60px;
+}
+
+/* Accessibility Helper Hiding */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* --- MUSIC PLAYER STYLES (Used on player.html only) --- */
+.player-body {
+    display: flex; 
+    min-height: 100vh;
+    align-items: center; 
+    justify-content: center; 
+    transform: none; 
+    transition: none;
+}
+
+#music-player-container {
+    margin-top: 0;
+    padding: 10px 20px 20px;
+    border: 2px solid var(--text-color);
+    background-color: var(--bg-color); 
+    width: 300px;
+    min-height: 400px; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Player Visuals & Controls (Final Styles) */
+.album-art-large {
+    width: 150px;
+    height: 150px;
+    background-color: var(--text-color); 
+    border: 4px solid var(--accent-color);
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    position: relative;
+}
+
+.album-art-large::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 25px;
+    height: 25px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+}
+
+.song-title, .song-artist, .track-info {
+    color: var(--text-color);
+    margin: 3px 0;
+    text-align: center;
+}
+
+.track-info {
+    font-size: 0.9em;
+    color: var(--link-color);
+    margin-bottom: 20px;
+}
+
+.progress-bar-container {
+    height: 8px;
+    background-color: var(--link-color);
+    border-radius: 4px;
+    margin: 25px 0;
+    cursor: pointer;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background-color: var(--accent-color);
+    border-radius: 4px;
+    transition: width 0.1s linear;
+}
+
+/* FIX: Added flex properties to bottom controls to prevent overflow */
+.bottom-controls {
+    display: flex; 
+    justify-content: space-between;
+    padding-top: 15px;
+    gap: 10px; /* Spacing between buttons */
+}
+
+.control-inactive, .control-active {
+    /* FIX: Added flex-grow to ensure the button shrinks/grows to fit the container */
+    flex: 1; 
+    
+    padding: 8px 6px; /* Slightly reduced horizontal padding */
+    border: 1px solid var(--link-color);
+    cursor: pointer;
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    text-align: center; 
+    white-space: nowrap; 
+}
+
+.control-inactive {
+    background: transparent;
+    color: var(--link-color);
+}
+
+.control-active {
+    background: var(--accent-color);
+    color: var(--text-color);
+    font-weight: bold;
+    border-color: var(--accent-color);
+}
+
+/* --- MOBILE RESPONSIVENESS (< 600px) --- */
+@media (max-width: 600px) {
+    .main-title { font-size: 3.5em; }
+    .sub-title { font-size: 3em; }
+    
+    .hero-section { 
+        flex-direction: column; 
+        width: 100%; 
+        min-height: auto; 
+        transform: none; /* Remove scaling on mobile */
+    }
+    
+    .hero-content { 
+        flex: 0 0 auto; 
+        padding: 40px; 
+        text-align: center; 
+    }
+    
+    .hero-image { 
+        flex: 0 0 auto; 
+        height: 300px;
+    }
+}

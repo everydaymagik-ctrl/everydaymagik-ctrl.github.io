@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Simulation Player</title>
+    <link rel="stylesheet" href="styles.css"> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+</head>
+<body class="player-body">
+    
+    <p style="text-align: center; margin-top: 40px;">
+        <a href="index.html" class="control-active" style="padding: 10px 20px; text-decoration: none;">&larr; Back to Vibe Site</a>
+    </p>
+
+    <div class="player-center-wrapper player-flex-center">
+        <div id="music-player-container">
+            <div class="player-visuals">
+                <div class="album-art-large"></div> 
+                <p class="song-title">Loading...</p>
+                <p class="song-artist"></p>
+                <p class="track-info"></p>
+            </div>
+            
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill"></div>
+            </div>
+            
+            <div class="bottom-controls">
+                <button id="prev-btn" class="control-active">Prev</button>
+                <button id="play-pause-btn" class="control-active">Play</button>
+                <button id="next-btn" class="control-active">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <audio id="vibe-audio" preload="auto"></audio>
+    
+    <script src="script.js"></script>
+    <script>
+        // This ensures the DOM is fully loaded before trying to run the script.
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // This function is expected to be defined in script.js
+            if (typeof initializePlayer === 'function') {
+                initializePlayer();
+            }
+        });
+    </script>
+</body>
+</html>
