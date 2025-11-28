@@ -37,12 +37,12 @@ function openReader(pdfPath) {
     if(overlay && frame) {
         let params = "";
         
-        // Check if user is on Mobile (Screen narrower than 768px)
+        // Standardize params to ensure mobile behaves
         if (window.innerWidth <= 768) {
-            // MOBILE: Force Single Page, Fit Width (Enables Scrolling)
-            params = "#page=1&view=FitH&pagemode=none&scrollbar=1&toolbar=0&navpanes=0";
+            // Mobile: Simple view, let the iframe scroll naturally
+            params = "#toolbar=0&navpanes=0&scrollbar=1&view=FitH";
         } else {
-            // DESKTOP: Keep the "Book" Aesthetic (Two Page, Zoomed Out)
+            // DESKTOP: Custom Zoom Logic
             if (pdfPath.includes('01-book')) {
                 // Book 01: 10% zoom out (90% scale)
                 params = "#page=1&view=TwoColumn&zoom=90&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
@@ -53,7 +53,10 @@ function openReader(pdfPath) {
         }
         
         frame.src = pdfPath + params; 
-        overlay.classList.remove('hidden-view'); 
+        overlay.classList.remove('hidden-view');
+        
+        // LOCK BODY SCROLL
+        document.body.classList.add('no-scroll');
     }
 }
 
@@ -64,6 +67,9 @@ function closeReader() {
     if(overlay && frame) {
         overlay.classList.add('hidden-view'); 
         frame.src = ""; 
+        
+        // UNLOCK BODY SCROLL
+        document.body.classList.remove('no-scroll');
     }
 }
 
@@ -198,6 +204,7 @@ function closeReader() {
 
     if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', startClock); } else startClock();
 })();
+
 
 // ==========================================
 // 4. IMAGE INTERACTIVITY

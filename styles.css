@@ -23,6 +23,14 @@ body {
     overflow-x: hidden;
 }
 
+/* Lock body scroll when reader is open */
+body.no-scroll {
+    overflow: hidden;
+    height: 100vh;
+    position: fixed;
+    width: 100%;
+}
+
 /* --- SPA VIEW UTILITIES --- */
 .active-view {
     display: block; 
@@ -169,7 +177,6 @@ body {
     cursor: pointer;
     max-width: 160px;
     margin: 0 auto;
-    /* Aspect Ratio for uniform size */
     aspect-ratio: 2 / 3;
 }
 
@@ -189,13 +196,12 @@ body {
 
 .book-item:hover img { filter: brightness(1); }
 
-/* PDF Reader Overlay (UPDATED FOR MOBILE SCROLL) */
+/* PDF Reader Overlay */
 #pdf-reader-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.95); z-index: 1000;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     animation: fadeIn 0.5s ease;
-    /* IMPORTANT: Enables scrolling on iOS Safari */
     -webkit-overflow-scrolling: touch;
     overflow-y: auto;
 }
@@ -203,7 +209,6 @@ body {
     width: 90%; height: 85%; 
     border: none; border-radius: 8px; 
     box-shadow: 0 0 50px rgba(255,255,255,0.1);
-    /* IMPORTANT: Prevents iframe collapse on mobile */
     min-height: 80vh;
 }
 .close-reader-btn { margin-bottom: 15px; background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-family: var(--font-ui); text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s; }
