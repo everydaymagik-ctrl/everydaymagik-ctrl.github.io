@@ -1,14 +1,45 @@
 // ==========================================
-// 1. ALIEN CANVAS CLOCK LOGIC
+// 1. SPA NAVIGATION LOGIC
+// ==========================================
+function switchView(viewId) {
+    // Hide all views
+    document.getElementById('home-view').classList.add('hidden-view');
+    document.getElementById('home-view').classList.remove('active-view');
+    
+    document.getElementById('player-view').classList.add('hidden-view');
+    document.getElementById('player-view').classList.remove('active-view', 'player-body'); 
+    
+    document.getElementById('vlog-view').classList.add('hidden-view');
+    document.getElementById('vlog-view').classList.remove('active-view', 'player-body');
+
+    // Show selected view
+    const view = document.getElementById(viewId);
+    view.classList.remove('hidden-view');
+    view.classList.add('active-view');
+
+    // Apply special centering class for Player/Vlog
+    if (viewId === 'player-view' || viewId === 'vlog-view') {
+        view.classList.add('player-body');
+    }
+
+    // Init Vlog if needed
+    if (viewId === 'vlog-view') {
+        initializeVlog();
+    }
+}
+
+// ==========================================
+// 2. ALIEN CANVAS CLOCK LOGIC
 // ==========================================
 (function () {
     const canvas = document.getElementById('digital-clock');
-    if (!canvas) return; // Safely exit if not on homepage
+    if (!canvas) return; 
     const ctx = canvas.getContext('2d');
 
     function resize() {
         const rect = canvas.getBoundingClientRect();
         const ratio = window.devicePixelRatio || 1;
+        if (rect.width === 0) return; 
         canvas.width = Math.max(1, Math.floor(rect.width * ratio));
         const desiredHeight = rect.height || 50; 
         canvas.height = Math.max(1, Math.floor(desiredHeight * ratio));
@@ -90,22 +121,24 @@
         
         const w = canvas.width / (window.devicePixelRatio || 1);
         const h = canvas.height / (window.devicePixelRatio || 1);
-        ctx.clearRect(0, 0, w, h);
+        
+        if (w > 0 && h > 0) {
+            ctx.clearRect(0, 0, w, h);
+            const cols = 6;
+            const gap = Math.min(24, w * 0.02);
+            const boxW = (w - gap * (cols - 1)) / cols;
+            const boxH = Math.min(h, boxW * 0.9);
+            const startX = (w - (boxW * cols + gap * (cols - 1))) / 2;
+            const y = (h - boxH) / 2;
 
-        const cols = 6;
-        const gap = Math.min(24, w * 0.02);
-        const boxW = (w - gap * (cols - 1)) / cols;
-        const boxH = Math.min(h, boxW * 0.9);
-        const startX = (w - (boxW * cols + gap * (cols - 1))) / 2;
-        const y = (h - boxH) / 2;
-
-        for (let i = 0; i < cols; i++) {
-            const digit = parseInt((hh + mm + ss)[i], 10);
-            const instr = glyphCache[digit];
-            const hue = 40 + (i * 20) % 360;
-            const color = `hsl(${hue} 90% 50%)`; 
-            const x = startX + i * (boxW + gap);
-            drawGlyph(instr, x, y, boxW, boxH, color);
+            for (let i = 0; i < cols; i++) {
+                const digit = parseInt((hh + mm + ss)[i], 10);
+                const instr = glyphCache[digit];
+                const hue = 40 + (i * 20) % 360;
+                const color = `hsl(${hue} 90% 50%)`; 
+                const x = startX + i * (boxW + gap);
+                drawGlyph(instr, x, y, boxW, boxH, color);
+            }
         }
     }
 
@@ -119,43 +152,46 @@
     }
 
     window.addEventListener('resize', () => { resize(); renderTime(); });
+    
+    setInterval(() => {
+        if (canvas.offsetParent !== null && canvas.width === 0) { resize(); }
+    }, 500);
 
     if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', startClock); } else startClock();
 })();
 
 
 // ==========================================
-// 2. HOMEPAGE IMAGE INTERACTIVITY
+// 3. IMAGE INTERACTIVITY
 // ==========================================
 const flashImages = [
-    'flash-01.jpg', 'flash-02.jpg', 'flash-03.jpg', 'flash-04.jpg', 
-    'flash-05.jpg', 'flash-06.jpg', 'flash-07.jpg', 'flash-08.jpg',
-    'flash-09.jpg', 'flash-10.jpg', 'flash-11.jpg', 'flash-12.jpg',
-    'flash-13.jpg', 'flash-14.jpg', 'flash-15.jpg', 'flash-16.jpg',
-    'flash-17.jpg', 'flash-18.jpg', 'flash-19.jpg', 'flash-20.jpg',
-    'flash-21.jpg', 'flash-22.jpg', 'flash-23.jpg', 'flash-24.jpg',
-    'flash-25.jpg', 'flash-26.jpg', 'flash-27.jpg', 'flash-28.jpg',
-    'flash-29.jpg', 'flash-30.jpg', 'flash-31.jpg', 'flash-32.jpg',
-    'flash-33.jpg', 'flash-34.jpg', 'flash-35.jpg', 'flash-36.jpg',
-    'flash-37.jpg', 'flash-38.jpg', 'flash-39.jpg', 'flash-40.jpg',
-    'flash-41.jpg', 'flash-42.jpg', 'flash-43.jpg', 'flash-44.jpg',
-    'flash-45.jpg', 'flash-46.jpg', 'flash-47.jpg', 'flash-48.jpg',
-    'flash-49.jpg', 'flash-50.jpg', 'flash-51.jpg', 'flash-52.jpg',
-    'flash-53.jpg', 'flash-54.jpg', 'flash-55.jpg', 'flash-56.jpg',
-    'flash-57.jpg', 'flash-58.jpg', 'flash-59.jpg', 'flash-60.jpg',
-    'flash-61.jpg', 'flash-62.jpg', 'flash-63.jpg', 'flash-64.jpg',
-    'flash-65.jpg', 'flash-66.jpg', 'flash-67.jpg', 'flash-68.jpg',
-    'flash-69.jpg', 'flash-70.jpg', 'flash-71.jpg', 'flash-72.jpg',
-    'flash-73.jpg', 'flash-74.jpg', 'flash-75.jpg', 'flash-76.jpg',
-    'flash-77.jpg', 'flash-78.jpg', 'flash-79.jpg', 'flash-80.jpg',
-    'flash-81.jpg', 'flash-82.jpg', 'flash-83.jpg', 'flash-84.jpg',
-    'flash-85.jpg', 'flash-86.jpg', 'flash-87.jpg', 'flash-88.jpg',
-    'flash-89.jpg', 'flash-90.jpg', 'flash-91.jpg', 'flash-92.jpg',
-    'flash-93.jpg', 'flash-94.jpg', 'flash-95.jpg', 'flash-96.jpg',
-    'flash-97.jpg', 'flash-98.jpg'
+    'images/flash-01.jpg', 'images/flash-02.jpg', 'images/flash-03.jpg', 'images/flash-04.jpg', 
+    'images/flash-05.jpg', 'images/flash-06.jpg', 'images/flash-07.jpg', 'images/flash-08.jpg',
+    'images/flash-09.jpg', 'images/flash-10.jpg', 'images/flash-11.jpg', 'images/flash-12.jpg',
+    'images/flash-13.jpg', 'images/flash-14.jpg', 'images/flash-15.jpg', 'images/flash-16.jpg',
+    'images/flash-17.jpg', 'images/flash-18.jpg', 'images/flash-19.jpg', 'images/flash-20.jpg',
+    'images/flash-21.jpg', 'images/flash-22.jpg', 'images/flash-23.jpg', 'images/flash-24.jpg',
+    'images/flash-25.jpg', 'images/flash-26.jpg', 'images/flash-27.jpg', 'images/flash-28.jpg',
+    'images/flash-29.jpg', 'images/flash-30.jpg', 'images/flash-31.jpg', 'images/flash-32.jpg',
+    'images/flash-33.jpg', 'images/flash-34.jpg', 'images/flash-35.jpg', 'images/flash-36.jpg',
+    'images/flash-37.jpg', 'images/flash-38.jpg', 'images/flash-39.jpg', 'images/flash-40.jpg',
+    'images/flash-41.jpg', 'images/flash-42.jpg', 'images/flash-43.jpg', 'images/flash-44.jpg',
+    'images/flash-45.jpg', 'images/flash-46.jpg', 'images/flash-47.jpg', 'images/flash-48.jpg',
+    'images/flash-49.jpg', 'images/flash-50.jpg', 'images/flash-51.jpg', 'images/flash-52.jpg',
+    'images/flash-53.jpg', 'images/flash-54.jpg', 'images/flash-55.jpg', 'images/flash-56.jpg',
+    'images/flash-57.jpg', 'images/flash-58.jpg', 'images/flash-59.jpg', 'images/flash-60.jpg',
+    'images/flash-61.jpg', 'images/flash-62.jpg', 'images/flash-63.jpg', 'images/flash-64.jpg',
+    'images/flash-65.jpg', 'images/flash-66.jpg', 'images/flash-67.jpg', 'images/flash-68.jpg',
+    'images/flash-69.jpg', 'images/flash-70.jpg', 'images/flash-71.jpg', 'images/flash-72.jpg',
+    'images/flash-73.jpg', 'images/flash-74.jpg', 'images/flash-75.jpg', 'images/flash-76.jpg',
+    'images/flash-77.jpg', 'images/flash-78.jpg', 'images/flash-79.jpg', 'images/flash-80.jpg',
+    'images/flash-81.jpg', 'images/flash-82.jpg', 'images/flash-83.jpg', 'images/flash-84.jpg',
+    'images/flash-85.jpg', 'images/flash-86.jpg', 'images/flash-87.jpg', 'images/flash-88.jpg',
+    'images/flash-89.jpg', 'images/flash-90.jpg', 'images/flash-91.jpg', 'images/flash-92.jpg',
+    'images/flash-93.jpg', 'images/flash-94.jpg', 'images/flash-95.jpg', 'images/flash-96.jpg',
+    'images/flash-97.jpg', 'images/flash-98.jpg'
 ];
 
-// Text Color Hover
 const vibeWorld = document.querySelector('.sub-title');
 if (vibeWorld) {
     vibeWorld.addEventListener('mouseover', function() {
@@ -166,14 +202,12 @@ if (vibeWorld) {
     });
 }
 
-// Image Flash Logic
-// Targets the new '.hero-image-right' container or falls back to old one
-const mainImage = document.querySelector('.hero-image-right img') || document.querySelector('.hero-image img'); 
+const mainImage = document.querySelector('.hero-image-right img'); 
 let flashInterval; 
 let flashTimeout;
 
 if (mainImage) {
-    const originalSrc = 'simulation-scales.jpg';
+    const originalSrc = 'images/simulation-scales.jpg';
 
     function resetFlash() {
         if (flashInterval) clearInterval(flashInterval);
@@ -188,7 +222,6 @@ if (mainImage) {
         return flashImages[randomIndex];
     }
     
-    // START FLASH ON HOVER
     mainImage.addEventListener('mouseover', function() {
         resetFlash(); 
         let shouldShake = false;
@@ -213,10 +246,9 @@ if (mainImage) {
 
 
 // ==========================================
-// 3. AUDIO PLAYER LOGIC
+// 4. AUDIO PLAYER LOGIC
 // ==========================================
 const playlist = [
-    // 🔑 CORRECT RELATIVE PATH: Use this for both Local Live Server AND GitHub
     { name: "Track 01", artist: "", src: "audio/01-track.wav" },
     { name: "Track 02", artist: "", src: "audio/02-track.wav" },
     { name: "Track 03", artist: "", src: "audio/03-track.wav" },
@@ -243,8 +275,8 @@ function updateTimeDisplay() {
     const currentTime = audio.currentTime;
     const duration = audio.duration || 0;
     const progressPercent = (currentTime / duration) * 100;
-    progressBarFill.style.width = `${progressPercent}%`;
-    trackInfo.textContent = `${formatTime(currentTime)} / ${formatTime(duration)}`;
+    if(progressBarFill) progressBarFill.style.width = `${progressPercent}%`;
+    if(trackInfo) trackInfo.textContent = `${formatTime(currentTime)} / ${formatTime(duration)}`;
 }
 
 function seek(e) {
@@ -263,11 +295,11 @@ function loadTrack(index, autoPlay = true) {
     const track = playlist[index];
     
     audio.src = track.src;
-    songTitle.textContent = track.name;
-    songArtist.textContent = track.artist; 
+    if(songTitle) songTitle.textContent = track.name;
+    if(songArtist) songArtist.textContent = track.artist; 
 
-    trackInfo.textContent = "0:00 / 0:00"; 
-    progressBarFill.style.width = '0%';
+    if(trackInfo) trackInfo.textContent = "0:00 / 0:00"; 
+    if(progressBarFill) progressBarFill.style.width = '0%';
 
     audio.load();
 
@@ -275,10 +307,10 @@ function loadTrack(index, autoPlay = true) {
         audio.play().catch(e => {
             if (e.name !== 'AbortError') console.error(`Playback failed:`, e);
         });
-        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'; // Pause Icon
+        if(playPauseBtn) playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'; 
     } else {
         audio.pause();
-        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'; // Play Icon
+        if(playPauseBtn) playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'; 
     }
 }
 
@@ -287,14 +319,17 @@ function togglePlayback() {
         audio.play().catch(e => {
             if (e.name !== 'AbortError') console.error("Playback failed:", e);
         });
-        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'; // Pause Icon
+        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'; 
     } else {
         audio.pause();
-        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'; // Play Icon
+        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'; 
     }
 }
 
 function initializePlayer() {
+    // Only initialize if we are in the player view
+    if (!document.getElementById('music-player-container')) return;
+
     audio = document.getElementById('vibe-audio');
     songTitle = document.querySelector('.song-title');
     songArtist = document.querySelector('.song-artist'); 
@@ -306,22 +341,20 @@ function initializePlayer() {
     trackInfo = document.querySelector('.track-info');
 
     if (audio && playPauseBtn) {
-        audio.src = ''; 
-        playPauseBtn.addEventListener('click', togglePlayback);
-        nextBtn.addEventListener('click', () => loadTrack(currentTrackIndex + 1));
-        prevBtn.addEventListener('click', () => loadTrack(currentTrackIndex - 1));
-        audio.addEventListener('ended', () => loadTrack(currentTrackIndex + 1));
-        audio.addEventListener('timeupdate', updateTimeDisplay);
-        audio.addEventListener('loadedmetadata', updateTimeDisplay);
-        progressContainer.addEventListener('click', seek);
-        
-        loadTrack(currentTrackIndex, false); 
+        if (!audio.src) loadTrack(currentTrackIndex, false);
+
+        playPauseBtn.onclick = togglePlayback;
+        nextBtn.onclick = () => loadTrack(currentTrackIndex + 1);
+        prevBtn.onclick = () => loadTrack(currentTrackIndex - 1);
+        audio.onended = () => loadTrack(currentTrackIndex + 1);
+        audio.ontimeupdate = updateTimeDisplay;
+        audio.onloadedmetadata = updateTimeDisplay;
+        progressContainer.onclick = seek;
     }
 }
 
-
 // ==========================================
-// 4. VLOG PAGE LOGIC (Click-to-Expand)
+// 5. VLOG PAGE LOGIC (Read-Only Fetch)
 // ==========================================
 function initializeVlog() {
     const feedContainer = document.getElementById('vlog-feed');
@@ -341,15 +374,14 @@ function initializeVlog() {
 
             feedContainer.innerHTML = '';
             vlogs.forEach(vlog => {
-                const dateObj = new Date(vlog.date + "T12:00:00");
+                // Correct date parsing to avoid timezone shifts
+                const dateObj = new Date(vlog.date + "T12:00:00"); 
                 const dateStr = dateObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
-                // KEY FEATURE: onclick toggle
                 const entryHTML = `
                     <div class="vlog-entry" onclick="this.classList.toggle('active')">
                         <h2 class="entry-title">${vlog.title}</h2>
                         <span class="entry-date">${dateStr}</span>
-                        
                         <p class="entry-body">${vlog.text}</p>
                         ${vlog.image ? `<img src="${vlog.image}" class="entry-image">` : ''}
                     </div>
@@ -363,15 +395,14 @@ function initializeVlog() {
         });
 }
 
-
 // --- INITIALIZE ALL ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Preload Images for Homepage
+    // Preload Images
     for (let i = 0; i < flashImages.length; i++) {
         let img = new Image();
         img.src = flashImages[i];
     }
 
-    if (document.getElementById('music-player-container')) initializePlayer();
-    if (document.getElementById('vlog-feed')) initializeVlog(); 
+    // Init Player (persists in DOM)
+    initializePlayer();
 });
