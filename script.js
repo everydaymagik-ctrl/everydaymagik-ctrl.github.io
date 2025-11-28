@@ -1,19 +1,22 @@
 // --- ALIEN CANVAS CLOCK LOGIC ---
 (function () {
     const canvas = document.getElementById('digital-clock');
-    const sr = document.getElementById('digital-clock-hidden');
-    if (!canvas) return;
+    if (!canvas) return; // Safely exit if not on homepage
     const ctx = canvas.getContext('2d');
 
     function resize() {
         const rect = canvas.getBoundingClientRect();
+        // Force high resolution for sharp lines
         const ratio = window.devicePixelRatio || 1;
         canvas.width = Math.max(1, Math.floor(rect.width * ratio));
-        const desiredHeight = rect.height || 120;
+        // Force height if rect is zero (fix for flexbox collapse)
+        const desiredHeight = rect.height || 50; 
         canvas.height = Math.max(1, Math.floor(desiredHeight * ratio));
         canvas.style.height = desiredHeight + 'px';
         ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
     }
+    
+    // PRNG for consistent alien glyphs
     function mulberry32(a) {
         return function () {
             var t = (a += 0x6D2B79F5);
@@ -87,8 +90,6 @@
         const ss = String(now.getSeconds()).padStart(2, '0');
         const timeStr = hh + mm + ss;
 
-        if (sr) sr.textContent = hh + ':' + mm + ':' + ss;
-
         const w = canvas.width / (window.devicePixelRatio || 1);
         const h = canvas.height / (window.devicePixelRatio || 1);
         ctx.clearRect(0, 0, w, h);
@@ -103,8 +104,9 @@
         for (let i = 0; i < cols; i++) {
             const digit = parseInt(timeStr[i], 10);
             const instr = glyphCache[digit];
+            // Black ink (CSS filter:invert(1) turns this white)
             const hue = 40 + (i * 20) % 360;
-            const color = `hsl(${hue} 90% 50%)`;
+            const color = `hsl(${hue} 90% 50%)`; 
             const x = startX + i * (boxW + gap);
             drawGlyph(instr, x, y, boxW, boxH, color);
         }
@@ -121,11 +123,12 @@
 
     window.addEventListener('resize', () => { resize(); renderTime(); });
 
+    // Force start immediately if document ready
     if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', startClock); } else startClock();
 })();
 
 
-// --- NEW INTERACTIVITY ---
+// --- IMAGE INTERACTIVITY ---
 const flashImages = [
     'flash-01.jpg', 'flash-02.jpg', 'flash-03.jpg', 'flash-04.jpg', 
     'flash-05.jpg', 'flash-06.jpg', 'flash-07.jpg', 'flash-08.jpg',
@@ -154,17 +157,22 @@ const flashImages = [
     'flash-97.jpg', 'flash-98.jpg'
 ];
 
-window.onload = function() {
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Preload Images
     for (let i = 0; i < flashImages.length; i++) {
         let img = new Image();
         img.src = flashImages[i];
     }
-    if (typeof initializePlayer === 'function') {
-        initializePlayer();
+
+    // 2. Initialize Player if present
+    if (document.getElementById('music-player-container')) {
+        if (typeof initializePlayer === 'function') {
+            initializePlayer();
+        }
     }
-}
+});
 
-
+// Text Color Hover
 const vibeWorld = document.querySelector('.sub-title');
 if (vibeWorld) {
     vibeWorld.addEventListener('mouseover', function() {
@@ -176,7 +184,9 @@ if (vibeWorld) {
     });
 }
 
-const mainImage = document.querySelector('.hero-image img'); 
+// IMAGE FLASH LOGIC
+// Checks for both new class (right) and old class (fallback)
+const mainImage = document.querySelector('.hero-image-right img') || document.querySelector('.hero-image img'); 
 let flashInterval; 
 let flashTimeout;
 
@@ -187,6 +197,7 @@ if (mainImage) {
         if (flashInterval) clearInterval(flashInterval);
         if (flashTimeout) clearTimeout(flashTimeout); 
         mainImage.src = originalSrc;
+        mainImage.classList.remove('flash-out'); 
         document.body.classList.remove('shake');
     }
     
@@ -195,20 +206,14 @@ if (mainImage) {
         return flashImages[randomIndex];
     }
     
-    // --- MOUSE OVER: START HYPERSPEED FLASH & SHAKE ---
+    // START HYPERSPEED FLASH ON HOVER
     mainImage.addEventListener('mouseover', function() {
-        resetFlash();
-        
+        resetFlash(); 
         let shouldShake = false;
         
-        // FASTER INTERVAL (75ms) and OPACITY/SHAKE TOGGLE
+        // --- SPEED ADJUSTED HERE: Changed from 75 to 100ms ---
         flashInterval = setInterval(function() {
-            mainImage.classList.add('flash-out');
-            
-            setTimeout(() => {
-                mainImage.src = getRandomFlashImage();
-                mainImage.classList.remove('flash-out');
-            }, 10); // Swap source quickly after hiding
+            mainImage.src = getRandomFlashImage();
             
             if (shouldShake) {
                 document.body.classList.add('shake');
@@ -217,9 +222,8 @@ if (mainImage) {
             }
             shouldShake = !shouldShake;
             
-        }, 75); // Faster interval for hyperspeed effect
+        }, 100); // A wink slower ;)
 
-        // 4. Set a new 2-second timeout to stop the animation automatically
         flashTimeout = setTimeout(function() {
             resetFlash();
         }, 2000); 
@@ -229,8 +233,9 @@ if (mainImage) {
 }
 
 
-// 5. PLAYLIST MANAGER & CONTROL LOGIC
+// --- AUDIO PLAYER LOGIC ---
 const playlist = [
+    // 🔑 Correct paths for Local Live Server
     { name: "Track 01", artist: "", src: "audio/01-track.wav" },
     { name: "Track 02", artist: "", src: "audio/02-track.wav" },
     { name: "Track 03", artist: "", src: "audio/03-track.wav" },
@@ -244,9 +249,8 @@ const playlist = [
 
 let currentTrackIndex = 0;
 let audio, songTitle, songArtist, playPauseBtn, nextBtn, prevBtn;
-let progressBarFill, progressContainer, trackInfo; 
+let progressBarFill, progressContainer, trackInfo;
 
-// --- TIME FORMATTING UTILITY ---
 function formatTime(secs) {
     if (!isFinite(secs) || secs < 0) return "0:00"; 
     const minutes = Math.floor(secs / 60);
@@ -254,37 +258,26 @@ function formatTime(secs) {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
-// --- UPDATE TIME/PROGRESS BAR LOGIC ---
 function updateTimeDisplay() {
     const currentTime = audio.currentTime;
     const duration = audio.duration || 0;
-
-    // Update the progress bar width
     const progressPercent = (currentTime / duration) * 100;
     progressBarFill.style.width = `${progressPercent}%`;
-
-    // Update the time counter text (track-info element)
     trackInfo.textContent = `${formatTime(currentTime)} / ${formatTime(duration)}`;
 }
 
-// --- SEEKING LOGIC ---
 function seek(e) {
     if (!audio.duration) return; 
-    
     const width = this.clientWidth;
     const clickX = e.offsetX;
     const duration = audio.duration;
-    
-    // Set the new playback time based on click position
     audio.currentTime = (clickX / width) * duration;
 }
 
 function loadTrack(index, autoPlay = true) {
-    if (index < 0) {
-        index = playlist.length - 1; 
-    } else if (index >= playlist.length) {
-        index = 0;
-    }
+    if (index < 0) index = playlist.length - 1; 
+    else if (index >= playlist.length) index = 0;
+    
     currentTrackIndex = index;
     const track = playlist[index];
     
@@ -292,38 +285,31 @@ function loadTrack(index, autoPlay = true) {
     songTitle.textContent = track.name;
     songArtist.textContent = track.artist; 
 
-    // Reset Time Display
     trackInfo.textContent = "0:00 / 0:00"; 
     progressBarFill.style.width = '0%';
 
     audio.load();
 
     if (autoPlay) {
-        // 🧼 CLEAN ERROR HANDLING: Ignore "AbortError" (Interrupted by user clicking next)
         audio.play().catch(e => {
-            if (e.name !== 'AbortError') {
-                console.error(`Playback failed for ${track.name}:`, e);
-            }
+            if (e.name !== 'AbortError') console.error(`Playback failed:`, e);
         });
-        playPauseBtn.textContent = 'Pause';
+        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'; 
     } else {
         audio.pause();
-        playPauseBtn.textContent = 'Play';
+        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'; 
     }
 }
 
 function togglePlayback() {
     if (audio.paused) {
-        // 🧼 CLEAN ERROR HANDLING HERE TOO
         audio.play().catch(e => {
-            if (e.name !== 'AbortError') {
-                console.error("Playback failed:", e);
-            }
+            if (e.name !== 'AbortError') console.error("Playback failed:", e);
         });
-        playPauseBtn.textContent = 'Pause';
+        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'; 
     } else {
         audio.pause();
-        playPauseBtn.textContent = 'Play';
+        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'; 
     }
 }
 
@@ -334,29 +320,20 @@ function initializePlayer() {
     playPauseBtn = document.getElementById('play-pause-btn');
     nextBtn = document.getElementById('next-btn');
     prevBtn = document.getElementById('prev-btn');
-
-    // Progress element lookups
     progressBarFill = document.querySelector('.progress-bar-fill');
     progressContainer = document.querySelector('.progress-bar-container');
     trackInfo = document.querySelector('.track-info');
 
     if (audio && playPauseBtn) {
         audio.src = ''; 
-        
         playPauseBtn.addEventListener('click', togglePlayback);
         nextBtn.addEventListener('click', () => loadTrack(currentTrackIndex + 1));
         prevBtn.addEventListener('click', () => loadTrack(currentTrackIndex - 1));
         audio.addEventListener('ended', () => loadTrack(currentTrackIndex + 1));
-
-        // Time/Progress Bar Listeners
         audio.addEventListener('timeupdate', updateTimeDisplay);
         audio.addEventListener('loadedmetadata', updateTimeDisplay);
         progressContainer.addEventListener('click', seek);
-
-        // Initialize first track without autoplay
+        
         loadTrack(currentTrackIndex, false); 
-
-    } else {
-        console.error("Audio playback elements not found. Check player.html IDs.");
     }
 }

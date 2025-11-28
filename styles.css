@@ -1,265 +1,348 @@
-/* FINAL THEME DEFINITION */
+/* =========================================
+   1. GLOBAL VARIABLES & RESET
+   ========================================= */
 :root {
-    --bg-color: #FFFAFA; /* Default: Light (Milk White) Background */
-    --text-color: #333333; /* Default: Dark Text */
-    --accent-color: #FFD700; /* Default: Golden Yellow Accent */
-    --link-color: #666666; /* Default: Link/Description Text */
+    /* Colors */
+    --bg-dark: #0f0f0f;       
+    --text-main: #ffffff;
+    --text-muted: #8b8b8b;
+    --accent-color: #ffffff;
+    
+    /* Player Specific Vars */
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --progress-bg: #333333;
+    --progress-fill: #e0e0e0;
+    
+    /* Fonts */
+    --font-display: 'Playfair Display', serif;
+    --font-ui: 'Inter', sans-serif;
 }
 
-/* AUTOMATIC DARK THEME APPLICATION */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg-color: #000000; /* True Black Black Background */
-        --text-color: #CCCCCC; /* Light Gray Text */
-        --accent-color: #00FF41; /* Matrix Green Accent */
-        --link-color: #00FF41; /* Link/Description Text (Matches Accent) */
-    }
-}
-
-/* --- BASE BODY & FONT --- */
 body {
-    background-color: var(--bg-color);
-    font-family: 'Playfair Display', serif;
+    background-color: var(--bg-dark);
+    font-family: var(--font-display);
     margin: 0;
     padding: 0;
-    transition: background-color 0.5s ease;
-}
-
-/* NEW: Animation & Image Opacity Control */
-.hero-image img {
-    transition: opacity 0.05s ease-out; 
-    opacity: 1; 
-}
-
-.flash-out {
-    opacity: 0.1 !important; 
-}
-
-/* NEW: Page Shake Effect */
-.shake {
-    transform: translate(1px, 1px) rotate(0.1deg); 
-}
-
-/* --- HERO SECTION (Outer Flex Container) --- */
-.hero-section {
-    display: flex; 
-    flex-direction: row; 
-    align-items: stretch;
-    width: 100vw;
+    color: var(--text-main);
     min-height: 100vh;
-    gap: 0;
-    transform: scale(0.9); 
-    transform-origin: center center;
-    transition: transform 0.05s ease-out;
+    overflow-x: hidden;
 }
 
-/* --- TEXT CONTENT (50% Split) --- */
-.hero-content {
-    flex: 0 0 50%;
+/* =========================================
+   2. HOMEPAGE STYLES (Split-Screen)
+   ========================================= */
+
+.hero-section {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 60px; 
+    flex-direction: row; 
+    justify-content: space-between; 
+    align-items: center; 
+    min-height: 100vh;
+    padding: 80px; 
+    box-sizing: border-box;
+    max-width: 1600px;
+    margin: 0 auto;
+    gap: 60px;
+}
+
+/* --- Left Content Block --- */
+.hero-content-left {
+    flex: 1; 
     text-align: left;
+    z-index: 2;
+    max-width: 600px; 
 }
 
-/* --- IMAGE CONTENT (50% Split) --- */
-.hero-image {
-    flex: 0 0 50%;
-    overflow: hidden;
-}
-
-.hero-image img {
-    width: 100%;
-    height: 100%;
+/* Big Typography */
+.main-title, .sub-title {
     display: block; 
-    border-radius: 0;
-    filter: grayscale(30%);
-    object-fit: cover; 
+    font-size: clamp(4rem, 8vw, 7rem); 
+    margin: 0;
+    line-height: 0.9;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text-main);
 }
 
-/* --- TYPOGRAPHY --- */
-.main-title {
-    color: var(--text-color); 
-    font-size: 7em;
-    margin: 0; 
-    letter-spacing: 0.25em; 
-    line-height: 0.8; 
-    text-transform: uppercase;
-    font-weight: 700; 
-}
-
-.sub-title {
-    color: var(--accent-color); 
-    font-size: 6em; 
-    margin: 0; 
-    letter-spacing: 0.15em; 
-    line-height: 0.8;
-    text-transform: uppercase;
-    transition: color 0.2s ease;
-}
-
-.description {
-    color: var(--link-color); 
-    font-size: 1.5em;
-    margin-top: 30px;
-    font-style: italic;
+/* Alien Clock (FIXED VISIBILITY) */
+.clock-container-left {
     display: block;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-/* --- CLOCK INTEGRATION --- */
-.clock-container {
-    display: inline-block;
-    margin: 20px 0; 
-    padding: 0;
+    margin: 30px 0; 
+    opacity: 0.8;
 }
 
 #digital-clock {
-    width: 150px;
-    height: 60px;
+    height: 50px; /* Enforced height */
+    width: 100%;
+    max-width: 350px; /* Prevent it from stretching too far */
+    filter: invert(1); /* Turns the black script drawing WHITE */
+    display: block;
 }
 
-/* Accessibility Helper Hiding */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
+/* Footer Link */
+.footer-link-container {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.description {
+    font-family: var(--font-ui);
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    transition: color 0.3s ease;
+    letter-spacing: 0.05em;
+}
+
+.description:hover { color: var(--text-main); }
+
+
+/* --- Right Image Block (Tall Portrait) --- */
+.hero-image-right {
+    flex: 1; 
+    height: 70vh; 
+    min-height: 500px; 
+    width: 100%; 
+    max-width: 600px; 
+    
     overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
 }
 
-/* --- MUSIC PLAYER STYLES (Used on player.html only) --- */
+.hero-image-right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    display: block;
+    opacity: 0.9;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.2s;
+}
+
+.hero-image-right:hover img {
+    transform: scale(1.04);
+    opacity: 1;
+}
+
+/* Flash Animations */
+.flash-out { opacity: 0.1 !important; }
+.shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 1024px) {
+    .hero-section {
+        flex-direction: column-reverse; 
+        padding: 40px 20px;
+        gap: 40px;
+        justify-content: center;
+    }
+
+    .hero-content-left {
+        text-align: center;
+        align-items: center;
+        width: 100%;
+    }
+    
+    .clock-container-left, .footer-link-container {
+        text-align: center;
+        margin: 20px auto;
+    }
+    
+    #digital-clock {
+        margin: 0 auto; /* Center clock on mobile */
+    }
+
+    .hero-image-right {
+        width: 100%;
+        max-width: 100%;
+        height: 50vh;
+    }
+    
+    .main-title, .sub-title {
+        font-size: 3.5rem;
+    }
+}
+
+
+/* =========================================
+   3. PLAYER PAGE STYLES (Glassmorphism)
+   ========================================= */
+
 .player-body {
-    display: flex; 
+    display: flex;
     min-height: 100vh;
-    align-items: center; 
-    justify-content: center; 
-    transform: none; 
-    transition: none;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 100%);
+    font-family: var(--font-ui);
+}
+
+.player-center-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 #music-player-container {
-    margin-top: 0;
-    padding: 10px 20px 20px;
-    border: 2px solid var(--text-color);
-    background-color: var(--bg-color); 
-    width: 300px;
-    min-height: 400px; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-/* Player Visuals & Controls (Final Styles) */
-.album-art-large {
-    width: 150px;
-    height: 150px;
-    background-color: var(--text-color); 
-    border: 4px solid var(--accent-color);
-    border-radius: 50%;
-    margin: 0 auto 15px;
-    position: relative;
-}
-
-.album-art-large::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 25px;
-    height: 25px;
-    background-color: var(--accent-color);
-    border-radius: 50%;
-}
-
-.song-title, .song-artist, .track-info {
-    color: var(--text-color);
-    margin: 3px 0;
+    width: 360px;
+    padding: 40px;
+    border-radius: 40px;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
 }
 
-.track-info {
-    font-size: 0.9em;
-    color: var(--link-color);
-    margin-bottom: 20px;
+.player-visuals { margin-bottom: 30px; }
+
+.album-art-large {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #333, #111);
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.05), 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
+.track-details { margin-bottom: 30px; width: 100%; }
+
+.song-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.5px;
+}
+
+.song-artist {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Progress Bar */
+.progress-area { width: 100%; margin-bottom: 30px; }
+
 .progress-bar-container {
-    height: 8px;
-    background-color: var(--link-color);
-    border-radius: 4px;
-    margin: 25px 0;
+    width: 100%;
+    height: 4px;
+    background-color: var(--progress-bg);
+    border-radius: 2px;
     cursor: pointer;
+    position: relative;
+    margin-bottom: 10px;
 }
 
 .progress-bar-fill {
     height: 100%;
     width: 0%;
-    background-color: var(--accent-color);
-    border-radius: 4px;
-    transition: width 0.1s linear;
+    background-color: var(--progress-fill);
+    border-radius: 2px;
+    position: relative;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-/* FIX: Added flex properties to bottom controls to prevent overflow */
-.bottom-controls {
-    display: flex; 
+.progress-handle {
+    width: 12px;
+    height: 12px;
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    right: -6px;
+    top: -4px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.progress-bar-container:hover .progress-handle { opacity: 1; }
+
+.track-info {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
     justify-content: space-between;
-    padding-top: 15px;
-    gap: 10px; /* Spacing between buttons */
+    font-variant-numeric: tabular-nums;
 }
 
-.control-inactive, .control-active {
-    /* FIX: Added flex-grow to ensure the button shrinks/grows to fit the container */
-    flex: 1; 
-    
-    padding: 8px 6px; /* Slightly reduced horizontal padding */
-    border: 1px solid var(--link-color);
-    cursor: pointer;
-    border-radius: 3px;
-    text-transform: uppercase;
-    font-size: 0.9em;
-    transition: background 0.2s, color 0.2s, border-color 0.2s;
-    text-align: center; 
-    white-space: nowrap; 
+/* Controls */
+.bottom-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    width: 100%;
+    margin-bottom: 30px;
 }
 
-.control-inactive {
+.control-btn {
     background: transparent;
-    color: var(--link-color);
+    border: none;
+    color: var(--text-main);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, color 0.2s;
 }
 
-.control-active {
-    background: var(--accent-color);
-    color: var(--text-color);
-    font-weight: bold;
-    border-color: var(--accent-color);
+.control-btn svg { width: 28px; height: 28px; }
+.control-btn:hover { color: #fff; transform: scale(1.1); }
+
+.main-btn {
+    width: 64px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-/* --- MOBILE RESPONSIVENESS (< 600px) --- */
-@media (max-width: 600px) {
-    .main-title { font-size: 3.5em; }
-    .sub-title { font-size: 3em; }
-    
-    .hero-section { 
-        flex-direction: column; 
-        width: 100%; 
-        min-height: auto; 
-        transform: none; /* Remove scaling on mobile */
-    }
-    
-    .hero-content { 
-        flex: 0 0 auto; 
-        padding: 40px; 
-        text-align: center; 
-    }
-    
-    .hero-image { 
-        flex: 0 0 auto; 
-        height: 300px;
-    }
+.main-btn svg { width: 32px; height: 32px; fill: #fff; }
+.main-btn:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.05); }
+
+.volume-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    color: var(--text-muted);
 }
+
+.volume-bar {
+    flex-grow: 1;
+    height: 4px;
+    background: var(--progress-bg);
+    border-radius: 2px;
+}
+
+.volume-fill {
+    width: 60%;
+    height: 100%;
+    background: var(--text-muted);
+    border-radius: 2px;
+}
+
+.back-link {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    transition: color 0.2s;
+}
+
+.back-link:hover { color: #fff; }
