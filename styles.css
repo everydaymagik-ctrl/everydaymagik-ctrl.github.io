@@ -64,7 +64,7 @@ body {
     color: var(--text-main);
 }
 
-/* Alien Clock */
+/* Alien Clock (FIXED VISIBILITY) */
 .clock-container-left {
     display: block;
     margin: 30px 0; 
@@ -79,20 +79,20 @@ body {
     display: block;
 }
 
-/* --- Simulation Navigation Links (UPDATED) --- */
+/* Footer Link */
 .footer-link-container {
     text-align: left;
     margin-top: 40px;
     display: flex;
-    flex-direction: column; /* Stacks links vertically */
-    gap: 15px; /* Space between the two links */
+    flex-direction: column;
+    gap: 15px;
 }
 
 .description {
     font-family: var(--font-ui);
     color: var(--text-muted);
     font-size: 1rem;
-    text-decoration: none; /* Removed underline for cleaner look */
+    text-decoration: none;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     transition: all 0.3s ease;
@@ -103,7 +103,7 @@ body {
 
 .description:hover {
     color: var(--text-main);
-    letter-spacing: 0.15em; /* Subtle expansion effect */
+    letter-spacing: 0.15em;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
@@ -121,7 +121,7 @@ body {
 }
 
 
-/* --- Right Image Block --- */
+/* --- Right Image Block (Tall Portrait) --- */
 .hero-image-right {
     flex: 1; 
     height: 70vh; 
@@ -370,3 +370,178 @@ body {
 }
 
 .back-link:hover { color: #fff; }
+
+/* =========================================
+   4. VLOG PAGE (Note App Functionality)
+   ========================================= */
+
+.vlog-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Header: "Low," */
+.vlog-header {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 8rem;
+    line-height: 0.8;
+    margin: 0 0 60px 0;
+    letter-spacing: -0.04em;
+    color: var(--text-main);
+}
+
+/* Editor */
+.editor-section {
+    margin-bottom: 60px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 20px;
+}
+
+details summary {
+    cursor: pointer;
+    font-family: var(--font-ui);
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    list-style: none;
+    transition: color 0.2s;
+}
+
+details summary:hover { color: var(--text-main); }
+
+.editor-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+    background: rgba(255,255,255,0.03);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.editor-form input, .editor-form textarea {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-main);
+    padding: 12px;
+    font-family: var(--font-ui);
+    font-size: 1rem;
+    border-radius: 4px;
+}
+
+.editor-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* File Upload */
+.file-upload-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+input[type="file"] { display: none; }
+
+.file-label {
+    background: var(--progress-bg);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--text-main);
+}
+
+.file-label:hover { background: #444; }
+
+#save-vlog-btn {
+    background: var(--text-main);
+    color: var(--bg-dark);
+    border: none;
+    padding: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+#save-vlog-btn:hover { background: #e0e0e0; }
+
+/* Entries */
+.vlog-entry {
+    margin-bottom: 50px;
+    animation: fadeIn 0.5s ease;
+    position: relative;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.entry-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    margin: 0 0 5px 0;
+    letter-spacing: -0.02em;
+}
+
+.entry-date {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.entry-body {
+    font-family: var(--font-ui);
+    line-height: 1.6;
+    color: #cccccc;
+    font-size: 1.05rem;
+}
+
+.entry-image {
+    max-width: 100%;
+    margin-top: 20px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.delete-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: transparent;
+    border: none;
+    color: #555;
+    cursor: pointer;
+    font-size: 1.2rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.vlog-entry:hover .delete-btn { opacity: 1; }
+.delete-btn:hover { color: red; }
+
+.vlog-footer {
+    margin-top: 80px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .vlog-header { font-size: 5rem; }
+    .vlog-wrapper { padding: 40px 20px; }
+}

@@ -6,17 +6,14 @@
 
     function resize() {
         const rect = canvas.getBoundingClientRect();
-        // Force high resolution for sharp lines
         const ratio = window.devicePixelRatio || 1;
         canvas.width = Math.max(1, Math.floor(rect.width * ratio));
-        // Force height if rect is zero (fix for flexbox collapse)
         const desiredHeight = rect.height || 50; 
         canvas.height = Math.max(1, Math.floor(desiredHeight * ratio));
         canvas.style.height = desiredHeight + 'px';
         ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
     }
     
-    // PRNG for consistent alien glyphs
     function mulberry32(a) {
         return function () {
             var t = (a += 0x6D2B79F5);
@@ -104,7 +101,6 @@
         for (let i = 0; i < cols; i++) {
             const digit = parseInt(timeStr[i], 10);
             const instr = glyphCache[digit];
-            // Black ink (CSS filter:invert(1) turns this white)
             const hue = 40 + (i * 20) % 360;
             const color = `hsl(${hue} 90% 50%)`; 
             const x = startX + i * (boxW + gap);
@@ -123,7 +119,6 @@
 
     window.addEventListener('resize', () => { resize(); renderTime(); });
 
-    // Force start immediately if document ready
     if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', startClock); } else startClock();
 })();
 
@@ -157,35 +152,18 @@ const flashImages = [
     'flash-97.jpg', 'flash-98.jpg'
 ];
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Preload Images
-    for (let i = 0; i < flashImages.length; i++) {
-        let img = new Image();
-        img.src = flashImages[i];
-    }
-
-    // 2. Initialize Player if present
-    if (document.getElementById('music-player-container')) {
-        if (typeof initializePlayer === 'function') {
-            initializePlayer();
-        }
-    }
-});
-
 // Text Color Hover
 const vibeWorld = document.querySelector('.sub-title');
 if (vibeWorld) {
     vibeWorld.addEventListener('mouseover', function() {
         vibeWorld.style.color = '#FF0000'; 
     });
-    
     vibeWorld.addEventListener('mouseout', function() {
         vibeWorld.style.color = ''; 
     });
 }
 
 // IMAGE FLASH LOGIC
-// Checks for both new class (right) and old class (fallback)
 const mainImage = document.querySelector('.hero-image-right img') || document.querySelector('.hero-image img'); 
 let flashInterval; 
 let flashTimeout;
@@ -206,23 +184,20 @@ if (mainImage) {
         return flashImages[randomIndex];
     }
     
-    // START HYPERSPEED FLASH ON HOVER
+    // START FLASH ON HOVER
     mainImage.addEventListener('mouseover', function() {
         resetFlash(); 
         let shouldShake = false;
         
-        // --- SPEED ADJUSTED HERE: Changed from 75 to 100ms ---
         flashInterval = setInterval(function() {
             mainImage.src = getRandomFlashImage();
-            
             if (shouldShake) {
                 document.body.classList.add('shake');
             } else {
                 document.body.classList.remove('shake');
             }
             shouldShake = !shouldShake;
-            
-        }, 100); // A wink slower ;)
+        }, 100); // 100ms Speed
 
         flashTimeout = setTimeout(function() {
             resetFlash();
@@ -235,7 +210,7 @@ if (mainImage) {
 
 // --- AUDIO PLAYER LOGIC ---
 const playlist = [
-    // 🔑 Correct paths for Local Live Server
+    // 🔑 FINAL CORRECT RELATIVE PATH: Since your folders are now clean, use the simple path.
     { name: "Track 01", artist: "", src: "audio/01-track.wav" },
     { name: "Track 02", artist: "", src: "audio/02-track.wav" },
     { name: "Track 03", artist: "", src: "audio/03-track.wav" },
@@ -294,10 +269,10 @@ function loadTrack(index, autoPlay = true) {
         audio.play().catch(e => {
             if (e.name !== 'AbortError') console.error(`Playback failed:`, e);
         });
-        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'; 
+        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'; // Pause
     } else {
         audio.pause();
-        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'; 
+        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'; // Play
     }
 }
 
@@ -337,3 +312,117 @@ function initializePlayer() {
         loadTrack(currentTrackIndex, false); 
     }
 }
+
+// ==========================================
+// VLOG PAGE LOGIC (Note App Functionality)
+// ==========================================
+const defaultVlogs = [
+    { id: 1, title: "VLOG 001: CYBERNETIC WHISPERS", date: "2025-11-28", text: "Exploring the echoes of data within the neural network. The interface between mind and machine is blurring.", image: null },
+    { id: 2, title: "VLOG 002: NEURAL NETWORK DREAMS", date: "2025-11-26", text: "A deep dive into the generative processes of the simulation. Patterns emerge from chaos.", image: null },
+    { id: 3, title: "VLOG 003: CHRONOS DRIFT", date: "2025-11-24", text: "Reflecting on time dilation within the vibeWorld simulation. Seconds feel like years.", image: null }
+];
+
+function initializeVlog() {
+    const feedContainer = document.getElementById('vlog-feed');
+    const saveBtn = document.getElementById('save-vlog-btn');
+    const fileInput = document.getElementById('vlog-image');
+    const fileNameSpan = document.getElementById('file-name');
+
+    if (!feedContainer) return; 
+
+    let vlogs = JSON.parse(localStorage.getItem('vibeWorldVlogs'));
+    if (!vlogs || vlogs.length === 0) {
+        vlogs = defaultVlogs;
+        localStorage.setItem('vibeWorldVlogs', JSON.stringify(vlogs));
+    }
+
+    function renderVlogs() {
+        feedContainer.innerHTML = '';
+        vlogs.forEach(vlog => {
+            const dateObj = new Date(vlog.date);
+            const dateStr = dateObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+            const entryHTML = `
+                <div class="vlog-entry">
+                    <button class="delete-btn" onclick="deleteVlog(${vlog.id})">×</button>
+                    <h2 class="entry-title">${vlog.title}</h2>
+                    <span class="entry-date">${dateStr}</span>
+                    <p class="entry-body">${vlog.text}</p>
+                    ${vlog.image ? `<img src="${vlog.image}" class="entry-image">` : ''}
+                </div>
+            `;
+            feedContainer.insertAdjacentHTML('beforeend', entryHTML);
+        });
+    }
+
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files.length > 0) {
+            fileNameSpan.textContent = this.files[0].name;
+        }
+    });
+
+    saveBtn.addEventListener('click', () => {
+        const title = document.getElementById('vlog-title').value;
+        const date = document.getElementById('vlog-date').value;
+        const text = document.getElementById('vlog-text').value;
+        const file = fileInput.files[0];
+
+        if (!title || !text) {
+            alert("Please enter a title and content.");
+            return;
+        }
+
+        const newVlog = {
+            id: Date.now(), 
+            title: title,
+            date: date || new Date().toISOString().split('T')[0],
+            text: text,
+            image: null
+        };
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                newVlog.image = e.target.result;
+                saveAndRender(newVlog);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            saveAndRender(newVlog);
+        }
+    });
+
+    function saveAndRender(newVlog) {
+        vlogs.unshift(newVlog);
+        localStorage.setItem('vibeWorldVlogs', JSON.stringify(vlogs));
+        renderVlogs();
+        
+        document.getElementById('vlog-title').value = '';
+        document.getElementById('vlog-text').value = '';
+        fileInput.value = '';
+        fileNameSpan.textContent = "No file chosen";
+    }
+
+    renderVlogs();
+}
+
+window.deleteVlog = function(id) {
+    if(confirm("Delete this memory?")) {
+        let vlogs = JSON.parse(localStorage.getItem('vibeWorldVlogs'));
+        vlogs = vlogs.filter(v => v.id !== id);
+        localStorage.setItem('vibeWorldVlogs', JSON.stringify(vlogs));
+        location.reload(); 
+    }
+};
+
+// --- INITIALIZE ALL ---
+document.addEventListener('DOMContentLoaded', () => {
+    // Preload Images
+    for (let i = 0; i < flashImages.length; i++) {
+        let img = new Image();
+        img.src = flashImages[i];
+    }
+
+    if (document.getElementById('music-player-container')) initializePlayer();
+    if (document.getElementById('vlog-feed')) initializeVlog(); 
+});

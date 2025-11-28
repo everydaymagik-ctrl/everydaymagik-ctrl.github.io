@@ -3,34 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulation 1895</title>
+    <title>Simulation 1895: Low</title>
     <link rel="stylesheet" href="styles.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;700;900&display=swap" rel="stylesheet">
 </head>
-<body class="player-body">
+<body>
     
-    <div class="player-center-wrapper">
-        <div id="music-player-container" style="width: 600px; max-width: 90vw;">
-            
-            <div class="track-details">
-                <h1 class="song-title" style="font-size: 3rem;">1895</h1>
-                <p class="song-artist">The Golden Sequence</p>
-            </div>
-            
-            <div style="text-align: left; color: var(--text-muted); font-family: var(--font-ui); line-height: 1.6; margin-bottom: 30px;">
-                <p>The pattern continues.</p>
-                <br>
-                <p>[ Future transmission: Vlogs, Images, and Text will manifest here. ]</p>
-            </div>
+    <div class="vlog-wrapper">
+        <h1 class="vlog-header">Low,</h1>
 
-            <p>
-                <a href="index.html" class="back-link">&larr; Return to Base (724)</a>
-            </p>
+        <div class="editor-section">
+            <details>
+                <summary>+ New Entry</summary>
+                <div class="editor-form">
+                    <input type="text" id="vlog-title" placeholder="TITLE (e.g. VLOG 004: SYSTEM FAILURE)">
+                    <input type="date" id="vlog-date">
+                    <textarea id="vlog-text" placeholder="Record your simulation data..."></textarea>
+                    
+                    <div class="file-upload-wrapper">
+                        <label for="vlog-image" class="file-label">Upload Image</label>
+                        <input type="file" id="vlog-image" accept="image/*">
+                        <span id="file-name">No file chosen</span>
+                    </div>
+
+                    <button id="save-vlog-btn">Commit Data</button>
+                </div>
+            </details>
+        </div>
+
+        <div id="vlog-feed"></div>
+
+        <div class="vlog-footer">
+            <a href="index.html" class="back-link">Return to base Simulation 724</a>
         </div>
     </div>
 
+    <script src="script.js"></script>
 </body>
 </html>
