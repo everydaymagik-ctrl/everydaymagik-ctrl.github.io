@@ -34,7 +34,7 @@ function openReader(pdfPath) {
     // 📱 MOBILE LOGIC: Open in new tab immediately
     if (window.innerWidth <= 768) {
         window.open(pdfPath, '_blank');
-        return; // Stop execution here so overlay doesn't open
+        return; 
     }
 
     // 🖥️ DESKTOP LOGIC: Open in embedded overlay
@@ -303,12 +303,25 @@ const playlist = [
     { name: "Track 06", artist: "", src: "audio/06-track.wav" },
     { name: "Track 07", artist: "", src: "audio/07-track.wav" },
     { name: "Track 08", artist: "", src: "audio/08-track.wav" },
-    { name: "Track 09", artist: "", src: "audio/09-track.wav" }
+    { name: "Track 09", artist: "", src: "audio/09-track.wav" },
+    { name: "Track 10", artist: "", src: "audio/10-track.wav" },
+    { name: "Track 11", artist: "", src: "audio/11-track.wav" },
+    { name: "Track 12", artist: "", src: "audio/12-track.wav" },
+    { name: "Track 13", artist: "", src: "audio/13-track.wav" },
+    { name: "Track 14", artist: "", src: "audio/14-track.wav" },
+    { name: "Track 15", artist: "", src: "audio/15-track.wav" },
+    { name: "Track 16", artist: "", src: "audio/16-track.wav" },
+    { name: "Track 17", artist: "", src: "audio/17-track.wav" },
+    { name: "Track 18", artist: "", src: "audio/18-track.wav" },
+    { name: "Track 19", artist: "", src: "audio/19-track.wav" },
+    { name: "Track 20", artist: "", src: "audio/20-track.wav" },
+    { name: "Track 21", artist: "", src: "audio/21-track.wav" }
 ]; 
 
 let currentTrackIndex = 0;
 let audio, songTitle, songArtist, playPauseBtn, nextBtn, prevBtn;
 let progressBarFill, progressContainer, trackInfo;
+let albumArt;
 
 function formatTime(secs) {
     if (!isFinite(secs) || secs < 0) return "0:00"; 
@@ -344,6 +357,16 @@ function loadTrack(index, autoPlay = true) {
     if(songTitle) songTitle.textContent = track.name;
     if(songArtist) songArtist.textContent = track.artist; 
 
+    // Yellow Mode Check
+    albumArt = document.querySelector('.album-art-large');
+    if (albumArt) {
+        if (currentTrackIndex >= 9) { 
+            albumArt.classList.add('yellow-mode');
+        } else {
+            albumArt.classList.remove('yellow-mode');
+        }
+    }
+
     if(trackInfo) trackInfo.textContent = "0:00 / 0:00"; 
     if(progressBarFill) progressBarFill.style.width = '0%';
 
@@ -373,7 +396,6 @@ function togglePlayback() {
 }
 
 function initializePlayer() {
-    // Only initialize if we are in the player view
     if (!document.getElementById('music-player-container')) return;
 
     audio = document.getElementById('vibe-audio');

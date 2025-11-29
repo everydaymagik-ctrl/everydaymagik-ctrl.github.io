@@ -6,13 +6,9 @@
     --text-main: #ffffff;
     --text-muted: #8b8b8b;
     --accent-color: #ffffff;
-    
-    /* Player Specific Vars */
     --card-bg: rgba(255, 255, 255, 0.05);
     --progress-bg: #333333;
     --progress-fill: #e0e0e0;
-    
-    /* Fonts */
     --font-display: 'Playfair Display', serif;
     --font-ui: 'Inter', sans-serif;
 }
@@ -27,7 +23,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Lock body scroll when reader is open */
+/* Lock body scroll when reader is open (Desktop only) */
 body.no-scroll {
     overflow: hidden;
     height: 100vh;
@@ -148,7 +144,7 @@ body.no-scroll {
 }
 
 .library-container {
-    max-width: 700px; /* Tight aesthetic */
+    max-width: 700px;
     width: 100%;
     text-align: center;
 }
@@ -158,7 +154,6 @@ body.no-scroll {
     font-weight: 600;
     font-size: 0.9rem;
     letter-spacing: 0.3em;
-    /* text-transform: uppercase; REMOVED to allow lowercase */
     margin-bottom: 50px;
     color: var(--accent-color);
     opacity: 0.6;
@@ -180,11 +175,9 @@ body.no-scroll {
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     position: relative;
     cursor: pointer;
-    
-    /* FIX: Strict Aspect Ratio for Uniformity */
-    aspect-ratio: 2 / 3; 
     max-width: 160px;
     margin: 0 auto;
+    aspect-ratio: 2 / 3;
 }
 
 .book-item:hover {
@@ -196,7 +189,7 @@ body.no-scroll {
 .book-item img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* FIX: Ensures fills container perfectly */
+    object-fit: cover;
     filter: brightness(0.8);
     transition: filter 0.3s ease;
 }
@@ -210,11 +203,9 @@ body.no-scroll {
     display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
     animation: fadeIn 0.5s ease;
     padding-top: 20px;
-    /* FIX: Mobile scrolling */
     -webkit-overflow-scrolling: touch;
     overflow-y: auto;
 }
-
 #pdf-frame { 
     width: 90%; 
     flex-grow: 1; 
@@ -223,15 +214,7 @@ body.no-scroll {
     background: #fff;
     margin-bottom: 20px;
 }
-
-.close-reader-btn { 
-    margin-bottom: 15px; 
-    background: rgba(0,0,0,0.8); 
-    border: 1px solid rgba(255,255,255,0.3); 
-    color: #fff; padding: 10px 25px; border-radius: 20px; cursor: pointer; 
-    font-family: var(--font-ui); text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s; 
-    z-index: 10000;
-}
+.close-reader-btn { margin-bottom: 15px; background: rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 10px 25px; border-radius: 20px; cursor: pointer; font-family: var(--font-ui); text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s; z-index: 10000; }
 .close-reader-btn:hover { background: #fff; color: #000; }
 
 /* Nav */
@@ -251,3 +234,11 @@ body.no-scroll {
 @media (max-width: 480px) {
     .bookshelf-grid { grid-template-columns: 1fr; gap: 25px; }
 }
+
+/* --- DYNAMIC ALBUM ART STYLES --- */
+.album-art-large.yellow-mode {
+    background: linear-gradient(135deg, #FFD700, #FF8C00);
+    border-color: #FFFFFF;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+}
+.album-art-large.yellow-mode::before { background-color: #0f0f0f; }
