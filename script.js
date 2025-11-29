@@ -294,29 +294,35 @@ if (mainImage) {
 // ==========================================
 // 5. AUDIO PLAYER LOGIC
 // ==========================================
+// ==========================================
+// 5. AUDIO PLAYER LOGIC
+// ==========================================
 const playlist = [
-    { name: "Track 01", artist: "", src: "audio/01-track.wav" },
-    { name: "Track 02", artist: "", src: "audio/02-track.wav" },
-    { name: "Track 03", artist: "", src: "audio/03-track.wav" },
-    { name: "Track 04", artist: "", src: "audio/04-track.wav" },
-    { name: "Track 05", artist: "", src: "audio/05-track.wav" },
-    { name: "Track 06", artist: "", src: "audio/06-track.wav" },
-    { name: "Track 07", artist: "", src: "audio/07-track.wav" },
-    { name: "Track 08", artist: "", src: "audio/08-track.wav" },
-    { name: "Track 09", artist: "", src: "audio/09-track.wav" },
-    { name: "Track 10", artist: "", src: "audio/10-track.wav" },
-    { name: "Track 11", artist: "", src: "audio/11-track.wav" },
-    { name: "Track 12", artist: "", src: "audio/12-track.wav" },
-    { name: "Track 13", artist: "", src: "audio/13-track.wav" },
-    { name: "Track 14", artist: "", src: "audio/14-track.wav" },
-    { name: "Track 15", artist: "", src: "audio/15-track.wav" },
-    { name: "Track 16", artist: "", src: "audio/16-track.wav" },
-    { name: "Track 17", artist: "", src: "audio/17-track.wav" },
-    { name: "Track 18", artist: "", src: "audio/18-track.wav" },
-    { name: "Track 19", artist: "", src: "audio/19-track.wav" },
-    { name: "Track 20", artist: "", src: "audio/20-track.wav" },
-    { name: "Track 21", artist: "", src: "audio/21-track.wav" }
-]; 
+    // Tracks 01-09: Jacky Toussaint, Jahki Magik & Notre Nostalgi
+    { name: "Track 01", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/01-track.wav" },
+    { name: "Track 02", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/02-track.wav" },
+    { name: "Track 03", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/03-track.wav" },
+    { name: "Track 04", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/04-track.wav" },
+    { name: "Track 05", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/05-track.wav" },
+    { name: "Track 06", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/06-track.wav" },
+    { name: "Track 07", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/07-track.wav" },
+    { name: "Track 08", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/08-track.wav" },
+    { name: "Track 09", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/09-track.wav" },
+
+    // Tracks 10-21: Jacky Toussaint
+    { name: "Track 10", artist: "Jacky Toussaint", src: "audio/10-track.wav" },
+    { name: "Track 11", artist: "Jacky Toussaint", src: "audio/11-track.wav" },
+    { name: "Track 12", artist: "Jacky Toussaint", src: "audio/12-track.wav" },
+    { name: "Track 13", artist: "Jacky Toussaint", src: "audio/13-track.wav" },
+    { name: "Track 14", artist: "Jacky Toussaint", src: "audio/14-track.wav" },
+    { name: "Track 15", artist: "Jacky Toussaint", src: "audio/15-track.wav" },
+    { name: "Track 16", artist: "Jacky Toussaint", src: "audio/16-track.wav" },
+    { name: "Track 17", artist: "Jacky Toussaint", src: "audio/17-track.wav" },
+    { name: "Track 18", artist: "Jacky Toussaint", src: "audio/18-track.wav" },
+    { name: "Track 19", artist: "Jacky Toussaint", src: "audio/19-track.wav" },
+    { name: "Track 20", artist: "Jacky Toussaint", src: "audio/20-track.wav" },
+    { name: "Track 21", artist: "Jacky Toussaint", src: "audio/21-track.wav" }
+];
 
 let currentTrackIndex = 0;
 let audio, songTitle, songArtist, playPauseBtn, nextBtn, prevBtn;
