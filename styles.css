@@ -23,7 +23,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Lock body scroll when reader is open */
+/* Lock body scroll when reader is open (Desktop only) */
 body.no-scroll {
     overflow: hidden;
     height: 100vh;
@@ -165,6 +165,7 @@ body.no-scroll {
     font-weight: 600;
     font-size: 0.9rem;
     letter-spacing: 0.3em;
+    /* text-transform: uppercase; REMOVED to allow lowercase */
     margin-bottom: 50px;
     color: var(--accent-color);
     opacity: 0.6;
@@ -246,10 +247,17 @@ body.no-scroll {
     .bookshelf-grid { grid-template-columns: 1fr; gap: 25px; }
 }
 
-/* --- DYNAMIC ALBUM ART STYLES --- */
-.album-art-large.yellow-mode {
-    background: linear-gradient(135deg, #FFD700, #FF8C00);
-    border-color: #FFFFFF;
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
-}
+/* --- 5. RESEARCH PAGE STYLES (Simulation 4960) --- */
+.research-container { max-width: 800px; width: 100%; padding: 40px 20px; text-align: left; }
+.paper-list { display: flex; flex-direction: column; gap: 0; margin-bottom: 60px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+.paper-item { display: flex; align-items: center; justify-content: space-between; padding: 25px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: background-color 0.2s ease, padding-left 0.2s ease; }
+.paper-item:hover { background-color: rgba(255, 255, 255, 0.03); padding-left: 20px; }
+.paper-id { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--text-muted); opacity: 0.5; width: 80px; letter-spacing: 0.1em; }
+.paper-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 400; color: var(--text-main); margin: 0; flex-grow: 1; }
+.paper-arrow { color: var(--accent-color); font-size: 1.2rem; opacity: 0; transform: translateX(-10px); transition: all 0.3s ease; }
+.paper-item:hover .paper-arrow { opacity: 1; transform: translateX(0); }
+@media (max-width: 600px) { .paper-item { flex-direction: column; align-items: flex-start; gap: 10px; } .paper-id { width: auto; margin-bottom: 5px; } .paper-arrow { display: none; } }
+
+/* Dynamic Album Art */
+.album-art-large.yellow-mode { background: linear-gradient(135deg, #FFD700, #FF8C00); border-color: #FFFFFF; box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); }
 .album-art-large.yellow-mode::before { background-color: #0f0f0f; }

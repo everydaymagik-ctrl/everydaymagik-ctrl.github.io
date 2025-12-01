@@ -2,7 +2,7 @@
 // 1. SPA NAVIGATION LOGIC
 // ==========================================
 function switchView(viewId) {
-    const views = ['home-view', 'player-view', 'vlog-view', 'library-view'];
+    const views = ['home-view', 'player-view', 'vlog-view', 'library-view', 'research-view'];
     views.forEach(id => {
         const el = document.getElementById(id);
         if(el) {
@@ -19,7 +19,7 @@ function switchView(viewId) {
         if (viewId === 'player-view' || viewId === 'vlog-view') {
             view.classList.add('player-body');
         }
-        if (viewId === 'library-view') {
+        if (viewId === 'library-view' || viewId === 'research-view') {
             view.classList.add('vibe-body');
         }
     }
@@ -48,6 +48,9 @@ function openReader(pdfPath) {
         if (pdfPath.includes('01-book')) {
             // Book 01: 10% zoom out (90% scale)
             params = "#page=1&zoom=90&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
+        } else if (pdfPath.includes('research')) {
+             // Research Papers: Standard Width
+             params = "#page=1&view=FitH&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         } else {
             // All others: 50% zoom out (50% scale)
             params = "#page=1&zoom=50&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";

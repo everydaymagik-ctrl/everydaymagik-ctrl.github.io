@@ -37,6 +37,9 @@
                     <a href="#" onclick="switchView('library-view')" class="description">
                         Simulation 3066 <span class="link-arrow">→</span>
                     </a>
+                    <a href="#" onclick="switchView('research-view')" class="description">
+                        Simulation 4960 <span class="link-arrow">→</span>
+                    </a>
                 </div>
             </div>
 
@@ -84,10 +87,13 @@
                     </button>
                 </div>
 
+                <div class="track-select-grid"></div>
+
                 <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
-                    <div style="display: flex; gap: 20px;">
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
                         <a href="#" onclick="switchView('vlog-view')" class="back-link">1895 →</a>
                         <a href="#" onclick="switchView('library-view')" class="back-link">3066 →</a>
+                        <a href="#" onclick="switchView('research-view')" class="back-link">4960 →</a>
                     </div>
                     <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">&larr; Return to Base (724)</a>
                 </div>
@@ -107,9 +113,10 @@
             </div>
 
             <div class="vlog-footer" style="display: flex; flex-direction: column; gap: 10px;">
-                <div style="display: flex; gap: 20px; justify-content: center;">
+                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <a href="#" onclick="switchView('player-view')" class="back-link">1171 →</a>
                     <a href="#" onclick="switchView('library-view')" class="back-link">3066 →</a>
+                    <a href="#" onclick="switchView('research-view')" class="back-link">4960 →</a>
                 </div>
                 <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">&larr; Return to Base (724)</a>
             </div>
@@ -156,19 +163,75 @@
                 <div class="simulation-nav">
                     <a href="#" onclick="switchView('player-view')">1171 →</a>
                     <a href="#" onclick="switchView('vlog-view')">1895 →</a>
+                    <a href="#" onclick="switchView('research-view')">4960 →</a>
                 </div>
                 <div style="margin-top: 20px;">
                     <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">&larr; Return to Base (724)</a>
                 </div>
             </div>
-
-            <div id="pdf-reader-overlay" class="hidden-view">
-                <button class="close-reader-btn" onclick="closeReader()">Close Book ✕</button>
-                <iframe id="pdf-frame" src="" type="application/pdf"></iframe>
-            </div>
-
         </div>
     </section>
+
+    <section id="research-view" class="vibe-body hidden-view">
+        <div class="research-container">
+            <h1 class="library-title">vibeData_</h1>
+            
+            <div class="paper-list">
+                <div class="paper-item" onclick="openReader('pdfs/01-research.pdf')">
+                    <span class="paper-id">DOC.001</span>
+                    <h3 class="paper-title">Shattering the Mirage: A Critical
+Inquiry into White Male Criminality
+and the Structural Apparatus of
+Innocence</h3>
+                    <span class="paper-arrow">→</span>
+                </div>
+
+                <div class="paper-item" onclick="openReader('pdfs/02-research.pdf')">
+                    <span class="paper-id">DOC.002</span>
+                    <h3 class="paper-title">Global Disparity and the Realization of Genetic Dilution: An Anthropo-Political Analysis</h3>
+                    <span class="paper-arrow">→</span>
+                </div>
+
+                <div class="paper-item" onclick="openReader('pdfs/03-research.pdf')">
+                    <span class="paper-id">DOC.003</span>
+                    <h3 class="paper-title">unwritten</h3>
+                    <span class="paper-arrow">→</span>
+                </div>
+                
+                <div class="paper-item" onclick="openReader('pdfs/04-research.pdf')">
+                    <span class="paper-id">DOC.004</span>
+                    <h3 class="paper-title">unwritten</h3>
+                    <span class="paper-arrow">→</span>
+                </div>
+
+                <div class="paper-item" onclick="openReader('pdfs/05-research.pdf')">
+                    <span class="paper-id">DOC.005</span>
+                    <h3 class="paper-title">unwritten</h3>
+                    <span class="paper-arrow">→</span>
+                </div>
+
+                <div class="paper-item" onclick="openReader('pdfs/06-research.pdf')">
+                    <span class="paper-id">DOC.006</span>
+                    <h3 class="paper-title">unwritten</h3>
+                    <span class="paper-arrow">→</span>
+                </div>
+            </div>
+
+            <div class="simulation-nav">
+                <a href="#" onclick="switchView('player-view')">1171 →</a>
+                <a href="#" onclick="switchView('vlog-view')">1895 →</a>
+                <a href="#" onclick="switchView('library-view')">3066 →</a>
+            </div>
+            <div style="margin-top: 20px;">
+                <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">&larr; Return to Base (724)</a>
+            </div>
+        </div>
+    </section>
+
+    <div id="pdf-reader-overlay" class="hidden-view">
+        <button class="close-reader-btn" onclick="closeReader()">Close Document ✕</button>
+        <iframe id="pdf-frame" src="" type="application/pdf"></iframe>
+    </div>
 
     <audio id="vibe-audio" preload="auto"></audio>
     
