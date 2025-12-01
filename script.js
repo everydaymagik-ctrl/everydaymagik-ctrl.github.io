@@ -2,7 +2,7 @@
 // 1. SPA NAVIGATION LOGIC
 // ==========================================
 function switchView(viewId) {
-    const views = ['home-view', 'player-view', 'viblog-view', 'library-view', 'research-view'];
+    const views = ['home-view', 'player-view', 'vlog-view', 'library-view', 'research-view'];
     views.forEach(id => {
         const el = document.getElementById(id);
         if(el) {
@@ -16,7 +16,7 @@ function switchView(viewId) {
         view.classList.remove('hidden-view');
         view.classList.add('active-view');
 
-        if (viewId === 'player-view' || viewId === 'viblog-view') {
+        if (viewId === 'player-view' || viewId === 'vlog-view') {
             view.classList.add('player-body');
         }
         if (viewId === 'library-view' || viewId === 'research-view') {
@@ -24,42 +24,32 @@ function switchView(viewId) {
         }
     }
 
-    if (viewId === 'viblog-view') initializeVlog();
+    if (viewId === 'vlog-view') initializeVlog();
 }
 
 // ==========================================
 // 2. LIBRARY / PDF READER LOGIC
 // ==========================================
 function openReader(pdfPath) {
-    // 📱 MOBILE LOGIC: Open in new tab immediately
     if (window.innerWidth <= 768) {
         window.open(pdfPath, '_blank');
         return; 
     }
 
-    // 🖥️ DESKTOP LOGIC: Open in embedded overlay
     const overlay = document.getElementById('pdf-reader-overlay');
     const frame = document.getElementById('pdf-frame');
     
     if(overlay && frame) {
         let params = "";
-        
-        // Custom Zoom Logic for Desktop
         if (pdfPath.includes('01-book')) {
-            // Book 01: 10% zoom out (90% scale)
             params = "#page=1&zoom=90&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         } else if (pdfPath.includes('research')) {
-             // Research Papers: Fit Width
              params = "#page=1&view=FitH&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         } else {
-            // All others: 50% zoom out (50% scale)
             params = "#page=1&zoom=50&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         }
-        
         frame.src = pdfPath + params; 
         overlay.classList.remove('hidden-view');
-        
-        // Lock background scroll
         document.body.classList.add('no-scroll');
     }
 }
@@ -67,12 +57,9 @@ function openReader(pdfPath) {
 function closeReader() {
     const overlay = document.getElementById('pdf-reader-overlay');
     const frame = document.getElementById('pdf-frame');
-    
     if(overlay && frame) {
         overlay.classList.add('hidden-view'); 
         frame.src = ""; 
-        
-        // Unlock background scroll
         document.body.classList.remove('no-scroll');
     }
 }
@@ -325,7 +312,7 @@ const playlist = [
     { name: "Track 20", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/20-track.wav" },
     { name: "Track 21", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/21-track.wav" },
 
-    // Tracks 22-37: No Sight Trust (2024)
+    // Tracks 22-37: No Sight Trust (2016)
     { name: "Track 22", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/22-track.mp3" },
     { name: "Track 23", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/23-track.mp3" },
     { name: "Track 24", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/24-track.mp3" },
@@ -388,19 +375,17 @@ function loadTrack(index, autoPlay = true) {
     if(songAlbum) songAlbum.textContent = track.album;
     if(songYear) songYear.textContent = track.year;
 
-    // DYNAMIC THEME LOGIC
+    // Yellow Mode Check
     albumArt = document.querySelector('.album-art-large');
     if (albumArt) {
-        // Reset classes
+        // Reset
         albumArt.classList.remove('yellow-mode', 'white-mode');
-
-        // Apply class based on album
+        
         if (track.album === "MADE IN CHINA") { 
             albumArt.classList.add('yellow-mode');
         } else if (track.album === "No Sight Trust") {
             albumArt.classList.add('white-mode');
         }
-        // Default is Black (no extra class)
     }
 
     if(trackInfo) trackInfo.textContent = "0:00 / 0:00"; 
