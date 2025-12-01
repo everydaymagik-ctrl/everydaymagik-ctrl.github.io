@@ -46,8 +46,10 @@ function openReader(pdfPath) {
         
         // Custom Zoom Logic for Desktop
         if (pdfPath.includes('01-book')) {
+            // Book 01: 10% zoom out (90% scale)
             params = "#page=1&zoom=90&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         } else {
+            // All others: 50% zoom out (50% scale)
             params = "#page=1&zoom=50&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         }
         
@@ -71,6 +73,7 @@ function closeReader() {
         document.body.classList.remove('no-scroll');
     }
 }
+
 
 // ==========================================
 // 3. ALIEN CANVAS CLOCK LOGIC
@@ -294,38 +297,35 @@ if (mainImage) {
 // ==========================================
 // 5. AUDIO PLAYER LOGIC
 // ==========================================
-// ==========================================
-// 5. AUDIO PLAYER LOGIC
-// ==========================================
 const playlist = [
-    // Tracks 01-09: Jacky Toussaint, Jahki Magik & Notre Nostalgi
-    { name: "Track 01", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/01-track.wav" },
-    { name: "Track 02", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/02-track.wav" },
-    { name: "Track 03", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/03-track.wav" },
-    { name: "Track 04", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/04-track.wav" },
-    { name: "Track 05", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/05-track.wav" },
-    { name: "Track 06", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/06-track.wav" },
-    { name: "Track 07", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/07-track.wav" },
-    { name: "Track 08", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/08-track.wav" },
-    { name: "Track 09", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", src: "audio/09-track.wav" },
+    // Tracks 01-09: ORION (2024)
+    { name: "Track 01", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/01-track.wav" },
+    { name: "Track 02", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/02-track.wav" },
+    { name: "Track 03", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/03-track.wav" },
+    { name: "Track 04", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/04-track.wav" },
+    { name: "Track 05", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/05-track.wav" },
+    { name: "Track 06", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/06-track.wav" },
+    { name: "Track 07", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/07-track.wav" },
+    { name: "Track 08", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/08-track.wav" },
+    { name: "Track 09", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/09-track.wav" },
 
-    // Tracks 10-21: Jacky Toussaint
-    { name: "Track 10", artist: "Jacky Toussaint", src: "audio/10-track.wav" },
-    { name: "Track 11", artist: "Jacky Toussaint", src: "audio/11-track.wav" },
-    { name: "Track 12", artist: "Jacky Toussaint", src: "audio/12-track.wav" },
-    { name: "Track 13", artist: "Jacky Toussaint", src: "audio/13-track.wav" },
-    { name: "Track 14", artist: "Jacky Toussaint", src: "audio/14-track.wav" },
-    { name: "Track 15", artist: "Jacky Toussaint", src: "audio/15-track.wav" },
-    { name: "Track 16", artist: "Jacky Toussaint", src: "audio/16-track.wav" },
-    { name: "Track 17", artist: "Jacky Toussaint", src: "audio/17-track.wav" },
-    { name: "Track 18", artist: "Jacky Toussaint", src: "audio/18-track.wav" },
-    { name: "Track 19", artist: "Jacky Toussaint", src: "audio/19-track.wav" },
-    { name: "Track 20", artist: "Jacky Toussaint", src: "audio/20-track.wav" },
-    { name: "Track 21", artist: "Jacky Toussaint", src: "audio/21-track.wav" }
-];
+    // Tracks 10-21: MADE IN CHINA (2024)
+    { name: "Track 10", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/10-track.wav" },
+    { name: "Track 11", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/11-track.wav" },
+    { name: "Track 12", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/12-track.wav" },
+    { name: "Track 13", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/13-track.wav" },
+    { name: "Track 14", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/14-track.wav" },
+    { name: "Track 15", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/15-track.wav" },
+    { name: "Track 16", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/16-track.wav" },
+    { name: "Track 17", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/17-track.wav" },
+    { name: "Track 18", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/18-track.wav" },
+    { name: "Track 19", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/19-track.wav" },
+    { name: "Track 20", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/20-track.wav" },
+    { name: "Track 21", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/21-track.wav" }
+]; 
 
 let currentTrackIndex = 0;
-let audio, songTitle, songArtist, playPauseBtn, nextBtn, prevBtn;
+let audio, songTitle, songArtist, songAlbum, songYear, playPauseBtn, nextBtn, prevBtn;
 let progressBarFill, progressContainer, trackInfo;
 let albumArt;
 
@@ -362,6 +362,8 @@ function loadTrack(index, autoPlay = true) {
     audio.src = track.src;
     if(songTitle) songTitle.textContent = track.name;
     if(songArtist) songArtist.textContent = track.artist; 
+    if(songAlbum) songAlbum.textContent = track.album;
+    if(songYear) songYear.textContent = track.year;
 
     // Yellow Mode Check
     albumArt = document.querySelector('.album-art-large');
@@ -402,17 +404,34 @@ function togglePlayback() {
 }
 
 function initializePlayer() {
+    // Only initialize if we are in the player view
     if (!document.getElementById('music-player-container')) return;
 
     audio = document.getElementById('vibe-audio');
     songTitle = document.querySelector('.song-title');
     songArtist = document.querySelector('.song-artist'); 
+    songAlbum = document.querySelector('.song-album');
+    songYear = document.querySelector('.song-year');
+
     playPauseBtn = document.getElementById('play-pause-btn');
     nextBtn = document.getElementById('next-btn');
     prevBtn = document.getElementById('prev-btn');
     progressBarFill = document.querySelector('.progress-bar-fill');
     progressContainer = document.querySelector('.progress-bar-container');
     trackInfo = document.querySelector('.track-info');
+
+    // Generate Track Buttons
+    const grid = document.querySelector('.track-select-grid');
+    if (grid) {
+        grid.innerHTML = ''; 
+        playlist.forEach((_, i) => {
+            const btn = document.createElement('button');
+            btn.textContent = i + 1;
+            btn.className = 'track-number-btn';
+            btn.onclick = () => loadTrack(i, true);
+            grid.appendChild(btn);
+        });
+    }
 
     if (audio && playPauseBtn) {
         if (!audio.src) loadTrack(currentTrackIndex, false);
