@@ -1,13 +1,15 @@
 // ==========================================
 // 1. SPA NAVIGATION LOGIC
 // ==========================================
+// Added 'preface-view' to the list of views
 function switchView(viewId) {
-    const views = ['home-view', 'player-view', 'viblog-view', 'library-view', 'research-view', 'stream-view', 'oracle-view'];
+    const views = ['preface-view', 'home-view', 'player-view', 'viblog-view', 'library-view', 'research-view', 'stream-view', 'oracle-view'];
     views.forEach(id => {
         const el = document.getElementById(id);
         if(el) {
             el.classList.add('hidden-view');
-            el.classList.remove('active-view', 'player-body', 'vibe-body');
+            // Remove specific body classes
+            el.classList.remove('active-view', 'player-body', 'vibe-body', 'preface-body');
         }
     });
 
@@ -16,11 +18,15 @@ function switchView(viewId) {
         view.classList.remove('hidden-view');
         view.classList.add('active-view');
 
+        // Add specific body classes based on view
         if (viewId === 'player-view' || viewId === 'viblog-view' || viewId === 'stream-view' || viewId === 'oracle-view') {
             view.classList.add('player-body');
         }
         if (viewId === 'library-view' || viewId === 'research-view') {
             view.classList.add('vibe-body');
+        }
+        if (viewId === 'preface-view') {
+             view.classList.add('preface-body');
         }
     }
 
@@ -564,7 +570,39 @@ async function sendMessage() {
 
 // --- INITIALIZE ALL ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Preload
+    // 1. Check for Age Verification first
+    const isVerified = localStorage.getItem('vibe_age_verified');
+
+    if (isVerified === 'true') {
+        // If verified, skip the preface and go straight home
+        switchView('home-view');
+    } else {
+        // If not verified, ensure preface is shown and set up buttons
+        switchView('preface-view');
+        
+        const enterBtn = document.getElementById('enter-simulation-btn');
+        const denyBtn = document.getElementById('deny-simulation-btn');
+        const ageContent = document.getElementById('age-gate-content');
+        const deniedContent = document.getElementById('access-denied-content');
+
+        if (enterBtn) {
+            enterBtn.addEventListener('click', () => {
+                localStorage.setItem('vibe_age_verified', 'true');
+                switchView('home-view');
+            });
+        }
+
+        if (denyBtn) {
+            denyBtn.addEventListener('click', () => {
+                if(ageContent && deniedContent) {
+                    ageContent.classList.add('hidden-view');
+                    deniedContent.classList.remove('hidden-view');
+                }
+            });
+        }
+    }
+
+    // Preload Images
     for (let i = 0; i < flashImages.length; i++) {
         let img = new Image();
         img.src = flashImages[i];

@@ -13,7 +13,35 @@
 </head>
 <body>
 
-    <section id="home-view" class="active-view">
+    <section id="preface-view" class="active-view preface-body">
+        <div class="preface-content-wrapper">
+            <div class="preface-image-container">
+                <img src="images/preface.jpg" alt="Simulation Preface Context" class="preface-visual">
+            </div>
+            <div class="preface-text-content" id="age-gate-content">
+                <h1 class="preface-title">RESTRICTED SIMULATION DATA</h1>
+                <p class="preface-warning">
+                    Warning: The following environment contains explicit audio frequencies and visual patterns intended solely for mature processors.
+                </p>
+                <p class="preface-question">
+                    Confirm protocol: Are you 18 years of age or older to accept this transmission?
+                </p>
+                <div class="preface-actions">
+                    <button id="enter-simulation-btn" class="preface-btn enter-btn">I AM 18+ | INITIALIZE</button>
+                    <button id="deny-simulation-btn" class="preface-btn exit-btn">EXIT</button>
+                </div>
+            </div>
+             <div class="preface-text-content hidden-view" id="access-denied-content">
+                <h1 class="preface-title" style="color: #ff4444;">ACCESS DENIED.</h1>
+                <p class="preface-warning">
+                    Protocol mismatch. Your frequencies are not yet tuned for this environment. 
+                    <br><br>Closing connection...
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="home-view" class="hidden-view">
         <div class="hero-section">
             <div class="hero-content-left">
                 <div class="title-block">

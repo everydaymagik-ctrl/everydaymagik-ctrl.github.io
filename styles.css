@@ -28,6 +28,8 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
 /* --- SPA VIEW UTILITIES --- */
 .active-view { display: block; animation: fadeIn 0.5s ease; width: 100%; min-height: 100vh; }
 .active-view.player-body { display: flex; }
+/* New utility for preface centering */
+.active-view.preface-body { display: flex; align-items: center; justify-content: center; }
 .hidden-view { display: none !important; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -156,3 +158,23 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
 .album-art-large.yellow-mode::before { background-color: #0f0f0f; }
 .album-art-large.white-mode { background: linear-gradient(135deg, #FFFFFF, #E0E0E0); border-color: #333333; box-shadow: 0 0 30px rgba(255, 255, 255, 0.3); }
 .album-art-large.white-mode::before { background-color: #333333; }
+
+/* =========================================
+   8. PREFACE / AGE GATE STYLES (NEW)
+   ========================================= */
+.preface-body { background: #000; }
+.preface-content-wrapper { max-width: 500px; width: 90%; text-align: center; display: flex; flex-direction: column; gap: 30px; animation: fadeIn 1s ease; }
+.preface-image-container { width: 100%; height: 400px; overflow: hidden; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
+.preface-visual { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; transition: opacity 0.5s ease; }
+.preface-content-wrapper:hover .preface-visual { opacity: 1; }
+.preface-text-content { display: flex; flex-direction: column; gap: 20px; }
+.preface-title { font-family: var(--font-ui); font-weight: 900; font-size: 1.2rem; letter-spacing: 0.2em; text-transform: uppercase; margin: 0; color: var(--accent-color); opacity: 0.9; }
+.preface-warning { font-family: var(--font-ui); font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin: 0; border-left: 3px solid #ff4444; padding-left: 15px; text-align: left; }
+.preface-question { font-family: var(--font-display); font-size: 1.3rem; line-height: 1.4; margin: 10px 0; }
+.preface-actions { display: flex; gap: 15px; justify-content: center; margin-top: 10px; }
+.preface-btn { flex: 1; padding: 15px; border-radius: 30px; font-family: var(--font-ui); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.enter-btn { background: rgba(255, 255, 255, 0.15); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); }
+.enter-btn:hover { background: #fff; color: #000; transform: translateY(-3px); box-shadow: 0 10px 20px -10px rgba(255,255,255,0.5); }
+.exit-btn { background: transparent; color: var(--text-muted); border: 1px solid rgba(255, 255, 255, 0.1); }
+.exit-btn:hover { border-color: #ff4444; color: #ff4444; }
+@media (max-width: 600px) { .preface-image-container { height: 250px; } .preface-actions { flex-direction: column; } }
