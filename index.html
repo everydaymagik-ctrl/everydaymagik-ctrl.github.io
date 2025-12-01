@@ -30,6 +30,7 @@
                     <a href="#" onclick="switchView('library-view')" class="description">Simulation 3066 <span class="link-arrow">→</span></a>
                     <a href="#" onclick="switchView('research-view')" class="description">Simulation 4960 <span class="link-arrow">→</span></a>
                     <a href="#" onclick="switchView('stream-view')" class="description">Simulation 8025 <span class="link-arrow">→</span></a>
+                    <a href="#" onclick="switchView('oracle-view')" class="description">Simulation 12984 <span class="link-arrow">→</span></a>
                 </div>
             </div>
             <div class="hero-image-right">
@@ -64,6 +65,7 @@
                         <a href="#" onclick="switchView('library-view')" class="back-link">3066 →</a>
                         <a href="#" onclick="switchView('research-view')" class="back-link">4960 →</a>
                         <a href="#" onclick="switchView('stream-view')" class="back-link">8025 →</a>
+                        <a href="#" onclick="switchView('oracle-view')" class="back-link">12984 →</a>
                     </div>
                     <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">← Return to Base (724)</a>
                 </div>
@@ -81,6 +83,7 @@
                     <a href="#" onclick="switchView('library-view')" class="back-link">3066 →</a>
                     <a href="#" onclick="switchView('research-view')" class="back-link">4960 →</a>
                     <a href="#" onclick="switchView('stream-view')" class="back-link">8025 →</a>
+                    <a href="#" onclick="switchView('oracle-view')" class="back-link">12984 →</a>
                 </div>
                 <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">← Return to Base (724)</a>
             </div>
@@ -107,6 +110,7 @@
                     <a href="#" onclick="switchView('viblog-view')">1895 →</a>
                     <a href="#" onclick="switchView('research-view')">4960 →</a>
                     <a href="#" onclick="switchView('stream-view')">8025 →</a>
+                    <a href="#" onclick="switchView('oracle-view')">12984 →</a>
                 </div>
                 <div style="margin-top: 20px;"><a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">← Return to Base (724)</a></div>
             </div>
@@ -132,10 +136,10 @@
                             <span class="paper-id">DOC.004</span><h3 class="paper-title">unwritten</h3><span class="paper-arrow">→</span>
                         </a>
                         <a href="pdfs/05-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
-                            <span class="paper-id">DOC.005</span><h3 class="paper-title">unwritten</h3><span class="paper-arrow">→</span>
+                            <span class="paper-id">RES.005</span><h3 class="paper-title">unwritten</h3><span class="paper-arrow">→</span>
                         </a>
                         <a href="pdfs/06-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
-                            <span class="paper-id">DOC.006</span><h3 class="paper-title">unwritten</h3><span class="paper-arrow">→</span>
+                            <span class="paper-id">RES.006</span><h3 class="paper-title">unwritten</h3><span class="paper-arrow">→</span>
                         </a>
                     </div>
                     <div class="simulation-nav" style="justify-content: flex-start;">
@@ -143,6 +147,7 @@
                         <a href="#" onclick="switchView('viblog-view')">1895 →</a>
                         <a href="#" onclick="switchView('library-view')">3066 →</a>
                         <a href="#" onclick="switchView('stream-view')">8025 →</a>
+                        <a href="#" onclick="switchView('oracle-view')">12984 →</a>
                     </div>
                     <div style="margin-top: 20px; text-align: left;"><a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">← Return to Base (724)</a></div>
                 </div>
@@ -160,52 +165,56 @@
                         <h1 class="song-title" style="margin-bottom: 5px;">She</h1>
                         <p class="song-artist" style="margin-bottom: 20px;">Jacky Toussaint</p>
                         <div class="stream-links-list">
-                            <a href="https://open.spotify.com/album/1XRokTHtPNIbUOwsJ6NmwW" target="_blank" class="stream-item">
-                                <span class="service-name">Spotify</span><span class="service-play">Play</span>
-                            </a>
-                            <a href="https://music.apple.com/us/album/she/1855897899" target="_blank" class="stream-item">
-                                <span class="service-name">Apple Music</span><span class="service-play">Play</span>
-                            </a>
-                            <a href="https://www.youtube.com/playlist?list=OLAK5uy_niVufFhhaKW8qVWDqplioBW0Ja6PMcfo8" target="_blank" class="stream-item">
-                                <span class="service-name">YouTube</span><span class="service-play">Play</span>
-                            </a>
-                            <a href="https://tidal.com/album/476601989" target="_blank" class="stream-item">
-                                <span class="service-name">Tidal</span><span class="service-play">Play</span>
-                            </a>
-                            <a href="https://soundcloud.com/jackytoussaint/sets/she-257778852" target="_blank" class="stream-item">
-                                <span class="service-name">SoundCloud</span><span class="service-play">Play</span>
-                            </a>
+                            <a href="https://open.spotify.com/album/1XRokTHtPNIbUOwsJ6NmwW" target="_blank" class="stream-item"><span class="service-name">Spotify</span><span class="service-play">Play</span></a>
+                            <a href="https://music.apple.com/us/album/she/1855897899" target="_blank" class="stream-item"><span class="service-name">Apple Music</span><span class="service-play">Play</span></a>
+                            <a href="https://www.youtube.com/playlist?list=OLAK5uy_niVufFhhaKW8qVWDqplioBW0Ja6PMcfo8" target="_blank" class="stream-item"><span class="service-name">YouTube</span><span class="service-play">Play</span></a>
+                            <a href="https://tidal.com/album/476601989" target="_blank" class="stream-item"><span class="service-name">Tidal</span><span class="service-play">Play</span></a>
+                            <a href="https://soundcloud.com/jackytoussaint/sets/she-257778852" target="_blank" class="stream-item"><span class="service-name">SoundCloud</span><span class="service-play">Play</span></a>
                         </div>
                     </div>
-
                     <div class="stream-card">
                         <img src="images/mpit-cover.jpg" class="stream-album-art" alt="MPIT Album Cover">
                         <h1 class="song-title" style="margin-bottom: 5px;">My Phone Is Tapped</h1>
                         <p class="song-artist" style="margin-bottom: 20px;">Jahki Magik</p>
                         <div class="stream-links-list">
-                            <a href="https://open.spotify.com/album/1SIUyB11m5ctDLtZxJAfwM" target="_blank" class="stream-item">
-                                <span class="service-name">Spotify</span><span class="service-play">Play</span>
-                            </a>
-                            <a href="http://itunes.apple.com/album/id/1840831342" target="_blank" class="stream-item">
-                                <span class="service-name">Apple Music</span><span class="service-play">Play</span>
-                            </a>
-                            <a href="http://itunes.apple.com/album/id1840831342?ls=1&app=itunes" target="_blank" class="stream-item">
-                                <span class="service-name">iTunes</span><span class="service-play">Buy</span>
-                            </a>
-                            <a href="https://tidal.com/album/461408582" target="_blank" class="stream-item">
-                                <span class="service-name">Tidal</span><span class="service-play">Play</span>
-                            </a>
+                            <a href="https://open.spotify.com/album/1SIUyB11m5ctDLtZxJAfwM" target="_blank" class="stream-item"><span class="service-name">Spotify</span><span class="service-play">Play</span></a>
+                            <a href="http://itunes.apple.com/album/id/1840831342" target="_blank" class="stream-item"><span class="service-name">Apple Music</span><span class="service-play">Play</span></a>
+                            <a href="http://itunes.apple.com/album/id1840831342?ls=1&app=itunes" target="_blank" class="stream-item"><span class="service-name">iTunes</span><span class="service-play">Buy</span></a>
+                            <a href="https://tidal.com/album/461408582" target="_blank" class="stream-item"><span class="service-name">Tidal</span><span class="service-play">Play</span></a>
                         </div>
                     </div>
                 </div>
-                
                 <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
                     <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
                         <a href="#" onclick="switchView('player-view')" class="back-link">1171 →</a>
                         <a href="#" onclick="switchView('viblog-view')" class="back-link">1895 →</a>
                         <a href="#" onclick="switchView('library-view')" class="back-link">3066 →</a>
                         <a href="#" onclick="switchView('research-view')" class="back-link">4960 →</a>
+                        <a href="#" onclick="switchView('oracle-view')" class="back-link">12984 →</a>
                     </div>
+                    <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">← Return to Base (724)</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="oracle-view" class="player-body hidden-view">
+        <div class="player-center-wrapper">
+            <div class="oracle-container">
+                <h1 class="oracle-title">The Oracle</h1>
+                <p class="oracle-subtitle">Simulation 12984</p>
+                <div id="chat-history" class="chat-history">
+                    <div class="chat-message oracle">
+                        The frequency is open. I am listening. What seeks you?
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="user-input" placeholder="Transmit signal..." class="oracle-input" onkeypress="handleEnter(event)">
+                    <button onclick="sendMessage()" class="send-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                    </button>
+                </div>
+                <div style="margin-top: 30px;">
                     <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">← Return to Base (724)</a>
                 </div>
             </div>

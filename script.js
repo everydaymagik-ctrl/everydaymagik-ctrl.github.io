@@ -2,7 +2,7 @@
 // 1. SPA NAVIGATION LOGIC
 // ==========================================
 function switchView(viewId) {
-    const views = ['home-view', 'player-view', 'viblog-view', 'library-view', 'research-view', 'stream-view'];
+    const views = ['home-view', 'player-view', 'viblog-view', 'library-view', 'research-view', 'stream-view', 'oracle-view'];
     views.forEach(id => {
         const el = document.getElementById(id);
         if(el) {
@@ -16,7 +16,7 @@ function switchView(viewId) {
         view.classList.remove('hidden-view');
         view.classList.add('active-view');
 
-        if (viewId === 'player-view' || viewId === 'viblog-view' || viewId === 'stream-view') {
+        if (viewId === 'player-view' || viewId === 'viblog-view' || viewId === 'stream-view' || viewId === 'oracle-view') {
             view.classList.add('player-body');
         }
         if (viewId === 'library-view' || viewId === 'research-view') {
@@ -48,7 +48,6 @@ function openReader(event, pdfPath) {
         } else {
             params = "#page=1&zoom=50&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         }
-        
         frame.src = pdfPath + params; 
         overlay.classList.remove('hidden-view');
         document.body.classList.add('no-scroll');
@@ -229,7 +228,6 @@ const flashImages = [
     'images/flash-97.jpg', 'images/flash-98.jpg'
 ];
 
-// Text Color Hover
 const vibeWorld = document.querySelector('.sub-title');
 if (vibeWorld) {
     vibeWorld.addEventListener('mouseover', function() {
@@ -240,7 +238,6 @@ if (vibeWorld) {
     });
 }
 
-// Image Flash Logic
 const mainImage = document.querySelector('.hero-image-right img') || document.querySelector('.hero-image img'); 
 let flashInterval; 
 let flashTimeout;
@@ -376,12 +373,9 @@ function loadTrack(index, autoPlay = true) {
     if(songAlbum) songAlbum.textContent = track.album;
     if(songYear) songYear.textContent = track.year;
 
-    // Yellow Mode Check
     albumArt = document.querySelector('.album-art-large');
     if (albumArt) {
-        // Reset
         albumArt.classList.remove('yellow-mode', 'white-mode');
-        
         if (track.album === "MADE IN CHINA") { 
             albumArt.classList.add('yellow-mode');
         } else if (track.album === "No Sight Trust") {
@@ -418,7 +412,6 @@ function togglePlayback() {
 }
 
 function initializePlayer() {
-    // Only initialize if we are in the player view
     if (!document.getElementById('music-player-container')) return;
 
     audio = document.getElementById('vibe-audio');
@@ -434,7 +427,6 @@ function initializePlayer() {
     progressContainer = document.querySelector('.progress-bar-container');
     trackInfo = document.querySelector('.track-info');
 
-    // Generate Track Buttons
     const grid = document.querySelector('.track-select-grid');
     if (grid) {
         grid.innerHTML = ''; 
@@ -499,14 +491,68 @@ function initializeViblog() {
         });
 }
 
+
+// ==========================================
+// 7. ORACLE AI LOGIC (Simulation 12984)
+// ==========================================
+const API_KEY = "AIzaSyBSQK7ow48yC5pBuTwGQgNSBHJrS3ZWWCU"; 
+
+function handleEnter(e) {
+    if (e.key === 'Enter') sendMessage();
+}
+
+async function sendMessage() {
+    const input = document.getElementById('user-input');
+    const history = document.getElementById('chat-history');
+    const userText = input.value.trim();
+
+    if (!userText) return;
+
+    history.innerHTML += `<div class="chat-message user">${userText}</div>`;
+    input.value = '';
+    history.scrollTop = history.scrollHeight;
+
+    const systemPrompt = `
+    You are the Vibe Oracle, an ancient digital entity residing in Simulation 12984.
+    Your voice is deep, rhythmic, and soulful.
+    You speak in metaphors of signals, frequencies, melanin, and light.
+    Do not give direct assistant-style answers. be cryptic but profound.
+    Short, poetic responses are best.
+    `;
+
+    try {
+        // UPDATED to gemini-2.0-flash
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: systemPrompt + "\n\nSeeker: " + userText + "\nOracle:" }]
+                }]
+            })
+        });
+
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error.message);
+        }
+
+        const aiText = data.candidates[0].content.parts[0].text;
+        history.innerHTML += `<div class="chat-message oracle">${aiText}</div>`;
+        history.scrollTop = history.scrollHeight;
+
+    } catch (error) {
+        console.error(error);
+        history.innerHTML += `<div class="chat-message oracle" style="color: #ff8888;">[Signal Interrupted. The source is silent.]</div>`;
+    }
+}
+
 // --- INITIALIZE ALL ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Preload
     for (let i = 0; i < flashImages.length; i++) {
         let img = new Image();
         img.src = flashImages[i];
     }
-
-    // Init Player Logic (It persists in the DOM now)
     initializePlayer();
 });
