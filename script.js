@@ -2,7 +2,7 @@
 // 1. SPA NAVIGATION LOGIC
 // ==========================================
 function switchView(viewId) {
-    const views = ['home-view', 'player-view', 'viblog-view', 'library-view', 'research-view'];
+    const views = ['home-view', 'player-view', 'viblog-view', 'library-view', 'research-view', 'stream-view'];
     views.forEach(id => {
         const el = document.getElementById(id);
         if(el) {
@@ -16,7 +16,7 @@ function switchView(viewId) {
         view.classList.remove('hidden-view');
         view.classList.add('active-view');
 
-        if (viewId === 'player-view' || viewId === 'viblog-view') {
+        if (viewId === 'player-view' || viewId === 'viblog-view' || viewId === 'stream-view') {
             view.classList.add('player-body');
         }
         if (viewId === 'library-view' || viewId === 'research-view') {
@@ -28,15 +28,12 @@ function switchView(viewId) {
 }
 
 // ==========================================
-// 2. LIBRARY / PDF READER LOGIC (HYBRID)
+// 2. LIBRARY / PDF READER LOGIC
 // ==========================================
 function openReader(event, pdfPath) {
-    // 📱 MOBILE LOGIC: Do nothing. Let the <a> tag handle it naturally (New Tab).
     if (window.innerWidth <= 768) {
         return; 
     }
-
-    // 🖥️ DESKTOP LOGIC: Stop link navigation, open embedded overlay instead.
     if (event) event.preventDefault();
 
     const overlay = document.getElementById('pdf-reader-overlay');
@@ -44,23 +41,16 @@ function openReader(event, pdfPath) {
     
     if(overlay && frame) {
         let params = "";
-        
-        // Custom Zoom Logic for Desktop
         if (pdfPath.includes('01-book')) {
-            // Book 01: 90% zoom
             params = "#page=1&zoom=90&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         } else if (pdfPath.includes('research')) {
-             // Research Papers: Fit Width
              params = "#page=1&view=FitH&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         } else {
-            // All others: 50% zoom
             params = "#page=1&zoom=50&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         }
         
         frame.src = pdfPath + params; 
         overlay.classList.remove('hidden-view');
-        
-        // Lock background scroll
         document.body.classList.add('no-scroll');
     }
 }
@@ -68,12 +58,9 @@ function openReader(event, pdfPath) {
 function closeReader() {
     const overlay = document.getElementById('pdf-reader-overlay');
     const frame = document.getElementById('pdf-frame');
-    
     if(overlay && frame) {
         overlay.classList.add('hidden-view'); 
         frame.src = ""; 
-        
-        // Unlock background scroll
         document.body.classList.remove('no-scroll');
     }
 }
