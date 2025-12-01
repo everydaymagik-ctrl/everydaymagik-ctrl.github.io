@@ -28,17 +28,24 @@ function switchView(viewId) {
 }
 
 // ==========================================
-// 2. LIBRARY / PDF READER LOGIC
+// 2. LIBRARY / PDF READER LOGIC (HYBRID)
 // ==========================================
-function openReader(pdfPath) {
+function openReader(event, pdfPath) {
+    // 📱 MOBILE: Do nothing. Let the <a> tag open in a new tab naturally.
     if (window.innerWidth <= 768) {
-        window.open(pdfPath, '_blank');
         return; 
     }
+
+    // 🖥️ DESKTOP: Stop the link and open our overlay.
+    event.preventDefault();
+
     const overlay = document.getElementById('pdf-reader-overlay');
     const frame = document.getElementById('pdf-frame');
+    
     if(overlay && frame) {
         let params = "";
+        
+        // Custom Zoom Logic
         if (pdfPath.includes('01-book')) {
             params = "#page=1&zoom=90&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         } else if (pdfPath.includes('research')) {
@@ -46,6 +53,7 @@ function openReader(pdfPath) {
         } else {
             params = "#page=1&zoom=50&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         }
+        
         frame.src = pdfPath + params; 
         overlay.classList.remove('hidden-view');
         document.body.classList.add('no-scroll');
@@ -284,7 +292,6 @@ if (mainImage) {
 // 5. AUDIO PLAYER LOGIC
 // ==========================================
 const playlist = [
-    // Tracks 01-09: ORION (2024)
     { name: "Track 01", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/01-track.wav" },
     { name: "Track 02", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/02-track.wav" },
     { name: "Track 03", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/03-track.wav" },
@@ -295,7 +302,6 @@ const playlist = [
     { name: "Track 08", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/08-track.wav" },
     { name: "Track 09", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/09-track.wav" },
 
-    // Tracks 10-21: MADE IN CHINA (2024)
     { name: "Track 10", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/10-track.wav" },
     { name: "Track 11", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/11-track.wav" },
     { name: "Track 12", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/12-track.wav" },
@@ -309,7 +315,6 @@ const playlist = [
     { name: "Track 20", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/20-track.wav" },
     { name: "Track 21", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/21-track.wav" },
 
-    // Tracks 22-37: No Sight Trust (2016)
     { name: "Track 22", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/22-track.mp3" },
     { name: "Track 23", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/23-track.mp3" },
     { name: "Track 24", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/24-track.mp3" },
@@ -327,7 +332,6 @@ const playlist = [
     { name: "Track 36", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/36-track.mp3" },
     { name: "Track 37", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/37-track.mp3" },
 
-    // Track 38: Single (Made in China)
     { name: "Track 38", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/38-track.wav" }
 ]; 
 
@@ -372,12 +376,9 @@ function loadTrack(index, autoPlay = true) {
     if(songAlbum) songAlbum.textContent = track.album;
     if(songYear) songYear.textContent = track.year;
 
-    // Yellow Mode Check
     albumArt = document.querySelector('.album-art-large');
     if (albumArt) {
-        // Reset
         albumArt.classList.remove('yellow-mode', 'white-mode');
-        
         if (track.album === "MADE IN CHINA") { 
             albumArt.classList.add('yellow-mode');
         } else if (track.album === "No Sight Trust") {
@@ -414,7 +415,6 @@ function togglePlayback() {
 }
 
 function initializePlayer() {
-    // Only initialize if we are in the player view
     if (!document.getElementById('music-player-container')) return;
 
     audio = document.getElementById('vibe-audio');
@@ -430,7 +430,6 @@ function initializePlayer() {
     progressContainer = document.querySelector('.progress-bar-container');
     trackInfo = document.querySelector('.track-info');
 
-    // Generate Track Buttons
     const grid = document.querySelector('.track-select-grid');
     if (grid) {
         grid.innerHTML = ''; 
@@ -497,12 +496,9 @@ function initializeVlog() {
 
 // --- INITIALIZE ALL ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Preload
     for (let i = 0; i < flashImages.length; i++) {
         let img = new Image();
         img.src = flashImages[i];
     }
-
-    // Init Player Logic (It persists in the DOM now)
     initializePlayer();
 });
