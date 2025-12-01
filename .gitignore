@@ -1,1 +1,16 @@
-/fix
+# --- Mac System Files ---
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# --- Windows System Files (Just in case) ---
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Visual Studio Code Settings ---
+.vscode/
+.history/
+
+# --- Git LFS & Configs ---
+.gitattributes
