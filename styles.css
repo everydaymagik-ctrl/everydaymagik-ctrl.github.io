@@ -31,7 +31,10 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
 .hidden-view { display: none !important; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* 2. HOMEPAGE STYLES */
+
+/* =========================================
+   2. HOMEPAGE STYLES
+   ========================================= */
 .hero-section { display: flex; flex-direction: row; justify-content: space-between; align-items: center; min-height: 100vh; padding: 80px; box-sizing: border-box; max-width: 1600px; margin: 0 auto; gap: 60px; }
 .hero-content-left { flex: 1; text-align: left; z-index: 2; max-width: 600px; }
 .main-title, .sub-title { display: block; font-size: clamp(4rem, 8vw, 7rem); margin: 0; line-height: 0.9; font-weight: 700; letter-spacing: -0.03em; color: var(--text-main); }
@@ -50,7 +53,7 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
 @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
 @media (max-width: 1024px) { .hero-section { flex-direction: column-reverse; padding: 40px 20px; gap: 40px; justify-content: center; } .hero-content-left { text-align: center; align-items: center; width: 100%; } .clock-container-left, .footer-link-container { text-align: center; margin: 20px auto; align-items: center; } #digital-clock { margin: 0 auto; } .hero-image-right { width: 100%; max-width: 100%; height: 50vh; } .main-title, .sub-title { font-size: 3.5rem; } }
 
-/* 3. PLAYER & VLOG STYLES */
+/* 3. PLAYER & VIBLOG STYLES */
 .player-body { display: flex; min-height: 100vh; align-items: center; justify-content: center; background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 100%); font-family: var(--font-ui); }
 .player-center-wrapper { width: 100%; display: flex; justify-content: center; }
 #music-player-container { width: 360px; padding: 40px; border-radius: 40px; background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; align-items: center; text-align: center; }
@@ -80,18 +83,18 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
 .back-link { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; transition: color 0.2s; cursor: pointer; }
 .back-link:hover { color: #fff; }
 
-.vlog-wrapper { max-width: 800px; padding: 60px 20px; box-sizing: border-box; }
-.vlog-header { font-family: 'Inter', sans-serif; font-weight: 900; font-size: 8rem; line-height: 0.8; margin: 0 0 60px 0; letter-spacing: -0.04em; color: var(--text-main); text-align: left;}
-.vlog-entry { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: opacity 0.2s; text-align: left; }
-.vlog-entry:hover { opacity: 0.7; }
+.viblog-wrapper { max-width: 800px; padding: 60px 20px; box-sizing: border-box; }
+.viblog-header { font-family: 'Inter', sans-serif; font-weight: 900; font-size: 8rem; line-height: 0.8; margin: 0 0 60px 0; letter-spacing: -0.04em; color: var(--text-main); text-align: left;}
+.viblog-entry { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: opacity 0.2s; text-align: left; }
+.viblog-entry:hover { opacity: 0.7; }
 .entry-title { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1.4rem; text-transform: uppercase; margin: 0 0 5px 0; letter-spacing: -0.02em; pointer-events: none; }
 .entry-date { font-family: var(--font-display); font-style: italic; color: var(--text-muted); font-size: 1rem; display: block; pointer-events: none; }
 .entry-body, .entry-image { display: none; margin-top: 15px; }
-.vlog-entry.active .entry-body, .vlog-entry.active .entry-image { display: block; animation: fadeIn 0.5s ease; }
+.viblog-entry.active .entry-body, .viblog-entry.active .entry-image { display: block; animation: fadeIn 0.5s ease; }
 .entry-body { font-family: var(--font-ui); line-height: 1.6; color: #cccccc; font-size: 1.05rem; white-space: pre-wrap; }
 .entry-image { max-width: 100%; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
-.vlog-footer { margin-top: 80px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
-@media (max-width: 768px) { .vlog-header { font-size: 5rem; } .vlog-wrapper { padding: 40px 20px; } }
+.viblog-footer { margin-top: 80px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+@media (max-width: 768px) { .viblog-header { font-size: 5rem; } .viblog-wrapper { padding: 40px 20px; } }
 
 /* 4. LIBRARY STYLES */
 .vibe-body { min-height: 100vh; background: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 100%); color: var(--text-main); font-family: var(--font-ui); display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
@@ -118,7 +121,7 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
 .research-image-right { flex: 1; aspect-ratio: 9 / 16; height: auto; max-height: 90vh; width: 100%; overflow: hidden; border-radius: 12px; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.6); }
 .research-image-right img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.9; }
 .paper-list { display: flex; flex-direction: column; gap: 0; margin-bottom: 60px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
-.paper-item { display: flex; align-items: center; justify-content: space-between; padding: 25px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: background-color 0.2s ease, padding-left 0.2s ease; }
+.paper-item { display: flex; align-items: center; justify-content: space-between; padding: 25px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: background-color 0.2s ease, padding-left 0.2s ease; text-decoration: none; }
 .paper-item:hover { background-color: rgba(255, 255, 255, 0.03); padding-left: 20px; }
 .paper-id { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--text-muted); opacity: 0.5; width: 80px; letter-spacing: 0.1em; }
 .paper-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 400; color: var(--text-main); margin: 0; flex-grow: 1; line-height: 1.4; }

@@ -15,6 +15,7 @@
 
     <section id="home-view" class="active-view">
         <div class="hero-section">
+            
             <div class="hero-content-left">
                 <div class="title-block">
                     <h1 class="main-title">Hell Low,</h1>
@@ -45,6 +46,7 @@
             <div class="hero-image-right">
                 <img src="images/simulation-scales.jpg" alt="Visual representation of simulation scales">
             </div>
+            
         </div>
     </section>
 
@@ -104,7 +106,7 @@
         <div class="viblog-wrapper">
             <h1 class="viblog-header">Low,</h1>
 
-            <div id="vlog-feed">
+            <div id="viblog-feed">
                 <div style="color: var(--text-muted); font-family: var(--font-ui); margin-top: 20px;">
                     [ Awaiting data transmission... ]
                 </div>
@@ -167,78 +169,75 @@
                     <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">&larr; Return to Base (724)</a>
                 </div>
             </div>
-
-            <div id="pdf-reader-overlay" class="hidden-view">
-                <button class="close-reader-btn" onclick="closeReader()">Close Book ✕</button>
-                <iframe id="pdf-frame" src="" type="application/pdf"></iframe>
-            </div>
-
         </div>
     </section>
 
 
-    <section id="research-view" class="vibe-body hidden-view">
-        <div class="research-container">
-            <h1 class="library-title">vibeData_</h1>
+    <section id="research-view" class="hidden-view">
+        <div class="research-section">
             
-            <div class="research-section">
-                <div class="research-content-left">
-                    <div class="paper-list">
-                        
-                        <a href="pdfs/01-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
-                            <span class="paper-id">DOC.001</span>
-                            <h3 class="paper-title">Shattering the Mirage: A Critical Inquiry into White Male Criminality and the Structural Apparatus of Innocence</h3>
-                            <span class="paper-arrow">→</span>
-                        </a>
+            <div class="research-content-left">
+                <h1 class="library-title">vibeData_</h1>
+                
+                <div class="paper-list">
+                    <a href="pdfs/01-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
+                        <span class="paper-id">DOC.001</span>
+                        <h3 class="paper-title">Shattering the Mirage: A Critical Inquiry into White Male Criminality and the Structural Apparatus of Innocence</h3>
+                        <span class="paper-arrow">→</span>
+                    </a>
 
-                        <a href="pdfs/02-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
-                            <span class="paper-id">DOC.002</span>
-                            <h3 class="paper-title">Global Disparity and the Realization of Genetic Dilution: An Anthropo-Political Analysis</h3>
-                            <span class="paper-arrow">→</span>
-                        </a>
+                    <a href="pdfs/02-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
+                        <span class="paper-id">DOC.002</span>
+                        <h3 class="paper-title">Global Disparity and the Realization of Genetic Dilution: An Anthropo-Political Analysis</h3>
+                        <span class="paper-arrow">→</span>
+                    </a>
 
-                        <a href="pdfs/03-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
-                            <span class="paper-id">DOC.003</span>
-                            <h3 class="paper-title">unwritten</h3>
-                            <span class="paper-arrow">→</span>
-                        </a>
-                        
-                        <a href="pdfs/04-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
-                            <span class="paper-id">DOC.004</span>
-                            <h3 class="paper-title">unwritten</h3>
-                            <span class="paper-arrow">→</span>
-                        </a>
+                    <a href="pdfs/03-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
+                        <span class="paper-id">DOC.003</span>
+                        <h3 class="paper-title">unwritten</h3>
+                        <span class="paper-arrow">→</span>
+                    </a>
+                    
+                    <a href="pdfs/04-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
+                        <span class="paper-id">DOC.004</span>
+                        <h3 class="paper-title">unwritten</h3>
+                        <span class="paper-arrow">→</span>
+                    </a>
 
-                        <a href="pdfs/05-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
-                            <span class="paper-id">RES.005</span>
-                            <h3 class="paper-title">unwritten</h3>
-                            <span class="paper-arrow">→</span>
-                        </a>
+                    <a href="pdfs/05-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
+                        <span class="paper-id">RES.005</span>
+                        <h3 class="paper-title">unwritten</h3>
+                        <span class="paper-arrow">→</span>
+                    </a>
 
-                        <a href="pdfs/06-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
-                            <span class="paper-id">RES.006</span>
-                            <h3 class="paper-title">unwritten</h3>
-                            <span class="paper-arrow">→</span>
-                        </a>
-                    </div>
-
-                    <div class="simulation-nav" style="justify-content: flex-start;">
-                        <a href="#" onclick="switchView('player-view')">1171 →</a>
-                        <a href="#" onclick="switchView('viblog-view')">1895 →</a>
-                        <a href="#" onclick="switchView('library-view')">3066 →</a>
-                    </div>
-                    <div style="margin-top: 20px; text-align: left;">
-                        <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">&larr; Return to Base (724)</a>
-                    </div>
+                    <a href="pdfs/06-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
+                        <span class="paper-id">RES.006</span>
+                        <h3 class="paper-title">unwritten</h3>
+                        <span class="paper-arrow">→</span>
+                    </a>
                 </div>
 
-                <div class="research-image-right">
-                    <img src="images/research-banner.jpg" alt="Research Visual Context">
+                <div class="simulation-nav" style="justify-content: flex-start;">
+                    <a href="#" onclick="switchView('player-view')">1171 →</a>
+                    <a href="#" onclick="switchView('viblog-view')">1895 →</a>
+                    <a href="#" onclick="switchView('library-view')">3066 →</a>
                 </div>
+                <div style="margin-top: 20px; text-align: left;">
+                    <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">&larr; Return to Base (724)</a>
+                </div>
+            </div>
+
+            <div class="research-image-right">
+                <img src="images/research-banner.jpg" alt="Research Visual Context">
             </div>
             
         </div>
     </section>
+
+    <div id="pdf-reader-overlay" class="hidden-view">
+        <button class="close-reader-btn" onclick="closeReader()">Close Document ✕</button>
+        <iframe id="pdf-frame" src="" type="application/pdf"></iframe>
+    </div>
 
     <audio id="vibe-audio" preload="auto"></audio>
     

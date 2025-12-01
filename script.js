@@ -24,20 +24,20 @@ function switchView(viewId) {
         }
     }
 
-    if (viewId === 'viblog-view') initializeVlog();
+    if (viewId === 'viblog-view') initializeViblog();
 }
 
 // ==========================================
 // 2. LIBRARY / PDF READER LOGIC (HYBRID)
 // ==========================================
 function openReader(event, pdfPath) {
-    // 📱 MOBILE LOGIC: Open in new tab (Native Browser Behavior)
+    // 📱 MOBILE LOGIC: Do nothing. Let the <a> tag handle it naturally (New Tab).
     if (window.innerWidth <= 768) {
-        return; // Let the <a> tag handle it normally
+        return; 
     }
 
-    // 🖥️ DESKTOP LOGIC: Prevent new tab, use embedded overlay
-    event.preventDefault();
+    // 🖥️ DESKTOP LOGIC: Stop link navigation, open embedded overlay instead.
+    if (event) event.preventDefault();
 
     const overlay = document.getElementById('pdf-reader-overlay');
     const frame = document.getElementById('pdf-frame');
@@ -45,15 +45,15 @@ function openReader(event, pdfPath) {
     if(overlay && frame) {
         let params = "";
         
-        // Custom Zoom Logic
+        // Custom Zoom Logic for Desktop
         if (pdfPath.includes('01-book')) {
             // Book 01: 90% zoom
             params = "#page=1&zoom=90&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         } else if (pdfPath.includes('research')) {
-             // Research Papers: Clean view
-             params = "#page=1&toolbar=0&navpanes=0&scrollbar=0";
+             // Research Papers: Fit Width
+             params = "#page=1&view=FitH&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         } else {
-            // All others: 50% zoom out
+            // All others: 50% zoom
             params = "#page=1&zoom=50&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         }
         
@@ -476,8 +476,8 @@ function initializePlayer() {
 // ==========================================
 // 6. VLOG PAGE LOGIC (Read-Only Fetch)
 // ==========================================
-function initializeVlog() {
-    const feedContainer = document.getElementById('vlog-feed');
+function initializeViblog() {
+    const feedContainer = document.getElementById('viblog-feed');
     if (!feedContainer) return; 
 
     fetch('content/vlogs.json')
@@ -496,7 +496,7 @@ function initializeVlog() {
                 const dateStr = dateObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
                 const entryHTML = `
-                    <div class="vlog-entry" onclick="this.classList.toggle('active')">
+                    <div class="viblog-entry" onclick="this.classList.toggle('active')">
                         <h2 class="entry-title">${vlog.title}</h2>
                         <span class="entry-date">${dateStr}</span>
                         <p class="entry-body">${vlog.text}</p>
