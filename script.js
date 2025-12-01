@@ -35,10 +35,8 @@ function openReader(pdfPath) {
         window.open(pdfPath, '_blank');
         return; 
     }
-
     const overlay = document.getElementById('pdf-reader-overlay');
     const frame = document.getElementById('pdf-frame');
-    
     if(overlay && frame) {
         let params = "";
         if (pdfPath.includes('01-book')) {
@@ -195,7 +193,6 @@ function closeReader() {
 
     if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', startClock); } else startClock();
 })();
-
 
 // ==========================================
 // 4. IMAGE INTERACTIVITY
