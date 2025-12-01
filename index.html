@@ -103,8 +103,8 @@
 
 
     <section id="vlog-view" class="player-body hidden-view">
-        <div class="vlog-wrapper">
-            <h1 class="vlog-header">Low,</h1>
+        <div class="viblog-wrapper">
+            <h1 class="viblog-header">Low,</h1>
 
             <div id="vlog-feed">
                 <div style="color: var(--text-muted); font-family: var(--font-ui); margin-top: 20px;">
@@ -112,7 +112,7 @@
                 </div>
             </div>
 
-            <div class="vlog-footer" style="display: flex; flex-direction: column; gap: 10px;">
+            <div class="viblog-footer" style="display: flex; flex-direction: column; gap: 10px;">
                 <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <a href="#" onclick="switchView('player-view')" class="back-link">1171 →</a>
                     <a href="#" onclick="switchView('library-view')" class="back-link">3066 →</a>
@@ -131,33 +131,15 @@
                 <h1 class="library-title">vibeArchive_</h1>
 
                 <div class="bookshelf-grid">
-                    <div class="book-item" onclick="openReader('pdfs/01-book.pdf')">
-                        <img src="images/covers/01-cover.jpg" alt="Book 1">
-                    </div>
-                    <div class="book-item" onclick="openReader('pdfs/02-book.pdf')">
-                        <img src="images/covers/02-cover.jpg" alt="Book 2">
-                    </div>
-                    <div class="book-item" onclick="openReader('pdfs/03-book.pdf')">
-                        <img src="images/covers/03-cover.jpg" alt="Book 3">
-                    </div>
-                    <div class="book-item" onclick="openReader('pdfs/04-book.pdf')">
-                        <img src="images/covers/04-cover.jpg" alt="Book 4">
-                    </div>
-                    <div class="book-item" onclick="openReader('pdfs/05-book.pdf')">
-                        <img src="images/covers/05-cover.jpg" alt="Book 5">
-                    </div>
-                    <div class="book-item" onclick="openReader('pdfs/06-book.pdf')">
-                        <img src="images/covers/06-cover.jpg" alt="Book 6">
-                    </div>
-                    <div class="book-item" onclick="openReader('pdfs/07-book.pdf')">
-                        <img src="images/covers/07-cover.jpg" alt="Book 7">
-                    </div>
-                    <div class="book-item" onclick="openReader('pdfs/08-book.pdf')">
-                        <img src="images/covers/08-cover.jpg" alt="Book 8">
-                    </div>
-                    <div class="book-item" onclick="openReader('pdfs/09-book.pdf')">
-                        <img src="images/covers/09-cover.jpg" alt="Book 9">
-                    </div>
+                    <div class="book-item" onclick="openReader('pdfs/01-book.pdf')"><img src="images/covers/01-cover.jpg" alt="Book 1"></div>
+                    <div class="book-item" onclick="openReader('pdfs/02-book.pdf')"><img src="images/covers/02-cover.jpg" alt="Book 2"></div>
+                    <div class="book-item" onclick="openReader('pdfs/03-book.pdf')"><img src="images/covers/03-cover.jpg" alt="Book 3"></div>
+                    <div class="book-item" onclick="openReader('pdfs/04-book.pdf')"><img src="images/covers/04-cover.jpg" alt="Book 4"></div>
+                    <div class="book-item" onclick="openReader('pdfs/05-book.pdf')"><img src="images/covers/05-cover.jpg" alt="Book 5"></div>
+                    <div class="book-item" onclick="openReader('pdfs/06-book.pdf')"><img src="images/covers/06-cover.jpg" alt="Book 6"></div>
+                    <div class="book-item" onclick="openReader('pdfs/07-book.pdf')"><img src="images/covers/07-cover.jpg" alt="Book 7"></div>
+                    <div class="book-item" onclick="openReader('pdfs/08-book.pdf')"><img src="images/covers/08-cover.jpg" alt="Book 8"></div>
+                    <div class="book-item" onclick="openReader('pdfs/09-book.pdf')"><img src="images/covers/09-cover.jpg" alt="Book 9"></div>
                 </div>
 
                 <div class="simulation-nav">
@@ -172,59 +154,67 @@
         </div>
     </section>
 
+
     <section id="research-view" class="vibe-body hidden-view">
         <div class="research-container">
             <h1 class="library-title">vibeData_</h1>
             
-            <div class="paper-list">
-                <div class="paper-item" onclick="openReader('pdfs/01-research.pdf')">
-                    <span class="paper-id">DOC.001</span>
-                    <h3 class="paper-title">Shattering the Mirage: A Critical
-Inquiry into White Male Criminality
-and the Structural Apparatus of
-Innocence</h3>
-                    <span class="paper-arrow">→</span>
+            <div class="research-section">
+                <div class="research-content-left">
+                    <div class="paper-list">
+                        
+                        <div class="paper-item" onclick="openReader('pdfs/01-research.pdf')">
+                            <span class="paper-id">DOC.001</span>
+                            <h3 class="paper-title">Shattering the Mirage: A Critical Inquiry into White Male Criminality and the Structural Apparatus of Innocence</h3>
+                            <span class="paper-arrow">→</span>
+                        </div>
+
+                        <div class="paper-item" onclick="openReader('pdfs/02-research.pdf')">
+                            <span class="paper-id">DOC.002</span>
+                            <h3 class="paper-title">Global Disparity and the Realization of Genetic Dilution: An Anthropo-Political Analysis</h3>
+                            <span class="paper-arrow">→</span>
+                        </div>
+
+                        <div class="paper-item" onclick="openReader('pdfs/03-research.pdf')">
+                            <span class="paper-id">DOC.003</span>
+                            <h3 class="paper-title">unwritten</h3>
+                            <span class="paper-arrow">→</span>
+                        </div>
+                        
+                        <div class="paper-item" onclick="openReader('pdfs/04-research.pdf')">
+                            <span class="paper-id">DOC.004</span>
+                            <h3 class="paper-title">unwritten</h3>
+                            <span class="paper-arrow">→</span>
+                        </div>
+
+                        <div class="paper-item" onclick="openReader('pdfs/05-research.pdf')">
+                            <span class="paper-id">RES.005</span>
+                            <h3 class="paper-title">unwritten</h3>
+                            <span class="paper-arrow">→</span>
+                        </div>
+
+                        <div class="paper-item" onclick="openReader('pdfs/06-research.pdf')">
+                            <span class="paper-id">RES.006</span>
+                            <h3 class="paper-title">unwritten</h3>
+                            <span class="paper-arrow">→</span>
+                        </div>
+                    </div>
+
+                    <div class="simulation-nav" style="justify-content: flex-start;">
+                        <a href="#" onclick="switchView('player-view')">1171 →</a>
+                        <a href="#" onclick="switchView('vlog-view')">1895 →</a>
+                        <a href="#" onclick="switchView('library-view')">3066 →</a>
+                    </div>
+                    <div style="margin-top: 20px; text-align: left;">
+                        <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">&larr; Return to Base (724)</a>
+                    </div>
                 </div>
 
-                <div class="paper-item" onclick="openReader('pdfs/02-research.pdf')">
-                    <span class="paper-id">DOC.002</span>
-                    <h3 class="paper-title">Global Disparity and the Realization of Genetic Dilution: An Anthropo-Political Analysis</h3>
-                    <span class="paper-arrow">→</span>
-                </div>
-
-                <div class="paper-item" onclick="openReader('pdfs/03-research.pdf')">
-                    <span class="paper-id">DOC.003</span>
-                    <h3 class="paper-title">unwritten</h3>
-                    <span class="paper-arrow">→</span>
-                </div>
-                
-                <div class="paper-item" onclick="openReader('pdfs/04-research.pdf')">
-                    <span class="paper-id">DOC.004</span>
-                    <h3 class="paper-title">unwritten</h3>
-                    <span class="paper-arrow">→</span>
-                </div>
-
-                <div class="paper-item" onclick="openReader('pdfs/05-research.pdf')">
-                    <span class="paper-id">DOC.005</span>
-                    <h3 class="paper-title">unwritten</h3>
-                    <span class="paper-arrow">→</span>
-                </div>
-
-                <div class="paper-item" onclick="openReader('pdfs/06-research.pdf')">
-                    <span class="paper-id">DOC.006</span>
-                    <h3 class="paper-title">unwritten</h3>
-                    <span class="paper-arrow">→</span>
+                <div class="research-image-right">
+                    <img src="images/research-banner.jpg" alt="Research Visual Context">
                 </div>
             </div>
-
-            <div class="simulation-nav">
-                <a href="#" onclick="switchView('player-view')">1171 →</a>
-                <a href="#" onclick="switchView('vlog-view')">1895 →</a>
-                <a href="#" onclick="switchView('library-view')">3066 →</a>
-            </div>
-            <div style="margin-top: 20px;">
-                <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">&larr; Return to Base (724)</a>
-            </div>
+            
         </div>
     </section>
 
