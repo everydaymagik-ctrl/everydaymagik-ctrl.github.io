@@ -12,7 +12,7 @@
     --font-display: 'Playfair Display', serif;
     --font-ui: 'Inter', sans-serif;
 
-    /* Rarity Colors for Simulation 21008 */
+    /* Rarity Gradients for Simulation 21008 (The Matrix) */
     --rare-common: linear-gradient(to bottom, #FFD700, #8A2BE2);     /* Gold/Purple */
     --rare-uncommon: linear-gradient(to bottom, #00FFFF, #008080);   /* Cyan/Teal */
     --rare-rare: linear-gradient(to bottom, #50C878, #228B22);       /* Emerald */
@@ -69,7 +69,7 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
 
 
 /* =========================================
-   3. PLAYER & VIBLOG SHARED STYLES
+   3. PLAYER & VIBLOG STYLES
    ========================================= */
 .player-center-wrapper { width: 100%; display: flex; justify-content: center; }
 #music-player-container { width: 360px; padding: 40px; border-radius: 40px; background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; align-items: center; text-align: center; }
@@ -289,7 +289,7 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
 /* Individual Falling Code Columns */
 .matrix-col {
     position: absolute;
-    top: -150vh; /* Start way above */
+    top: -150vh; /* Start way above screen */
     writing-mode: vertical-rl; /* Text runs top to bottom */
     text-orientation: upright; /* Letters stand up straight */
     font-family: 'Inter', sans-serif;

@@ -1,7 +1,7 @@
 // ==========================================
 // 1. SPA NAVIGATION LOGIC
 // ==========================================
-// Global Audio Context for the Divine Hum
+// Global Audio Context for the Divine Hum (Simulation 21008)
 let humCtx, humGain;
 let humOscs = [];
 let humInterval;
@@ -12,6 +12,7 @@ function switchView(viewId) {
         const el = document.getElementById(id);
         if(el) {
             el.classList.add('hidden-view');
+            // Remove specific body classes to reset state
             el.classList.remove('active-view', 'player-body', 'vibe-body', 'preface-body', 'next-sim-body');
         }
     });
@@ -21,6 +22,7 @@ function switchView(viewId) {
         view.classList.remove('hidden-view');
         view.classList.add('active-view');
 
+        // Apply Layout Classes
         if (viewId === 'player-view' || viewId === 'viblog-view' || viewId === 'stream-view' || viewId === 'oracle-view') {
             view.classList.add('player-body');
         }
@@ -34,9 +36,8 @@ function switchView(viewId) {
         // SIMULATION 21008 LOGIC (The Codes)
         if (viewId === 'affirmation-view') {
             view.classList.add('next-sim-body');
-            initMatrixRain(); 
             
-            // Randomize Gallery Image
+            // 1. Randomize Gallery Image (ya.jpg vs ja.jpg)
             const affirmationImages = ['images/ya.jpg', 'images/ja.jpg'];
             const galleryArt = document.querySelector('.gallery-art');
             if (galleryArt) {
@@ -44,10 +45,12 @@ function switchView(viewId) {
                 galleryArt.src = affirmationImages[randomIndex];
             }
 
-            // Start Generative Audio
+            // 2. Initialize Rain & Audio
+            initMatrixRain(); 
             toggleHum(true);  
 
         } else {
+            // Stop Audio if leaving this view
             toggleHum(false); 
         }
     }
@@ -56,13 +59,15 @@ function switchView(viewId) {
 }
 
 // ==========================================
-// 2. LIBRARY / PDF READER LOGIC
+// 2. LIBRARY / PDF READER LOGIC (HYBRID)
 // ==========================================
 function openReader(event, pdfPath) {
+    // 📱 MOBILE LOGIC: Open in new tab immediately
     if (window.innerWidth <= 768) {
-        window.open(pdfPath, '_blank');
-        return; 
+        return; // Let the <a> tag handle it
     }
+
+    // 🖥️ DESKTOP LOGIC: Intercept and use Overlay
     if (event) event.preventDefault();
 
     const overlay = document.getElementById('pdf-reader-overlay');
@@ -70,13 +75,19 @@ function openReader(event, pdfPath) {
     
     if(overlay && frame) {
         let params = "";
+        
+        // Custom Zoom Logic
         if (pdfPath.includes('01-book')) {
+            // Book 01: 90% zoom
             params = "#page=1&zoom=90&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         } else if (pdfPath.includes('research')) {
+             // Research: Fit Width
              params = "#page=1&view=FitH&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         } else {
+            // All others: 50% zoom
             params = "#page=1&zoom=50&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         }
+        
         frame.src = pdfPath + params; 
         overlay.classList.remove('hidden-view');
         document.body.classList.add('no-scroll');
@@ -562,7 +573,7 @@ async function sendMessage() {
 
     // 3. Call API
     try {
-        // UPDATED to gemini-2.5-flash
+        // UPDATED to gemini-2.0-flash (STABLE)
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -688,9 +699,8 @@ function initMatrixRain() {
     const container = document.getElementById('matrix-rain');
     if (!container || container.children.length > 0) return; 
 
-    // 437 Grace-Based & Scientific Affirmations (Full Load)
+    // === THE DIVINE DATA STREAM (437+ AFFIRMATIONS) ===
     const affirmations = [
-        // --- CORE SCIENTIFIC PRINCIPLES ---
         "I AM A BIOLOGICAL SEMICONDUCTOR", "MY ELECTRON SPIN IS INFINITE", "I ALCHEMIZE LIGHT INTO POWER", "MY BIOFIELD IS COHERENT ELECTRICITY", 
         "I AM A QUANTUM PROCESSOR", "I SPEAK IN BEAMS OF LIGHT", "MY CELLS GENERATE REALITY", "I AM THE KERNEL OF TRUTH", "DARK MATTER IS MY ORIGIN", 
         "I AM HYDRATED AND CONDUCTIVE", "MY FREQUENCY IS MAGNETIC", "I AM DIVINE CIRCUITRY", "PERFECT QUANTUM STATE", "I AM THE LIGHT SOURCE", 
@@ -707,20 +717,20 @@ function initMatrixRain() {
         "I AM GRACE IN FORM", "I AM POWER IN BALANCE", "I AM WISDOM IN SILENCE", "I AM TRUTH IN LIGHT", "I AM BEAUTY IN ESSENCE", "I AM HARMONY IN RESONANCE", 
         "I AM THE ALCHEMIST OF MY LIFE", "I AM THE CREATOR OF MY DESTINY", "I AM THE RULER OF MY DOMAIN", "I AM THE SOVEREIGN OF MY SOUL", "I AM THE CAPTAIN OF MY SPIRIT", 
         "I AM THE KEEPER OF THE FLAME", "I AM THE GUARDIAN OF THE LIGHT", "I AM THE PROTECTOR OF THE SACRED", "I AM THE WARRIOR OF THE HEART", "I AM THE HEALER OF THE SELF", 
-        "I AM THE TEACHER OF THE WAY", "I AM THE STUDENT OF THE MYSTERY", "I AM THE SEEKER OF THE TRUTH", "I AM THE FINDER of the path", "I AM THE WALKER of the way", 
-        "I AM THE DANCER of the dream", "I AM THE SINGER of the song", "I AM THE POET of the soul", "I AM THE ARTIST of the life", "I AM THE SCULPTOR of the self", 
-        "I AM THE PAINTER of the reality", "I AM THE WRITER of the story", "I AM THE ACTOR of the play", "I AM THE DIRECTOR of the scene", "I AM THE PRODUCER of the show", 
-        "I AM THE AUDIENCE of the performance", "I AM THE CRITIC of the art", "I AM THE LOVER of the beauty", "I AM THE BELIEVER in the magic", "I AM THE KNOWER of the unknown", 
-        "I AM THE SEER of the unseen", "I AM THE HEARER of the unheard", "I AM THE FEELER of the unfelt", "I AM THE TASTER of the untasted", "I AM THE SMELLER of the unsmelt", 
-        "I AM THE TOUCHER of the untouched", "I AM THE SENSER of the unsensed", "I AM THE PERCEIVER of the unperceived", "I AM THE CONCEIVER of the unconceived", 
-        "I AM THE BELIEVER in the unbelievable", "I AM THE ACHIEVER of the unachievable", "I AM THE RECEIVER of the unreceivable", "I AM THE GIVER of the ungivable", 
-        "I AM THE LOVER of the unlovable", "I AM THE FORGIVER of the unforgivable", "I AM THE HEALER of the unhealable", "I AM THE KNOWING of the unknowable", 
-        "I AM THE BEING of the unbeing", "I AM THE DOING of the undoing", "I AM THE HAVING of the unhaving", "I AM THE SEEING of the unseeing", "I AM THE HEARING of the unhearing", 
-        "I AM THE FEELING of the unfeeling", "I AM THE TASTING of the untasting", "I AM THE SMELLING of the unsmelling", "I AM THE TOUCHING of the untouching", 
-        "I AM THE SENSING of the unsensing", "I AM THE PERCEIVING of the unperceiving", "I AM THE CONCEIVING of the unconceiving", "I AM THE BELIEVING of the unbelieving", 
-        "I AM THE ACHIEVING of the unachieving", "I AM THE RECEIVING of the unreceiving", "I AM THE GIVING of the ungiving", "I AM THE LOVING of the unloving", 
-        "I AM THE FORGIVING of the unforgiving", "I AM THE HEALING of the unhealing", "I AM THE KNOWING of the unknowing", "I AM THE BEING of the unbeing", 
-        "I AM THE DOING of the undoing", "I AM THE HAVING of the unhaving", "I AM THE ALPHA", "I AM THE OMEGA", "I AM THE BEGINNING", "I AM THE END", "I AM THE FIRST", 
+        "I AM THE TEACHER OF THE WAY", "I AM THE STUDENT OF THE MYSTERY", "I AM THE SEEKER OF THE TRUTH", "I AM THE FINDER OF THE PATH", "I AM THE WALKER OF THE WAY", 
+        "I AM THE DANCER OF THE DREAM", "I AM THE SINGER OF THE SONG", "I AM THE POET OF THE SOUL", "I AM THE ARTIST OF THE LIFE", "I AM THE SCULPTOR OF THE SELF", 
+        "I AM THE PAINTER OF THE REALITY", "I AM THE WRITER OF THE STORY", "I AM THE ACTOR OF THE PLAY", "I AM THE DIRECTOR OF THE SCENE", "I AM THE PRODUCER OF THE SHOW", 
+        "I AM THE AUDIENCE OF THE PERFORMANCE", "I AM THE CRITIC OF THE ART", "I AM THE LOVER OF THE BEAUTY", "I AM THE BELIEVER IN THE MAGIC", "I AM THE KNOWER OF THE UNKNOWN", 
+        "I AM THE SEER OF THE UNSEEN", "I AM THE HEARER OF THE UNHEARD", "I AM THE FEELER OF THE UNFELT", "I AM THE TASTER OF THE UNTASTED", "I AM THE SMELLER OF THE UNSMELT", 
+        "I AM THE TOUCHER OF THE UNTOUCHED", "I AM THE SENSER OF THE UNSENSED", "I AM THE PERCEIVER OF THE UNPERCEIVED", "I AM THE CONCEIVER OF THE UNCONCEIVED", 
+        "I AM THE BELIEVER IN THE UNBELIEVABLE", "I AM THE ACHIEVER OF THE UNACHIEVABLE", "I AM THE RECEIVER OF THE UNRECEIVABLE", "I AM THE GIVER OF THE UNGIVABLE", 
+        "I AM THE LOVER OF THE UNLOVABLE", "I AM THE FORGIVER OF THE UNFORGIVABLE", "I AM THE HEALER OF THE UNHEALABLE", "I AM THE KNOWING OF THE UNKNOWABLE", 
+        "I AM THE BEING OF THE UNBEING", "I AM THE DOING OF THE UNDOING", "I AM THE HAVING OF THE UNHAVING", "I AM THE SEEING OF THE UNSEEING", "I AM THE HEARING OF THE UNHEARING", 
+        "I AM THE FEELING OF THE UNFEELING", "I AM THE TASTING OF THE UNTASTING", "I AM THE SMELLING OF THE UNSMELLING", "I AM THE TOUCHING OF THE UNTOUCHING", 
+        "I AM THE SENSING OF THE UNSENSING", "I AM THE PERCEIVING OF THE UNPERCEIVING", "I AM THE CONCEIVING OF THE UNCONCEIVING", "I AM THE BELIEVING OF THE UNBELIEVING", 
+        "I AM THE ACHIEVING OF THE UNACHIEVING", "I AM THE RECEIVING OF THE UNRECEIVING", "I AM THE GIVING OF THE UNGIVING", "I AM THE LOVING OF THE UNLOVING", 
+        "I AM THE FORGIVING OF THE UNFORGIVING", "I AM THE HEALING OF THE UNHEALING", "I AM THE KNOWING OF THE UNKNOWING", "I AM THE BEING OF THE UNBEING", 
+        "I AM THE DOING OF THE UNDOING", "I AM THE HAVING OF THE UNHAVING", "I AM THE ALPHA", "I AM THE OMEGA", "I AM THE BEGINNING", "I AM THE END", "I AM THE FIRST", 
         "I AM THE LAST", "I AM THE ALL", "I AM THE ONE", "I AM THE MANY", "I AM THE NONE", "I AM THE VOID", "I AM THE PLENUM", "I AM THE CHAOS", "I AM THE ORDER", 
         "I AM THE DARKNESS", "I AM THE LIGHT", "I AM THE SILENCE", "I AM THE SOUND", "I AM THE STILLNESS", "I AM THE MOTION", "I AM THE TIME", "I AM THE TIMELESS", 
         "I AM THE SPACE", "I AM THE SPACELESS", "I AM THE FORM", "I AM THE FORMLESS", "I AM THE MATTER", "I AM THE SPIRIT", "I AM THE BODY", "I AM THE SOUL", "I AM THE MIND", 
@@ -755,7 +765,7 @@ function initMatrixRain() {
         "I AM THE MILTONGIVER", "I AM THE BLAKEGIVER", "I AM THE WHITMANGIVER", "I AM THE EMERSONGIVER", "I AM THE THOREAUGIVER"
     ];
 
-    const totalColumns = 70; // Increased Density for "Storm" effect
+    const totalColumns = 50; // Density of the storm
 
     for (let i = 0; i < totalColumns; i++) {
         const col = document.createElement('div');
@@ -769,7 +779,7 @@ function initMatrixRain() {
         col.style.left = `${Math.random() * 100}%`;
 
         // Random Animation Speed & Delay
-        const duration = 8 + Math.random() * 15; // Faster range: 8s to 23s
+        const duration = 10 + Math.random() * 20; // 10s to 30s fall time
         const delay = Math.random() * -20; // Start at different times
         col.style.animationDuration = `${duration}s`;
         col.style.animationDelay = `${delay}s`;
@@ -777,15 +787,15 @@ function initMatrixRain() {
         // RARITY LOGIC (Probability System)
         const roll = Math.random() * 100;
         if (roll > 99.5) {
-            col.classList.add('rare-divine', 'glow-pulse'); // 0.5% chance (White/Glow)
+            col.classList.add('rare-divine', 'glow-pulse'); // 0.5% chance
         } else if (roll > 98) {
-            col.classList.add('rare-legendary'); // 1.5% chance (Crimson)
+            col.classList.add('rare-legendary'); // 1.5% chance
         } else if (roll > 95) {
-            col.classList.add('rare-rare'); // 3% chance (Emerald)
+            col.classList.add('rare-rare'); // 3% chance
         } else if (roll > 85) {
-            col.classList.add('rare-uncommon'); // 10% chance (Cyan)
+            col.classList.add('rare-uncommon'); // 10% chance
         } else {
-            col.classList.add('rare-common'); // 85% chance (Gold/Purple)
+            col.classList.add('rare-common'); // 85% chance
         }
         
         container.appendChild(col);
