@@ -253,7 +253,8 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
 .gallery-art {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* Fallback for desktop */
+    object-position: center;
     display: block;
 }
 
@@ -322,6 +323,7 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     50% { filter: brightness(1.5) drop-shadow(0 0 10px currentColor); }
 }
 
+
 @keyframes matrixFall {
     0% { transform: translateY(0); }
     100% { transform: translateY(250vh); }
@@ -363,8 +365,6 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     .close-reader-btn { position: absolute; bottom: 20px; right: 20px; margin-bottom: 0; }
     .bookshelf-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
     .book-item { max-width: 140px; }
-    /* MOBILE FIX: Shrink frame so rain is visible */
-    .gallery-frame { max-height: 50vh; width: 85%; margin: 0 auto; transform: rotateX(0); }
     .matrix-col { font-size: 0.8rem; letter-spacing: 0.3em; opacity: 0.6; }
 }
 
@@ -375,4 +375,7 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     .paper-arrow { display: none; }
     .preface-image-container { height: 250px; }
     .preface-actions { flex-direction: column; }
+    
+    /* MOBILE FIX: Shrink frame so rain is visible */
+    .gallery-frame { max-height: 50vh; width: 85%; margin: 0 auto; transform: rotateX(0); }
 }

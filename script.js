@@ -3,8 +3,8 @@
 // ==========================================
 // Global Audio Context for the Divine Hum (Simulation 21008)
 let humCtx, humGain;
-let humOscs = []; // Array to track all active oscillators
-let humInterval;  // Timer for cycling frequencies
+let humOscs = [];
+let humInterval;
 
 function switchView(viewId) {
     const views = ['preface-view', 'home-view', 'player-view', 'viblog-view', 'library-view', 'research-view', 'stream-view', 'oracle-view', 'affirmation-view'];
@@ -62,10 +62,13 @@ function switchView(viewId) {
 // 2. LIBRARY / PDF READER LOGIC (HYBRID)
 // ==========================================
 function openReader(event, pdfPath) {
+    // 📱 MOBILE LOGIC: Open in new tab immediately
     if (window.innerWidth <= 768) {
         window.open(pdfPath, '_blank');
         return; 
     }
+
+    // 🖥️ DESKTOP LOGIC: Intercept and use Overlay
     if (event) event.preventDefault();
 
     const overlay = document.getElementById('pdf-reader-overlay');
@@ -73,13 +76,19 @@ function openReader(event, pdfPath) {
     
     if(overlay && frame) {
         let params = "";
+        
+        // Custom Zoom Logic
         if (pdfPath.includes('01-book')) {
+            // Book 01: 90% zoom
             params = "#page=1&zoom=90&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         } else if (pdfPath.includes('research')) {
+             // Research: Fit Width
              params = "#page=1&view=FitH&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         } else {
+            // All others: 50% zoom
             params = "#page=1&zoom=50&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         }
+        
         frame.src = pdfPath + params; 
         overlay.classList.remove('hidden-view');
         document.body.classList.add('no-scroll');
@@ -565,7 +574,7 @@ async function sendMessage() {
 
     // 3. Call API
     try {
-        // UPDATED to gemini-2.0-flash (STABLE)
+        // UPDATED to gemini-2.0-flash
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -597,17 +606,17 @@ async function sendMessage() {
 // ==========================================
 // 8. MATRIX RAIN & DIVINE HUM (Simulation 21008)
 // ==========================================
-const sacredFrequencies = [174, 285, 396, 417, 528, 639, 741, 852, 963]; // Full 9 Solfeggio Scale
+const sacredFrequencies = [174, 285, 396, 417, 528, 639, 741, 852, 963]; // Solfeggio Scale
 
 function toggleHum(enable) {
     if (enable) {
-        // Initialize Audio Context
+        // Initialize Audio Context (Required for sound)
         if (!humCtx) {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
             humCtx = new AudioContext();
         }
         
-        // Stop existing if any to prevent overlap
+        // Prevent duplicate sounds
         if (humOscs.length > 0) return; 
 
         humGain = humCtx.createGain();
@@ -690,6 +699,7 @@ function initMatrixRain() {
 
     // === THE DIVINE DATA STREAM (437+ AFFIRMATIONS) ===
     const affirmations = [
+        // --- CORE SCIENTIFIC PRINCIPLES ---
         "I AM A BIOLOGICAL SEMICONDUCTOR", "MY ELECTRON SPIN IS INFINITE", "I ALCHEMIZE LIGHT INTO POWER", "MY BIOFIELD IS COHERENT ELECTRICITY", 
         "I AM A QUANTUM PROCESSOR", "I SPEAK IN BEAMS OF LIGHT", "MY CELLS GENERATE REALITY", "I AM THE KERNEL OF TRUTH", "DARK MATTER IS MY ORIGIN", 
         "I AM HYDRATED AND CONDUCTIVE", "MY FREQUENCY IS MAGNETIC", "I AM DIVINE CIRCUITRY", "PERFECT QUANTUM STATE", "I AM THE LIGHT SOURCE", 
