@@ -12,7 +12,7 @@
     --font-display: 'Playfair Display', serif;
     --font-ui: 'Inter', sans-serif;
 
-    /* Rarity Gradients for Simulation 21008 */
+    /* Rarity Gradients for Simulation 21008 (The Matrix) */
     --rare-common: linear-gradient(to bottom, #FFD700, #8A2BE2);     /* Gold/Purple */
     --rare-uncommon: linear-gradient(to bottom, #00FFFF, #008080);   /* Cyan/Teal */
     --rare-rare: linear-gradient(to bottom, #50C878, #228B22);       /* Emerald */
@@ -235,12 +235,16 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
 
 .gallery-frame {
     position: relative;
-    aspect-ratio: 1856 / 2304; /* Match image ratio */
+    /* Match specific image ratio 1856x2304 ~= 4:5 aspect */
+    aspect-ratio: 1856 / 2304;
     height: 75vh; 
     width: auto;
+    
     border-radius: 12px;
+    /* The "Breathing" Glow Animation */
     animation: breatheGlow 8s infinite alternate ease-in-out;
-    transform: rotateX(2deg); 
+    
+    transform: rotateX(2deg); /* Slight tilt for majesty */
     overflow: hidden;
     border: 1px solid rgba(255, 215, 0, 0.1);
     pointer-events: auto;
@@ -284,7 +288,9 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     position: absolute;
     top: -150vh; 
     writing-mode: vertical-rl;
+    -webkit-writing-mode: vertical-rl; /* Safari fix */
     text-orientation: upright;
+    -webkit-text-orientation: upright; /* Safari fix */
     font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-size: 0.85rem;
@@ -316,21 +322,24 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     50% { filter: brightness(1.5) drop-shadow(0 0 10px currentColor); }
 }
 
-
 @keyframes matrixFall {
     0% { transform: translateY(0); }
     100% { transform: translateY(250vh); }
 }
 
 /* Randomize speeds */
+.s0 { animation-duration: 8s; } /* Blitz speed */
 .s1 { animation-duration: 15s; }
 .s2 { animation-duration: 20s; }
 .s3 { animation-duration: 25s; }
 .s4 { animation-duration: 30s; }
+.s5 { animation-duration: 40s; } /* Glacial speed */
 /* Randomize delays */
 .d1 { animation-delay: -5s; }
 .d2 { animation-delay: -12s; }
 .d3 { animation-delay: -8s; }
+.d4 { animation-delay: -15s; }
+.d5 { animation-delay: -22s; }
 
 
 /* =========================================
@@ -354,7 +363,8 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     .close-reader-btn { position: absolute; bottom: 20px; right: 20px; margin-bottom: 0; }
     .bookshelf-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
     .book-item { max-width: 140px; }
-    .gallery-frame { max-height: 70vh; transform: rotateX(0); }
+    /* MOBILE FIX: Shrink frame so rain is visible */
+    .gallery-frame { max-height: 50vh; width: 85%; margin: 0 auto; transform: rotateX(0); }
     .matrix-col { font-size: 0.8rem; letter-spacing: 0.3em; opacity: 0.6; }
 }
 
