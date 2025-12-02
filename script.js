@@ -3,8 +3,8 @@
 // ==========================================
 // Global Audio Context for the Divine Hum (Simulation 21008)
 let humCtx, humGain;
-let humOscs = [];
-let humInterval;
+let humOscs = []; // Array to track all active oscillators
+let humInterval;  // Timer for cycling frequencies
 
 function switchView(viewId) {
     const views = ['preface-view', 'home-view', 'player-view', 'viblog-view', 'library-view', 'research-view', 'stream-view', 'oracle-view', 'affirmation-view'];
@@ -37,8 +37,7 @@ function switchView(viewId) {
         if (viewId === 'affirmation-view') {
             view.classList.add('next-sim-body');
             
-            // 1. Randomize Gallery Image (ya.jpg vs ja.jpg) with CACHE BUSTER
-            // The "?v=" timestamp forces mobile browsers to ignore old cached versions
+            // 1. Randomize Gallery Image (ya.jpg vs ja.jpg) with Cache Buster
             const affirmationImages = ['images/ya.jpg', 'images/ja.jpg'];
             const galleryArt = document.querySelector('.gallery-art');
             if (galleryArt) {
@@ -63,13 +62,10 @@ function switchView(viewId) {
 // 2. LIBRARY / PDF READER LOGIC (HYBRID)
 // ==========================================
 function openReader(event, pdfPath) {
-    // 📱 MOBILE LOGIC: Open in new tab immediately
     if (window.innerWidth <= 768) {
         window.open(pdfPath, '_blank');
         return; 
     }
-
-    // 🖥️ DESKTOP LOGIC: Intercept and use Overlay
     if (event) event.preventDefault();
 
     const overlay = document.getElementById('pdf-reader-overlay');
@@ -77,8 +73,6 @@ function openReader(event, pdfPath) {
     
     if(overlay && frame) {
         let params = "";
-        
-        // Custom Zoom Logic
         if (pdfPath.includes('01-book')) {
             params = "#page=1&zoom=90&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         } else if (pdfPath.includes('research')) {
@@ -86,7 +80,6 @@ function openReader(event, pdfPath) {
         } else {
             params = "#page=1&zoom=50&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         }
-        
         frame.src = pdfPath + params; 
         overlay.classList.remove('hidden-view');
         document.body.classList.add('no-scroll');
@@ -537,6 +530,7 @@ function initializeViblog() {
         });
 }
 
+
 // ==========================================
 // 7. ORACLE AI LOGIC (Simulation 12984)
 // ==========================================
@@ -571,8 +565,8 @@ async function sendMessage() {
 
     // 3. Call API
     try {
-        // UPDATED to gemini-2.5-flash
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
+        // UPDATED to gemini-2.0-flash (STABLE)
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -603,17 +597,17 @@ async function sendMessage() {
 // ==========================================
 // 8. MATRIX RAIN & DIVINE HUM (Simulation 21008)
 // ==========================================
-const sacredFrequencies = [396, 417, 528, 639, 741, 852, 963]; // Solfeggio
+const sacredFrequencies = [174, 285, 396, 417, 528, 639, 741, 852, 963]; // Full 9 Solfeggio Scale
 
 function toggleHum(enable) {
     if (enable) {
-        // Initialize Audio Context (Required for sound)
+        // Initialize Audio Context
         if (!humCtx) {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
             humCtx = new AudioContext();
         }
         
-        // Prevent duplicate sounds
+        // Stop existing if any to prevent overlap
         if (humOscs.length > 0) return; 
 
         humGain = humCtx.createGain();
@@ -624,29 +618,8 @@ function toggleHum(enable) {
         const humMode = Math.floor(Math.random() * 3);
 
         if (humMode === 0) { 
-            // MODE 1: Chronological Solfeggio (Cycles through frequencies)
-            // Fade In
-            humGain.gain.linearRampToValueAtTime(0.15, humCtx.currentTime + 2);
-            
-            // Create single oscillator
-            const osc = humCtx.createOscillator();
-            osc.frequency.value = sacredFrequencies[0]; // Start at 396Hz
-            osc.type = 'sine';
-            osc.connect(humGain);
-            osc.start();
-            humOscs.push(osc);
-
-            // Cycle logic
-            let currentFreqIndex = 0;
-            humInterval = setInterval(() => {
-                currentFreqIndex = (currentFreqIndex + 1) % sacredFrequencies.length;
-                // Smoothly ramp to next frequency over 3 seconds
-                humOscs[0].frequency.linearRampToValueAtTime(sacredFrequencies[currentFreqIndex], humCtx.currentTime + 3);
-            }, 5000); // Change every 5 seconds
-
-        } else if (humMode === 1) { 
-            // MODE 2: Harmonic Stack (All Frequencies at Once)
-            // Lower individual volume to prevent clipping
+            // MODE 1: Harmonics (All 9 Frequencies Stacked)
+            // Very low gain per oscillator to avoid clipping
             const individualGain = 0.15 / sacredFrequencies.length;
             humGain.gain.linearRampToValueAtTime(individualGain, humCtx.currentTime + 2);
 
@@ -658,6 +631,24 @@ function toggleHum(enable) {
                 osc.start();
                 humOscs.push(osc);
             });
+
+        } else if (humMode === 1) { 
+            // MODE 2: Chronological Cycle (One by one)
+            humGain.gain.linearRampToValueAtTime(0.15, humCtx.currentTime + 2);
+            
+            const osc = humCtx.createOscillator();
+            osc.frequency.value = sacredFrequencies[0]; // Start at 174Hz
+            osc.type = 'sine';
+            osc.connect(humGain);
+            osc.start();
+            humOscs.push(osc);
+
+            let currentFreqIndex = 0;
+            humInterval = setInterval(() => {
+                currentFreqIndex = (currentFreqIndex + 1) % sacredFrequencies.length;
+                // Smoothly slide to next frequency over 3 seconds
+                humOscs[0].frequency.linearRampToValueAtTime(sacredFrequencies[currentFreqIndex], humCtx.currentTime + 3);
+            }, 5000); // Change every 5 seconds
 
         } else { 
             // MODE 3: The Universal Tune (432Hz Drone)
@@ -699,7 +690,6 @@ function initMatrixRain() {
 
     // === THE DIVINE DATA STREAM (437+ AFFIRMATIONS) ===
     const affirmations = [
-        // --- CORE SCIENTIFIC PRINCIPLES ---
         "I AM A BIOLOGICAL SEMICONDUCTOR", "MY ELECTRON SPIN IS INFINITE", "I ALCHEMIZE LIGHT INTO POWER", "MY BIOFIELD IS COHERENT ELECTRICITY", 
         "I AM A QUANTUM PROCESSOR", "I SPEAK IN BEAMS OF LIGHT", "MY CELLS GENERATE REALITY", "I AM THE KERNEL OF TRUTH", "DARK MATTER IS MY ORIGIN", 
         "I AM HYDRATED AND CONDUCTIVE", "MY FREQUENCY IS MAGNETIC", "I AM DIVINE CIRCUITRY", "PERFECT QUANTUM STATE", "I AM THE LIGHT SOURCE", 
@@ -764,16 +754,16 @@ function initMatrixRain() {
         "I AM THE MILTONGIVER", "I AM THE BLAKEGIVER", "I AM THE WHITMANGIVER", "I AM THE EMERSONGIVER", "I AM THE THOREAUGIVER", "Melanin kissed by cosmic grace", "Superconductor of infinite favor", "Dark light radiating pure source energy", "Quantum grace in every sacred strand", "Black sun of divine presence", "Electron spin eternally aligned", "Pineal portal streaming liquid starlight", "Grace remembers your original blueprint", "Skin holding ancient cosmic memory", "Biofield bathed in zero-point perfection", "Darkness crowned with universal love", "Melanin, original quantum sacrament", "Zero striving, infinite expansion", "Blood singing the frequency of now", "Grace chose this hue at the beginning", "Neuromelanin tuned to galactic center", "Shadow healing timelines", "Event horizon of pure potential", "Cells baptized in source light", "Black womb birthing new realities", "Frequency locked on higher self", "Ancestors flowing through your aura", "Grace encoded your name in starlight", "Crown chakra spinning pure prana", "Void overflowing with divine essence", "Melanin, throne of living light", "Resting while universes unfold", "Darkness, the first womb of creation", "Grace in every sacred curl", "Heartbeat synced to cosmic rhythm", "Aura dripping liquid diamond light", "Skin, living stargate of remembrance", "Quantum field humming source code", "Blackness, original divine template", "Grace never left the quantum garden", "Melanin conducting pure creation energy", "Eyes holding tomorrow’s light", "Breath made of infinite yes", "Bones woven from star plasma", "Skin, love letter from the cosmos", "Pulse whispering infinite worth", "Darkness, cradle of all light", "Melanin, signature of source", "Grace dancing in your double helix", "Shadow glowing with divine approval", "Blood carrying completed ascension", "Black, the color source wore first", "Resting in arms of pure presence", "Melanin, portal of unearned magic", "Skin kissed before form began", "Quantum grace in every breath", "Darkness, sacred void of creation", "Cells already home in oneness", "Grace flowing through your light body", "Black light, holy source flame", "Crown of favor eternally resting", "Melanin, throne room of the infinite", "Breath, echo of the first OM", "Skin, evidence of cosmic delight", "Shadow, altar of pure potential", "Heart, sanctuary of eternal now", "Melanin, ark of the new earth", "Grace holding every timeline", "Blackness, mirror of the absolute", "Pulse, rhythm of awakened DNA", "Skin, robe of living light", "Darkness, cradle of infinite stars", "Melanin, living source code", "Grace in the quantum spaces", "Shadow, priest of divine mystery", "Blood, elixir of remembrance", "Black, the color of pure potential", "Resting while dimensions shift", "Melanin, master key to all realms", "Skin, canvas of cosmic art", "Quantum mercy in every inhale", "Darkness, first breath of source", "Cells dancing in completed light", "Grace authored this body in love", "Black light guiding home", "Shadow, carrier of ancient star codes", "Melanin, throne of pure being", "Heartbeat, echo of cosmic beloved", "Skin, garment of living source", "Darkness, womb of infinite revelation", "Blood, river of liquid light", "Blackness, signature of the chosen ones", "Quantum field singing unity", "Shadow healing through presence alone", "Melanin, portal of pure peace", "Grace spiraling through your DNA", "Skin, love made magnificently visible", "Darkness, sacred ground of creation", "Cells resting in eternal truth", "Black light, eternal flame of grace", "Pulse, rhythm of divine remembrance", "Melanin, crown of cosmic glory", "Breath, wind of infinite forgiveness", "Skin, living temple of light", "Quantum grace flowing effortlessly", "Darkness, womb of pure consciousness", "Blood, golden oil of ascension", "Blackness, original beauty of source", "Shadow, wings of the infinite", "Heart, seat of divine mercy", "Melanin, living cosmic testimony", "Grace holding past present future", "Skin, robe of rainbow light", "Darkness, secret garden of source", "Cells crowned with infinite favor", "Black light, city of pure light", "Pulse, drum of universal love", "Melanin, sanctuary of the absolute", "Breath, sacred wind of rest", "Skin, banner of cosmic love", "Quantum mercy, zero point peace", "Darkness, womb of eternal dawn", "Blood, cup of infinite blessing", "Blackness, excellence of divine design", "Shadow, refuge in all realms", "Heart, enclosed garden of source", "Melanin, oil of cosmic joy", "Grace in every atom and void", "Skin, house of living prayer", "Darkness, pavilion of infinite peace", "Cells, temples of pure light", "Black light, everlasting gateway", "Pulse, sound of infinite abundance", "Melanin, diadem of divine beauty", "Breath, kiss of pure life", "Skin, wall of living light", "Quantum grace, river of pure being", "Darkness, secret of infinite strength", "Blood, new covenant of light", "Blackness, excellence of cosmic power", "Shadow, sacred hiding place", "Heart, chamber of eternal grace", "Melanin, crown of infinite life", "Grace flowing through every coil", "Skin, garment of pure praise", "Darkness, wings of eternal dawn", "Cells, living stones of light", "Black light, gateway to all realms", "Pulse, song of the awakened", "Melanin, well of cosmic salvation", "Breath, wind beneath infinite wings", "Skin, royal crown of light", "Quantum mercy, ocean of pure peace", "Darkness, bosom of eternal rest", "Blood, complete cosmic atonement", "Blackness, everlasting divine beauty", "Shadow, eternal strong tower", "Heart, throne of infinite grace", "Melanin, tree of cosmic life", "Grace in every sacred curl", "Skin, tabernacle of living glory", "Darkness, secret place of creation", "Cells, cities of pure refuge", "Black light, eternal morning star", "Pulse, heartbeat of the cosmos", "Melanin, fountain of eternal youth", "Breath, spirit of pure presence", "Skin, wall of living fire", "Quantum grace, endless eternal now", "Darkness, valley of cosmic vision", "Blood, river of infinite delight", "Blackness, crown of eternal splendor", "Shadow, shelter from all storms", "Heart, holy habitation of light", "Melanin, lamp of the cosmic body", "Grace in every bloodline of light", "Skin, house of infinite bread", "Darkness, womb of pure wonder", "Cells, branches of the cosmic vine", "Black light, light of pure life", "Pulse, sound of infinite waters", "Melanin, hidden cosmic manna", "Breath, breath of eternal dawn", "Skin, field of infinite blessing", "Quantum mercy, deep calling unto deep", "Darkness, chamber of the infinite king", "Blood, wine of cosmic astonishment", "Blackness, oil of eternal gladness", "Shadow, cover from all illusion", "Heart, ark of pure safety", "Melanin, white stone of truth", "Grace in every quantum pore", "Skin, banner of eternal love", "Darkness, secret of divine presence", "Cells, living letters of light", "Black light, door of infinite hope", "Pulse, voice of cosmic triumph", "Melanin, crown of eternal glory", "Breath, spirit of pure holiness", "Skin, wall of living praise", "Quantum grace, peace beyond understanding", "Darkness, valley of infinite blessing", "Blood, cup eternally overflowing", "Blackness, beauty for all ashes", "Shadow, wings of cosmic healing", "Heart, mercy that never ends", "Melanin, joy beyond words", "Grace in the eternal silence", "Skin, garment of pure salvation", "Darkness, holy habitation of light", "Cells, royal priesthood of source", "Black light, sun of pure righteousness", "Pulse, song of complete deliverance", "Melanin, hidden cosmic treasure", "Breath, wind of total restoration", "Skin, robe of pure praise", "Quantum mercy, eternal rest", "Darkness, secret place of infinite light", "Blood, covenant of eternal peace", "Blackness, strength and cosmic dignity", "Shadow, refuge through all timelines", "Heart, fountain eternally opened", "Melanin, pearl beyond price", "Grace upon grace upon grace", "Skin, house of infinite light", "Darkness, womb of pure resurrection", "Cells, chosen generation of light", "Black light, bright eternal morning star", "Pulse, shout of cosmic victory", "Melanin, crown of infinite beauty", "Breath, spirit of divine adoption", "Skin, wall of living jasper light", "Quantum grace, glory to endless glory", "Darkness, tabernacle of pure presence", "Blood, everlasting covenant of light", "Blackness, excellence of cosmic splendor", "Shadow, eternal strong habitation", "Heart, chamber of infinite peace", "Melanin, tree planted by rivers of light", "Grace, eternally sufficient", "Skin, eternal banner of love", "Darkness, holy of holies of source", "Cells, living oracles of light", "Black light, lamp unto all paths", "Pulse, voice of the eternal bridegroom", "Melanin, crown of cosmic rejoicing", "Breath, spirit of infinite glory", "Skin, wall of eternal salvation", "Quantum mercy, everlasting cosmic joy", "Darkness, secret of pure source", "Blood, atonement eternally complete", "Blackness, beauty of the infinite", "Shadow, wings of eternal refuge", "Heart, rest for all souls", "Melanin, hidden cosmic wisdom", "Grace eternally abounding", "Skin, house of light forever", "Darkness, pavilion of pure glory", "Cells, temple of living source", "Black light, light of all worlds", "Pulse, sound of infinite rain", "Melanin, crown of eternal life", "Breath, spirit of pure truth", "Skin, robe of living light", "Quantum grace, peace be forever", "Darkness, womb of new creation", "Blood, redemption eternally complete", "Blackness, strength perfectly made", "Shadow, hiding place forever prepared", "Heart, throne of infinite mercy", "Melanin, light beyond approaching", "Grace, all in all eternally", "Skin, garment of endless light", "Darkness, secret place of pure creation", "Cells, city of eternal light", "Black light, glory fully revealed", "Pulse, song of the eternal lamb", "Melanin, crown that never fades", "Breath, spirit of divine sonship", "Skin, wall of fire and glory", "Quantum mercy, joy beyond speaking", "Darkness, holy habitation forever", "Blood, victory eternally sealed", "Blackness, beauty that never dies", "Shadow, refuge from every storm", "Heart, eternal cosmic rest", "Melanin, living way forever opened", "Grace finished before all beginnings", "Skin, robe of infinite colors restored", "Darkness, bosom of pure source", "Cells, new creation fully complete", "Black light, everlasting cosmic light", "Pulse, heartbeat of pure eternity", "Melanin, crown of glory that never fades", "Breath, spirit of the living cosmos", "Skin, house not made with hands", "Quantum grace, it is eternally finished", "Darkness, secret place forever", "Blood, covenant that can never break", "Blackness, beauty that births worlds", "Shadow, wings of everlasting love", "Heart, home in the infinite chest", "Melanin, the yes of source in form", "Grace, the final and only word", "Skin, the glory and lifter of all", "Darkness, womb from which all light flows", "Cells, testimony of pure source", "Black light, light no darkness can touch", "Pulse, the sound of eternal home", "Melanin, original image of the infinite", "Breath, the kiss that never ends", "Skin, the tent source pitched in flesh", "Quantum grace, forever enough", "Darkness, the first eternal embrace", "Blood, the love that speaks all things", "Blackness, the beauty that beholds source", "Shadow, the secret place where grace sings", "Heart, the throne where love reigns", "Melanin, the masterpiece eternally signed", "Grace, the beginning and never-ending", "Skin, the story source always wanted", "Darkness, the holy of holies unveiled", "Cells, the new song the cosmos sings", "Black light, radiance of infinite delight", "Pulse, the rhythm of eternal belonging", "Melanin, the crown placed before all time", "Breath, the wind of eternal welcome", "Skin, the garment woven from pure light", "Quantum grace, the rest that forever remains", "Darkness, the bosom where all is made new", "Blood, the eternal amen", "Blackness, the mirror where source sees itself", "Shadow, the wing we abide under forever", "Heart, the home grace never left", "Melanin, living proof that love chose darkness to reveal its deepest splendor", "Grace, always grace, only grace, forever grace"
     ];
 
-    // 5 NEW FONTS + Default (7 Total)
+    // 7 FONTS FOR CHAOS & DIVERSITY
     const fonts = ['Playfair Display', 'Inter', 'Cinzel', 'Cormorant Garamond', 'Julius Sans One', 'Sacramento', 'Tenor Sans'];
 
-    const totalColumns = 70; // High density "Storm"
+    const totalColumns = 100; // MAXIMUM DENSITY STORM
 
     for (let i = 0; i < totalColumns; i++) {
         const col = document.createElement('div');
         col.classList.add('matrix-col');
         
-        // Random Affirmation
+        // Select random affirmation
         const text = affirmations[Math.floor(Math.random() * affirmations.length)];
         col.innerText = text;
         
@@ -782,12 +772,12 @@ function initMatrixRain() {
 
         // Random Position & Physics
         col.style.left = `${Math.random() * 100}%`;
-        const duration = 8 + Math.random() * 15; 
-        const delay = Math.random() * -20;
+        const duration = 6 + Math.random() * 20; // 6s to 26s speed
+        const delay = Math.random() * -30; 
         col.style.animationDuration = `${duration}s`;
         col.style.animationDelay = `${delay}s`;
         
-        // Rarity Logic
+        // RARITY LOGIC (Probability System)
         const roll = Math.random() * 100;
         if (roll > 99.5) {
             col.classList.add('rare-divine', 'glow-pulse'); 
@@ -819,7 +809,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (enterBtn) {
         enterBtn.addEventListener('click', () => {
             switchView('home-view');
-            // Initialize Audio Context on user click to allow auto-play
+            // Initialize Audio Context
             const AudioContext = window.AudioContext || window.webkitAudioContext;
             new AudioContext().resume();
         });
