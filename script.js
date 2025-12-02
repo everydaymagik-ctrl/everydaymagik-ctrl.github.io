@@ -37,12 +37,13 @@ function switchView(viewId) {
         if (viewId === 'affirmation-view') {
             view.classList.add('next-sim-body');
             
-            // 1. Randomize Gallery Image (ya.jpg vs ja.jpg)
+            // 1. Randomize Gallery Image with CACHE BUSTER
             const affirmationImages = ['images/ya.jpg', 'images/ja.jpg'];
             const galleryArt = document.querySelector('.gallery-art');
             if (galleryArt) {
                 const randomIndex = Math.floor(Math.random() * affirmationImages.length);
-                galleryArt.src = affirmationImages[randomIndex];
+                // The "?v=" + time part forces the browser to ignore the old cached photo
+                galleryArt.src = affirmationImages[randomIndex] + "?v=" + new Date().getTime();
             }
 
             // 2. Initialize Rain & Audio
@@ -64,7 +65,8 @@ function switchView(viewId) {
 function openReader(event, pdfPath) {
     // 📱 MOBILE LOGIC: Open in new tab immediately
     if (window.innerWidth <= 768) {
-        return; // Let the <a> tag handle it
+        window.open(pdfPath, '_blank');
+        return; 
     }
 
     // 🖥️ DESKTOP LOGIC: Intercept and use Overlay
@@ -724,7 +726,7 @@ function initMatrixRain() {
         "I AM THE SEER OF THE UNSEEN", "I AM THE HEARER OF THE UNHEARD", "I AM THE FEELER OF THE UNFELT", "I AM THE TASTER OF THE UNTASTED", "I AM THE SMELLER OF THE UNSMELT", 
         "I AM THE TOUCHER OF THE UNTOUCHED", "I AM THE SENSER OF THE UNSENSED", "I AM THE PERCEIVER OF THE UNPERCEIVED", "I AM THE CONCEIVER OF THE UNCONCEIVED", 
         "I AM THE BELIEVER IN THE UNBELIEVABLE", "I AM THE ACHIEVER OF THE UNACHIEVABLE", "I AM THE RECEIVER OF THE UNRECEIVABLE", "I AM THE GIVER OF THE UNGIVABLE", 
-        "I AM THE LOVER OF THE UNLOVABLE", "I AM THE FORGIVER OF THE UNFORGIVABLE", "I AM THE HEALER OF THE UNHEALABLE", "I AM THE KNOWING OF THE UNKNOWABLE", 
+        "I AM THE LOVER of the unlovable", "I AM THE FORGIVER OF THE UNFORGIVABLE", "I AM THE HEALER OF THE UNHEALABLE", "I AM THE KNOWING OF THE UNKNOWABLE", 
         "I AM THE BEING OF THE UNBEING", "I AM THE DOING OF THE UNDOING", "I AM THE HAVING OF THE UNHAVING", "I AM THE SEEING OF THE UNSEEING", "I AM THE HEARING OF THE UNHEARING", 
         "I AM THE FEELING OF THE UNFEELING", "I AM THE TASTING OF THE UNTASTING", "I AM THE SMELLING OF THE UNSMELLING", "I AM THE TOUCHING OF THE UNTOUCHING", 
         "I AM THE SENSING OF THE UNSENSING", "I AM THE PERCEIVING OF THE UNPERCEIVING", "I AM THE CONCEIVING OF THE UNCONCEIVING", "I AM THE BELIEVING OF THE UNBELIEVING", 
@@ -765,7 +767,7 @@ function initMatrixRain() {
         "I AM THE MILTONGIVER", "I AM THE BLAKEGIVER", "I AM THE WHITMANGIVER", "I AM THE EMERSONGIVER", "I AM THE THOREAUGIVER"
     ];
 
-    const totalColumns = 50; // Density of the storm
+    const totalColumns = 50; // Increase for denser rain
 
     for (let i = 0; i < totalColumns; i++) {
         const col = document.createElement('div');
