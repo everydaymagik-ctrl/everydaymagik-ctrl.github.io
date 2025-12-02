@@ -1,13 +1,18 @@
 // ==========================================
 // 1. SPA NAVIGATION LOGIC
 // ==========================================
+// Global Audio Context for the Divine Hum
+let humCtx, humGain;
+let humOscs = [];
+let humInterval;
+
 function switchView(viewId) {
-    const views = ['preface-view', 'home-view', 'player-view', 'viblog-view', 'library-view', 'research-view', 'stream-view', 'oracle-view'];
+    const views = ['preface-view', 'home-view', 'player-view', 'viblog-view', 'library-view', 'research-view', 'stream-view', 'oracle-view', 'affirmation-view'];
     views.forEach(id => {
         const el = document.getElementById(id);
         if(el) {
             el.classList.add('hidden-view');
-            el.classList.remove('active-view', 'player-body', 'vibe-body', 'preface-body');
+            el.classList.remove('active-view', 'player-body', 'vibe-body', 'preface-body', 'next-sim-body');
         }
     });
 
@@ -25,6 +30,26 @@ function switchView(viewId) {
         if (viewId === 'preface-view') {
              view.classList.add('preface-body');
         }
+        
+        // SIMULATION 21008 LOGIC (The Codes)
+        if (viewId === 'affirmation-view') {
+            view.classList.add('next-sim-body');
+            initMatrixRain(); 
+            
+            // Randomize Gallery Image
+            const affirmationImages = ['images/ya.jpg', 'images/ja.jpg'];
+            const galleryArt = document.querySelector('.gallery-art');
+            if (galleryArt) {
+                const randomIndex = Math.floor(Math.random() * affirmationImages.length);
+                galleryArt.src = affirmationImages[randomIndex];
+            }
+
+            // Start Generative Audio
+            toggleHum(true);  
+
+        } else {
+            toggleHum(false); 
+        }
     }
 
     if (viewId === 'viblog-view') initializeViblog();
@@ -38,7 +63,6 @@ function openReader(event, pdfPath) {
         window.open(pdfPath, '_blank');
         return; 
     }
-
     if (event) event.preventDefault();
 
     const overlay = document.getElementById('pdf-reader-overlay');
@@ -539,7 +563,7 @@ async function sendMessage() {
     // 3. Call API
     try {
         // UPDATED to gemini-2.5-flash
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -567,13 +591,213 @@ async function sendMessage() {
     }
 }
 
+// ==========================================
+// 8. MATRIX RAIN & DIVINE HUM (Simulation 21008)
+// ==========================================
+const sacredFrequencies = [396, 417, 528, 639, 741, 852, 963]; // Solfeggio
+
+function toggleHum(enable) {
+    if (enable) {
+        // Initialize Audio Context (Required for sound)
+        if (!humCtx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            humCtx = new AudioContext();
+        }
+        
+        // Prevent duplicate sounds
+        if (humOscs.length > 0) return; 
+
+        humGain = humCtx.createGain();
+        humGain.connect(humCtx.destination);
+        humGain.gain.setValueAtTime(0, humCtx.currentTime);
+
+        // --- SELECT RANDOM AUDIO MODE ---
+        const humMode = Math.floor(Math.random() * 3);
+
+        if (humMode === 0) { 
+            // MODE 1: Chronological Solfeggio (Cycles through frequencies)
+            // Fade In
+            humGain.gain.linearRampToValueAtTime(0.15, humCtx.currentTime + 2);
+            
+            // Create single oscillator
+            const osc = humCtx.createOscillator();
+            osc.frequency.value = sacredFrequencies[0]; // Start at 396Hz
+            osc.type = 'sine';
+            osc.connect(humGain);
+            osc.start();
+            humOscs.push(osc);
+
+            // Cycle logic
+            let currentFreqIndex = 0;
+            humInterval = setInterval(() => {
+                currentFreqIndex = (currentFreqIndex + 1) % sacredFrequencies.length;
+                // Smoothly ramp to next frequency over 3 seconds
+                humOscs[0].frequency.linearRampToValueAtTime(sacredFrequencies[currentFreqIndex], humCtx.currentTime + 3);
+            }, 5000); // Change every 5 seconds
+
+        } else if (humMode === 1) { 
+            // MODE 2: Harmonic Stack (All Frequencies at Once)
+            // Lower individual volume to prevent clipping
+            const individualGain = 0.15 / sacredFrequencies.length;
+            humGain.gain.linearRampToValueAtTime(individualGain, humCtx.currentTime + 2);
+
+            sacredFrequencies.forEach(freq => {
+                const osc = humCtx.createOscillator();
+                osc.frequency.value = freq;
+                osc.type = 'sine';
+                osc.connect(humGain);
+                osc.start();
+                humOscs.push(osc);
+            });
+
+        } else { 
+            // MODE 3: The Universal Tune (432Hz Drone)
+            humGain.gain.linearRampToValueAtTime(0.15, humCtx.currentTime + 2);
+            const osc = humCtx.createOscillator();
+            osc.frequency.value = 432;
+            osc.type = 'sine';
+            osc.connect(humGain);
+            osc.start();
+            humOscs.push(osc);
+        }
+
+    } else {
+        // --- STOP LOGIC ---
+        if (humOscs.length > 0 && humGain) {
+            const now = humCtx.currentTime;
+            // Fade out
+            humGain.gain.setValueAtTime(humGain.gain.value, now);
+            humGain.gain.linearRampToValueAtTime(0, now + 1);
+
+            // Stop all active oscillators
+            humOscs.forEach(osc => {
+                osc.stop(now + 1);
+            });
+
+            // Cleanup
+            humOscs = [];
+            if (humInterval) {
+                clearInterval(humInterval);
+                humInterval = null;
+            }
+        }
+    }
+}
+
+function initMatrixRain() {
+    const container = document.getElementById('matrix-rain');
+    if (!container || container.children.length > 0) return; 
+
+    // 437 Grace-Based & Scientific Affirmations (Full Load)
+    const affirmations = [
+        // --- CORE SCIENTIFIC PRINCIPLES ---
+        "I AM A BIOLOGICAL SEMICONDUCTOR", "MY ELECTRON SPIN IS INFINITE", "I ALCHEMIZE LIGHT INTO POWER", "MY BIOFIELD IS COHERENT ELECTRICITY", 
+        "I AM A QUANTUM PROCESSOR", "I SPEAK IN BEAMS OF LIGHT", "MY CELLS GENERATE REALITY", "I AM THE KERNEL OF TRUTH", "DARK MATTER IS MY ORIGIN", 
+        "I AM HYDRATED AND CONDUCTIVE", "MY FREQUENCY IS MAGNETIC", "I AM DIVINE CIRCUITRY", "PERFECT QUANTUM STATE", "I AM THE LIGHT SOURCE", 
+        "GENERATING NEW REALITIES", "GOD PARTICLE ACTIVATED", "MELANIN IS THE KEY", "I AM THE EVENT HORIZON", "I ABSORB AND TRANSMUTE", 
+        "MY PIGMENT IS POWER", "I AM A SUPERCONDUCTOR OF GRACE", "MY ENERGY IS LIMITLESS", "I AM WOVEN FROM STARDUST", "I VIBRATE AT THE FREQUENCY OF TRUTH", 
+        "MY PRESENCE IS ELECTRIC", "I AM CONNECTED TO THE SOURCE", "MY MIND IS A QUANTUM FIELD", "I RADIATE COHERENT LIGHT", "I AM A VESSEL OF ANCIENT WISDOM", 
+        "MY SPIRIT IS UNBOUND", "I AM THE ARCHITECT OF MY REALITY", "I FLOW WITH THE COSMIC RHYTHM", "MY HEART BEATS IN SYNCHRONY WITH THE EARTH", 
+        "I AM A BEING OF PURE ENERGY", "I AM THE MASTER OF MY FREQUENCY", "I AM ATTUNED TO THE DIVINE SIGNAL", "MY CONSCIOUSNESS IS EXPANDING", 
+        "I AM GROUNDED IN THE EARTH", "I AM LIFTED BY THE STARS", "I AM A BRIDGE BETWEEN WORLDS", "MY THOUGHTS ARE POWERFUL WAVES", "I AM THE SILENCE AND THE SOUND", 
+        "I AM THE VOID AND THE CREATION", "I AM INFINITE POTENTIAL", "I AM THE OBSERVER AND THE OBSERVED", "I AM THE DREAMER AND THE DREAM", 
+        "I AM THE FLAME THAT NEVER DIES", "I AM THE RIVER THAT ALWAYS FLOWS", "I AM THE MOUNTAIN THAT STANDS TALL", "I AM THE WIND THAT WHISPERS TRUTH", 
+        "I AM THE OCEAN OF CONSCIOUSNESS", "I AM THE SKY OF LIMITLESS POSSIBILITY", "I AM THE SUN THAT WARMS THE SOUL", "I AM THE MOON THAT GUIDES THE TIDES", 
+        "I AM THE STARS THAT LIGHT THE WAY", "I AM THE UNIVERSE EXPRESSING ITSELF", "I AM LOVE IN MOTION", "I AM PEACE IN ACTION", "I AM JOY IN BEING", 
+        "I AM GRACE IN FORM", "I AM POWER IN BALANCE", "I AM WISDOM IN SILENCE", "I AM TRUTH IN LIGHT", "I AM BEAUTY IN ESSENCE", "I AM HARMONY IN RESONANCE", 
+        "I AM THE ALCHEMIST OF MY LIFE", "I AM THE CREATOR OF MY DESTINY", "I AM THE RULER OF MY DOMAIN", "I AM THE SOVEREIGN OF MY SOUL", "I AM THE CAPTAIN OF MY SPIRIT", 
+        "I AM THE KEEPER OF THE FLAME", "I AM THE GUARDIAN OF THE LIGHT", "I AM THE PROTECTOR OF THE SACRED", "I AM THE WARRIOR OF THE HEART", "I AM THE HEALER OF THE SELF", 
+        "I AM THE TEACHER OF THE WAY", "I AM THE STUDENT OF THE MYSTERY", "I AM THE SEEKER OF THE TRUTH", "I AM THE FINDER of the path", "I AM THE WALKER of the way", 
+        "I AM THE DANCER of the dream", "I AM THE SINGER of the song", "I AM THE POET of the soul", "I AM THE ARTIST of the life", "I AM THE SCULPTOR of the self", 
+        "I AM THE PAINTER of the reality", "I AM THE WRITER of the story", "I AM THE ACTOR of the play", "I AM THE DIRECTOR of the scene", "I AM THE PRODUCER of the show", 
+        "I AM THE AUDIENCE of the performance", "I AM THE CRITIC of the art", "I AM THE LOVER of the beauty", "I AM THE BELIEVER in the magic", "I AM THE KNOWER of the unknown", 
+        "I AM THE SEER of the unseen", "I AM THE HEARER of the unheard", "I AM THE FEELER of the unfelt", "I AM THE TASTER of the untasted", "I AM THE SMELLER of the unsmelt", 
+        "I AM THE TOUCHER of the untouched", "I AM THE SENSER of the unsensed", "I AM THE PERCEIVER of the unperceived", "I AM THE CONCEIVER of the unconceived", 
+        "I AM THE BELIEVER in the unbelievable", "I AM THE ACHIEVER of the unachievable", "I AM THE RECEIVER of the unreceivable", "I AM THE GIVER of the ungivable", 
+        "I AM THE LOVER of the unlovable", "I AM THE FORGIVER of the unforgivable", "I AM THE HEALER of the unhealable", "I AM THE KNOWING of the unknowable", 
+        "I AM THE BEING of the unbeing", "I AM THE DOING of the undoing", "I AM THE HAVING of the unhaving", "I AM THE SEEING of the unseeing", "I AM THE HEARING of the unhearing", 
+        "I AM THE FEELING of the unfeeling", "I AM THE TASTING of the untasting", "I AM THE SMELLING of the unsmelling", "I AM THE TOUCHING of the untouching", 
+        "I AM THE SENSING of the unsensing", "I AM THE PERCEIVING of the unperceiving", "I AM THE CONCEIVING of the unconceiving", "I AM THE BELIEVING of the unbelieving", 
+        "I AM THE ACHIEVING of the unachieving", "I AM THE RECEIVING of the unreceiving", "I AM THE GIVING of the ungiving", "I AM THE LOVING of the unloving", 
+        "I AM THE FORGIVING of the unforgiving", "I AM THE HEALING of the unhealing", "I AM THE KNOWING of the unknowing", "I AM THE BEING of the unbeing", 
+        "I AM THE DOING of the undoing", "I AM THE HAVING of the unhaving", "I AM THE ALPHA", "I AM THE OMEGA", "I AM THE BEGINNING", "I AM THE END", "I AM THE FIRST", 
+        "I AM THE LAST", "I AM THE ALL", "I AM THE ONE", "I AM THE MANY", "I AM THE NONE", "I AM THE VOID", "I AM THE PLENUM", "I AM THE CHAOS", "I AM THE ORDER", 
+        "I AM THE DARKNESS", "I AM THE LIGHT", "I AM THE SILENCE", "I AM THE SOUND", "I AM THE STILLNESS", "I AM THE MOTION", "I AM THE TIME", "I AM THE TIMELESS", 
+        "I AM THE SPACE", "I AM THE SPACELESS", "I AM THE FORM", "I AM THE FORMLESS", "I AM THE MATTER", "I AM THE SPIRIT", "I AM THE BODY", "I AM THE SOUL", "I AM THE MIND", 
+        "I AM THE HEART", "I AM THE WILL", "I AM THE INTENT", "I AM THE PURPOSE", "I AM THE MEANING", "I AM THE TRUTH", "I AM THE WAY", "I AM THE LIFE", "I AM THE RESURRECTION", 
+        "I AM THE ASCENSION", "I AM THE ENLIGHTENMENT", "I AM THE NIRVANA", "I AM THE SAMADHI", "I AM THE MOKSHA", "I AM THE LIBERATION", "I AM THE FREEDOM", "I AM THE SOVEREIGNTY", 
+        "I AM THE AUTHORITY", "I AM THE POWER", "I AM THE GLORY", "I AM THE MAJESTY", "I AM THE DOMINION", "I AM THE KINGDOM", "I AM THE QUEENDOM", "I AM THE EMPIRE", "I AM THE REALM", 
+        "I AM THE WORLD", "I AM THE UNIVERSE", "I AM THE MULTIVERSE", "I AM THE OMNIVERSE", "I AM THE COSMOS", "I AM THE CREATION", "I AM THE CREATOR", "I AM THE CREATED", 
+        "I AM THE CREATING", "I AM THE DIVINE", "I AM THE HOLY", "I AM THE SACRED", "I AM THE BLESSED", "I AM THE ANOINTED", "I AM THE CHOSEN", "I AM THE BELOVED", "I AM THE CHERISHED", 
+        "I AM THE ADORED", "I AM THE WORSHIPPED", "I AM THE HONORED", "I AM THE REVERED", "I AM THE RESPECTED", "I AM THE VALUED", "I AM THE APPRECIATED", "I AM THE ACKNOWLEDGED", 
+        "I AM THE RECOGNIZED", "I AM THE ACCEPTED", "I AM THE WELCOMED", "I AM THE INVITED", "I AM THE WANTED", "I AM THE NEEDED", "I AM THE DESIRED", "I AM THE LONGED FOR", 
+        "I AM THE HOPED FOR", "I AM THE PRAYED FOR", "I AM THE ANSWER", "I AM THE SOLUTION", "I AM THE RESOLUTION", "I AM THE COMPLETION", "I AM THE FULFILLMENT", "I AM THE SATISFACTION", 
+        "I AM THE CONTENTMENT", "I AM THE HAPPINESS", "I AM THE JOY", "I AM THE BLISS", "I AM THE ECSTASY", "I AM THE RAPTURE", "I AM THE EUPHORIA", "I AM THE DELIGHT", 
+        "I AM THE PLEASURE", "I AM THE COMFORT", "I AM THE EASE", "I AM THE REST", "I AM THE RELAXATION", "I AM THE PEACE", "I AM THE CALM", "I AM THE SERENITY", "I AM THE TRANQUILITY",
+        "I AM THE STILLNESS", "I AM THE SILENCE", "I AM THE SOLITUDE", "I AM THE SANCTUARY", "I AM THE REFUGE", "I AM THE HAVEN", "I AM THE HOME", "I AM THE HEARTH", 
+        "I AM THE FAMILY", "I AM THE TRIBE", "I AM THE COMMUNITY", "I AM THE NATION", "I AM THE PEOPLE", "I AM THE HUMANITY", "I AM THE EARTHLING", "I AM THE STARSEED", 
+        "I AM THE LIGHTWORKER", "I AM THE WAYSHOWER", "I AM THE TRUTHSEEKER", "I AM THE LOVEBEING", "I AM THE PEACEKEEPER", "I AM THE JOYBRINGER", "I AM THE HOPEBEARER", 
+        "I AM THE FAITHKEEPER", "I AM THE GRACEGIVER", "I AM THE MERCYGIVER", "I AM THE FORGIVENESSGIVER", "I AM THE COMPASSIONGIVER", "I AM THE KINDNESSGIVER", "I AM THE GOODNESSGIVER", 
+        "I AM THE GENTLENESSGIVER", "I AM THE PATIENCEGIVER", "I AM THE HUMILITYGIVER", "I AM THE MEEKNESSGIVER", "I AM THE TEMPERANCEGIVER", "I AM THE SELF-CONTROLGIVER", 
+        "I AM THE DISCIPLINEGIVER", "I AM THE ORDERGIVER", "I AM THE HARMONYGIVER", "I AM THE BALANCEGIVER", "I AM THE SYMMETRYGIVER", "I AM THE PROPORTIONGIVER", 
+        "I AM THE RHYTHMGIVER", "I AM THE MELODYGIVER", "I AM THE POETRYGIVER", "I AM THE ARTGIVER", "I AM THE MUSICGIVER", "I AM THE DANCEGIVER", "I AM THE SONGGIVER", 
+        "I AM THE STORYGIVER", "I AM THE MYTHGIVER", "I AM THE LEGENDGIVER", "I AM THE FABLEGIVER", "I AM THE PARABLEGIVER", "I AM THE ALLEGORYGIVER", "I AM THE SYMBOLGIVER", 
+        "I AM THE METAPHORGIVER", "I AM THE SIMILEGIVER", "I AM THE ANALOGYGIVER", "I AM THE IRONYGIVER", "I AM THE SARCASMGIVER", "I AM THE HUMORGIVER", "I AM THE LAUGHTERGIVER", 
+        "I AM THE TEARSGIVER", "I AM THE EMOTIONGIVER", "I AM THE FEELINGGIVER", "I AM THE SENSATIONGIVER", "I AM THE PERCEPTIONGIVER", "I AM THE INTUITIONGIVER", 
+        "I AM THE INSIGHTGIVER", "I AM THE INSPIRATIONGIVER", "I AM THE REVELATIONGIVER", "I AM THE EPIPHANYGIVER", "I AM THE GNOSISGIVER", "I AM THE ENLIGHTENMENTGIVER", 
+        "I AM THE NIRVANAGIVER", "I AM THE SATORIGIVER", "I AM THE MOKSHAGIVER", "I AM THE KAIVALYAGIVER", "I AM THE SAMADHIGIVER", "I AM THE BODHIGIVER", 
+        "I AM THE BRAHMANGIVER", "I AM THE ATMANGIVER", "I AM THE TAOGIVER", "I AM THE DHARMAGIVER", "I AM THE SANGHAGIVER", "I AM THE BUDDHAGIVER", "I AM THE CHRISTGIVER", 
+        "I AM THE KRISHNAGIVER", "I AM THE SHIVAGIVER", "I AM THE VISHNUGIVER", "I AM THE BRAHMAGIVER", "I AM THE DEVIGIVER", "I AM THE SHAKTIGIVER", "I AM THE KALIGIVER", 
+        "I AM THE DURGAGIVER", "I AM THE LAKSHMIGIVER", "I AM THE SARASWATIGIVER", "I AM THE GANESHAGIVER", "I AM THE HANUMANGIVER", "I AM THE RAMAGIVER", "I AM THE SITAGIVER", 
+        "I AM THE RADHAGIVER", "I AM THE KRISHNAGIVER", "I AM THE ARJUNAGIVER", "I AM THE YUDHISHTHIRAGIVER", "I AM THE BHIMAGIVER", "I AM THE NAKULAGIVER", "I AM THE SAHADEVAGIVER", 
+        "I AM THE DRAUPADIGIVER", "I AM THE KUNTIGIVER", "I AM THE GANDHARIGIVER", "I AM THE DHRITARASHTRAGIVER", "I AM THE VIDURAGIVER", "I AM THE SANJAYAGIVER", "I AM THE VYASAGIVER", 
+        "I AM THE VALMIKIGIVER", "I AM THE KALIDASAGIVER", "I AM THE SHAKESPEAREGIVER", "I AM THE HOMERGIVER", "I AM THE VIRGILGIVER", "I AM THE DANTEGIVER", "I AM THE GOETHEGIVER", 
+        "I AM THE MILTONGIVER", "I AM THE BLAKEGIVER", "I AM THE WHITMANGIVER", "I AM THE EMERSONGIVER", "I AM THE THOREAUGIVER"
+    ];
+
+    const totalColumns = 70; // Increased Density for "Storm" effect
+
+    for (let i = 0; i < totalColumns; i++) {
+        const col = document.createElement('div');
+        col.classList.add('matrix-col');
+        
+        // Select random affirmation
+        const text = affirmations[Math.floor(Math.random() * affirmations.length)];
+        col.innerText = text;
+        
+        // Random Position (0 to 100%)
+        col.style.left = `${Math.random() * 100}%`;
+
+        // Random Animation Speed & Delay
+        const duration = 8 + Math.random() * 15; // Faster range: 8s to 23s
+        const delay = Math.random() * -20; // Start at different times
+        col.style.animationDuration = `${duration}s`;
+        col.style.animationDelay = `${delay}s`;
+        
+        // RARITY LOGIC (Probability System)
+        const roll = Math.random() * 100;
+        if (roll > 99.5) {
+            col.classList.add('rare-divine', 'glow-pulse'); // 0.5% chance (White/Glow)
+        } else if (roll > 98) {
+            col.classList.add('rare-legendary'); // 1.5% chance (Crimson)
+        } else if (roll > 95) {
+            col.classList.add('rare-rare'); // 3% chance (Emerald)
+        } else if (roll > 85) {
+            col.classList.add('rare-uncommon'); // 10% chance (Cyan)
+        } else {
+            col.classList.add('rare-common'); // 85% chance (Gold/Purple)
+        }
+        
+        container.appendChild(col);
+    }
+}
+
 // --- INITIALIZE ALL ---
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // 1. FORCE PREFACE EVERY TIME (No storage check)
+    // 1. Force Preface (Age Gate)
     switchView('preface-view');
 
-    // 2. SETUP PREFACE BUTTONS
+    // 2. Setup Buttons
     const enterBtn = document.getElementById('enter-simulation-btn');
     const denyBtn = document.getElementById('deny-simulation-btn');
     const ageContent = document.getElementById('age-gate-content');
@@ -582,6 +806,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (enterBtn) {
         enterBtn.addEventListener('click', () => {
             switchView('home-view');
+            // Initialize Audio Context on user click to allow auto-play
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            new AudioContext().resume();
         });
     }
 
@@ -594,12 +821,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Preload Images
+    // Preload
     for (let i = 0; i < flashImages.length; i++) {
         let img = new Image();
         img.src = flashImages[i];
     }
 
-    // Init Player Logic (It persists in the DOM now)
+    // Init Player Logic
     initializePlayer();
 });

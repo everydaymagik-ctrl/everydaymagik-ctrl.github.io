@@ -46,7 +46,7 @@
             <div class="hero-content-left">
                 <div class="title-block">
                     <h1 class="main-title">Hell Low,</h1>
-                    <h2 class="sub-title">vibeWorld</h2>
+                    <h2 class="sub-title" onclick="switchView('affirmation-view')" style="cursor: pointer;" title="Access The Source">vibeWorld</h2>
                 </div>
                 <div class="clock-container-left">
                     <canvas id="digital-clock" aria-hidden="true"></canvas> 
@@ -59,10 +59,11 @@
                     <a href="#" onclick="switchView('research-view')" class="description">Simulation 4960 <span class="link-arrow">→</span></a>
                     <a href="#" onclick="switchView('stream-view')" class="description">Simulation 8025 <span class="link-arrow">→</span></a>
                     <a href="#" onclick="switchView('oracle-view')" class="description">Simulation 12984 <span class="link-arrow">→</span></a>
+                    <a href="#" onclick="switchView('affirmation-view')" class="description">Simulation 21008 <span class="link-arrow">→</span></a>
                 </div>
             </div>
             <div class="hero-image-right">
-                <img src="images/simulation-scales.jpg" alt="Visual representation">
+                <img src="images/simulation-scales.jpg" alt="Visual representation of simulation scales">
             </div>
         </div>
     </section>
@@ -94,6 +95,7 @@
                         <a href="#" onclick="switchView('research-view')" class="back-link">4960 →</a>
                         <a href="#" onclick="switchView('stream-view')" class="back-link">8025 →</a>
                         <a href="#" onclick="switchView('oracle-view')" class="back-link">12984 →</a>
+                        <a href="#" onclick="switchView('affirmation-view')" class="back-link">21008 →</a>
                     </div>
                     <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">← Return to Base (724)</a>
                 </div>
@@ -112,6 +114,7 @@
                     <a href="#" onclick="switchView('research-view')" class="back-link">4960 →</a>
                     <a href="#" onclick="switchView('stream-view')" class="back-link">8025 →</a>
                     <a href="#" onclick="switchView('oracle-view')" class="back-link">12984 →</a>
+                    <a href="#" onclick="switchView('affirmation-view')" class="back-link">21008 →</a>
                 </div>
                 <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">← Return to Base (724)</a>
             </div>
@@ -139,6 +142,7 @@
                     <a href="#" onclick="switchView('research-view')">4960 →</a>
                     <a href="#" onclick="switchView('stream-view')">8025 →</a>
                     <a href="#" onclick="switchView('oracle-view')">12984 →</a>
+                    <a href="#" onclick="switchView('affirmation-view')">21008 →</a>
                 </div>
                 <div style="margin-top: 20px;"><a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">← Return to Base (724)</a></div>
             </div>
@@ -176,6 +180,7 @@
                         <a href="#" onclick="switchView('library-view')">3066 →</a>
                         <a href="#" onclick="switchView('stream-view')">8025 →</a>
                         <a href="#" onclick="switchView('oracle-view')">12984 →</a>
+                        <a href="#" onclick="switchView('affirmation-view')">21008 →</a>
                     </div>
                     <div style="margin-top: 20px; text-align: left;"><a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">← Return to Base (724)</a></div>
                 </div>
@@ -219,6 +224,7 @@
                         <a href="#" onclick="switchView('library-view')" class="back-link">3066 →</a>
                         <a href="#" onclick="switchView('research-view')" class="back-link">4960 →</a>
                         <a href="#" onclick="switchView('oracle-view')" class="back-link">12984 →</a>
+                        <a href="#" onclick="switchView('affirmation-view')" class="back-link">21008 →</a>
                     </div>
                     <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">← Return to Base (724)</a>
                 </div>
@@ -249,12 +255,26 @@
         </div>
     </section>
 
+    <section id="affirmation-view" class="hidden-view next-sim-body">
+        <div class="gallery-container">
+            <div class="gallery-frame">
+                <img src="" alt="Quantum Melanin Infographic" class="gallery-art">
+                <div class="gallery-reflection"></div>
+            </div>
+        </div>
+        <div id="matrix-rain" class="matrix-overlay"></div>
+        <div style="position: absolute; bottom: 40px; z-index: 20; width: 100%; text-align: center;">
+             <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.7; font-size: 0.9rem; letter-spacing: 0.2em; background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 20px;">← RETURN TO BASE REALITY</a>
+        </div>
+    </section>
+
     <div id="pdf-reader-overlay" class="hidden-view">
         <button class="close-reader-btn" onclick="closeReader()">Close Document ✕</button>
         <iframe id="pdf-frame" src="" type="application/pdf"></iframe>
     </div>
 
     <audio id="vibe-audio" preload="auto"></audio>
+    
     <script src="script.js"></script>
 </body>
 </html>
