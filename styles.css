@@ -12,7 +12,7 @@
     --font-display: 'Playfair Display', serif;
     --font-ui: 'Inter', sans-serif;
 
-    /* Rarity Gradients for Simulation 21008 (The Matrix) */
+    /* Rarity Gradients for Simulation 21008 */
     --rare-common: linear-gradient(to bottom, #FFD700, #8A2BE2);     /* Gold/Purple */
     --rare-uncommon: linear-gradient(to bottom, #00FFFF, #008080);   /* Cyan/Teal */
     --rare-rare: linear-gradient(to bottom, #50C878, #228B22);       /* Emerald */
@@ -228,23 +228,19 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
 /* The "Louvre" Gallery Frame */
 .gallery-container {
     position: relative;
-    z-index: 10; /* Above the raining text */
+    z-index: 10; 
     padding: 20px;
     pointer-events: none; /* Pass click to nav */
 }
 
 .gallery-frame {
     position: relative;
-    /* Match specific image ratio 1856x2304 ~= 4:5 aspect */
-    aspect-ratio: 1856 / 2304;
-    height: 75vh; /* Tall and imposing */
+    aspect-ratio: 1856 / 2304; /* Match image ratio */
+    height: 75vh; 
     width: auto;
-    
     border-radius: 12px;
-    /* The "Breathing" Glow Animation */
     animation: breatheGlow 8s infinite alternate ease-in-out;
-    
-    transform: rotateX(2deg); /* Slight tilt for majesty */
+    transform: rotateX(2deg); 
     overflow: hidden;
     border: 1px solid rgba(255, 215, 0, 0.1);
     pointer-events: auto;
@@ -271,7 +267,7 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     }
     100% {
         box-shadow: 0 0 80px rgba(138, 43, 226, 0.6), 0 0 20px rgba(255, 215, 0, 0.3);
-        transform: scale(1.02) rotateX(0deg); /* Subtle growth */
+        transform: scale(1.02) rotateX(0deg); 
     }
 }
 
@@ -280,18 +276,15 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none;
-    z-index: 1; /* Behind the gallery image */
-    overflow: hidden;
-    /* Subtle radiant gradient overlay on the rain */
+    z-index: 1; 
     background: linear-gradient(to bottom, transparent, rgba(138, 43, 226, 0.1) 80%);
 }
 
-/* Individual Falling Code Columns */
 .matrix-col {
     position: absolute;
-    top: -150vh; /* Start way above screen */
-    writing-mode: vertical-rl; /* Text runs top to bottom */
-    text-orientation: upright; /* Letters stand up straight */
+    top: -150vh; 
+    writing-mode: vertical-rl;
+    text-orientation: upright;
     font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-size: 0.85rem;
@@ -300,19 +293,21 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     /* Default Gradient Text (Common) */
     background: var(--rare-common);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
+    color: transparent;
     
     opacity: 0.7;
     white-space: nowrap;
     animation: matrixFall linear infinite;
 }
 
-/* Rarity Variants for JS to assign */
-.rare-common { background: var(--rare-common); -webkit-background-clip: text; }
-.rare-uncommon { background: var(--rare-uncommon); -webkit-background-clip: text; text-shadow: 0 0 5px rgba(0,255,255,0.5); }
-.rare-rare { background: var(--rare-rare); -webkit-background-clip: text; text-shadow: 0 0 5px rgba(80,200,120,0.5); }
-.rare-legendary { background: var(--rare-legendary); -webkit-background-clip: text; text-shadow: 0 0 8px rgba(255,0,0,0.6); font-weight: 900; }
-.rare-divine { background: var(--rare-divine); -webkit-background-clip: text; text-shadow: 0 0 15px rgba(255,255,255,0.9), 0 0 30px rgba(255,255,255,0.6); z-index: 5; opacity: 1 !important; }
+/* Rarity Variants with Fixed Clips */
+.rare-common { background: var(--rare-common); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.rare-uncommon { background: var(--rare-uncommon); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 5px rgba(0,255,255,0.5); }
+.rare-rare { background: var(--rare-rare); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 5px rgba(80,200,120,0.5); }
+.rare-legendary { background: var(--rare-legendary); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 8px rgba(255,0,0,0.6); font-weight: 900; }
+.rare-divine { background: var(--rare-divine); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 15px rgba(255,255,255,0.9), 0 0 30px rgba(255,255,255,0.6); z-index: 5; opacity: 1 !important; }
 
 /* Glow Effect */
 .glow-pulse { animation: matrixFall linear infinite, pulseGlow 2s ease-in-out infinite; }
