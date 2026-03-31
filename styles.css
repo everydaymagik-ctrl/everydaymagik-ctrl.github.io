@@ -530,3 +530,67 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     border-radius: 12px;
     margin-top: 10px;
 }
+/* =========================================
+   11. WEB3 ENHANCEMENTS - CRYPTO & BLOCKCHAIN
+   ========================================= */
+
+/* Subtle blockchain pulse animation */
+@keyframes hashPulse {
+    0% { text-shadow: 0 0 0 rgba(255,255,255,0); border-color: rgba(255,255,255,0.1); }
+    100% { text-shadow: 0 0 8px rgba(100,200,255,0.3); border-color: rgba(100,200,255,0.4); }
+}
+
+.hash-verified {
+    animation: hashPulse 2s ease-in-out;
+}
+
+/* Wallet connection button - minimalist */
+.wallet-status {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(8px);
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.wallet-status:hover {
+    border-color: var(--accent-color);
+    color: var(--text-main);
+    background: rgba(0,0,0,0.6);
+}
+
+.wallet-status.connected {
+    border-color: #00ffaa;
+    color: #00ffaa;
+    text-shadow: 0 0 5px rgba(0,255,170,0.3);
+}
+
+/* Simulation hash display - fits your existing style */
+.simulation-hash {
+    font-family: monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    opacity: 0.5;
+    margin-top: 15px;
+    word-break: break-all;
+    text-align: center;
+}
+
+/* IPFS pin indicator - subtle */
+.ipfs-pinned::after {
+    content: "⛓️";
+    font-size: 0.7rem;
+    margin-left: 6px;
+    opacity: 0.6;
+}
