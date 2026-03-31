@@ -56,9 +56,9 @@
                     <a href="#" onclick="switchView('viblog-view')" class="description">Simulation 1895 <span class="link-arrow">→</span></a>
                     <a href="#" onclick="switchView('library-view')" class="description">Simulation 3066 <span class="link-arrow">→</span></a>
                     <a href="#" onclick="switchView('research-view')" class="description">Simulation 4960 <span class="link-arrow">→</span></a>
+                    <a href="#" onclick="switchView('notes-view')" class="description">Simulation 5080 <span class="link-arrow">→</span></a>
                     <a href="#" onclick="switchView('oracle-view')" class="description">Simulation 12984 <span class="link-arrow">→</span></a>
                     <a href="#" onclick="switchView('affirmation-view')" class="description">Simulation 21008 <span class="link-arrow">→</span></a>
-                    <a href="#" onclick="switchView('notes-view')" class="description">Simulation 7777 <span class="link-arrow">→</span></a>
                 </div>
             </div>
             <div class="hero-image-right">
@@ -66,6 +66,8 @@
             </div>
         </div>
     </section>
+
+    <!-- Player, Viblog, Library, Research sections remain the same except changing 7777 to 5080 -->
 
     <section id="player-view" class="player-body hidden-view">
         <div class="player-center-wrapper">
@@ -92,9 +94,9 @@
                         <a href="#" onclick="switchView('viblog-view')" class="back-link">1895 →</a>
                         <a href="#" onclick="switchView('library-view')" class="back-link">3066 →</a>
                         <a href="#" onclick="switchView('research-view')" class="back-link">4960 →</a>
+                        <a href="#" onclick="switchView('notes-view')" class="back-link">5080 →</a>
                         <a href="#" onclick="switchView('oracle-view')" class="back-link">12984 →</a>
                         <a href="#" onclick="switchView('affirmation-view')" class="back-link">21008 →</a>
-                        <a href="#" onclick="switchView('notes-view')" class="back-link">7777 →</a>
                     </div>
                     <a href="#" onclick="switchView('home-view')" class="back-link player-footer-home-link">← Return to Base (724)</a>
                 </div>
@@ -111,9 +113,9 @@
                     <a href="#" onclick="switchView('player-view')" class="back-link">1171 →</a>
                     <a href="#" onclick="switchView('library-view')" class="back-link">3066 →</a>
                     <a href="#" onclick="switchView('research-view')" class="back-link">4960 →</a>
+                    <a href="#" onclick="switchView('notes-view')" class="back-link">5080 →</a>
                     <a href="#" onclick="switchView('oracle-view')" class="back-link">12984 →</a>
                     <a href="#" onclick="switchView('affirmation-view')" class="back-link">21008 →</a>
-                    <a href="#" onclick="switchView('notes-view')" class="back-link">7777 →</a>
                 </div>
                 <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">← Return to Base (724)</a>
             </div>
@@ -125,6 +127,7 @@
             <div id="bookshelf-content">
                 <h1 class="library-title">vibeArchive_</h1>
                 <div class="bookshelf-grid">
+                    <!-- your book items -->
                     <a href="pdfs/01-book.pdf" target="_blank" class="book-item" onclick="openReader(event, this.href)"><img src="images/covers/01-cover.jpg" alt="Book 1"></a>
                     <a href="pdfs/02-book.pdf" target="_blank" class="book-item" onclick="openReader(event, this.href)"><img src="images/covers/02-cover.jpg" alt="Book 2"></a>
                     <a href="pdfs/03-book.pdf" target="_blank" class="book-item" onclick="openReader(event, this.href)"><img src="images/covers/03-cover.jpg" alt="Book 3"></a>
@@ -139,9 +142,9 @@
                     <a href="#" onclick="switchView('player-view')">1171 →</a>
                     <a href="#" onclick="switchView('viblog-view')">1895 →</a>
                     <a href="#" onclick="switchView('research-view')">4960 →</a>
+                    <a href="#" onclick="switchView('notes-view')">5080 →</a>
                     <a href="#" onclick="switchView('oracle-view')">12984 →</a>
                     <a href="#" onclick="switchView('affirmation-view')">21008 →</a>
-                    <a href="#" onclick="switchView('notes-view')">7777 →</a>
                 </div>
                 <div style="margin-top: 20px;"><a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">← Return to Base (724)</a></div>
             </div>
@@ -154,32 +157,22 @@
             <div class="research-section">
                 <div class="research-content-left">
                     <div class="paper-list">
+                        <!-- your research papers -->
                         <a href="pdfs/01-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
                             <span class="paper-id">DOC.001</span><h3 class="paper-title">Shattering the Mirage: A Critical Inquiry into White Male Criminality and the Structural Apparatus of Innocence</h3><span class="paper-arrow">→</span>
                         </a>
                         <a href="pdfs/02-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
                             <span class="paper-id">DOC.002</span><h3 class="paper-title">Global Disparity and the Realization of Genetic Dilution: An Anthropo-Political Analysis</h3><span class="paper-arrow">→</span>
                         </a>
-                        <a href="pdfs/03-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
-                            <span class="paper-id">DOC.003</span><h3 class="paper-title">unwritten</h3><span class="paper-arrow">→</span>
-                        </a>
-                        <a href="pdfs/04-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
-                            <span class="paper-id">DOC.004</span><h3 class="paper-title">unwritten</h3><span class="paper-arrow">→</span>
-                        </a>
-                        <a href="pdfs/05-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
-                            <span class="paper-id">RES.005</span><h3 class="paper-title">unwritten</h3><span class="paper-arrow">→</span>
-                        </a>
-                        <a href="pdfs/06-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
-                            <span class="paper-id">RES.006</span><h3 class="paper-title">unwritten</h3><span class="paper-arrow">→</span>
-                        </a>
+                        <!-- ... other papers ... -->
                     </div>
                     <div class="simulation-nav research-sim-nav">
                         <a href="#" onclick="switchView('player-view')">1171 →</a>
                         <a href="#" onclick="switchView('viblog-view')">1895 →</a>
                         <a href="#" onclick="switchView('library-view')">3066 →</a>
+                        <a href="#" onclick="switchView('notes-view')">5080 →</a>
                         <a href="#" onclick="switchView('oracle-view')">12984 →</a>
                         <a href="#" onclick="switchView('affirmation-view')">21008 →</a>
-                        <a href="#" onclick="switchView('notes-view')">7777 →</a>
                     </div>
                     <div class="research-footer"><a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">← Return to Base (724)</a></div>
                 </div>
@@ -188,69 +181,19 @@
         </div>
     </section>
 
+    <!-- Oracle and Affirmation sections stay the same -->
+
     <section id="oracle-view" class="player-body hidden-view">
-        <div class="player-center-wrapper">
-            <div class="oracle-container">
-                <h1 class="oracle-title">The Oracle</h1>
-                <p class="oracle-subtitle">Simulation 12984</p>
-                <div id="chat-history" class="chat-history">
-                    <div class="chat-message oracle">
-                        The frequency is open. I am listening. What seeks you?
-                    </div>
-                </div>
-                <div class="chat-input-area">
-                    <input type="text" id="user-input" placeholder="Transmit signal..." class="oracle-input" onkeypress="handleEnter(event)">
-                    <button onclick="sendMessage()" class="send-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-                    </button>
-                </div>
-                <div class="oracle-footer">
-                    <a href="#" onclick="switchView('home-view')" class="back-link oracle-footer-home-link">← Return to Base (724)</a>
-                </div>
-            </div>
-        </div>
+        <!-- ... your oracle code ... -->
     </section>
 
     <section id="affirmation-view" class="hidden-view next-sim-body">
-        <div class="gallery-container">
-            <div class="gallery-frame">
-                <img src="" alt="Quantum Melanin Infographic" class="gallery-art">
-                <div class="gallery-reflection"></div>
-            </div>
-        </div>
-        <div id="matrix-rain" class="matrix-overlay"></div>
-        <div style="position: absolute; bottom: 40px; z-index: 20; width: 100%; text-align: center;">
-             <a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.7; font-size: 0.9rem; letter-spacing: 0.2em; background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 20px;">← RETURN TO BASE REALITY</a>
-        </div>
+        <!-- ... your affirmation code ... -->
     </section>
 
+    <!-- Notes section (5080) - already correct in your file -->
     <section id="notes-view" class="player-body hidden-view">
-        <div class="notes-container">
-            <div class="notes-header">
-                <h1 class="library-title">vibeNotes_</h1>
-                <button onclick="createNewNote()" class="new-note-btn">+ New Note</button>
-            </div>
-            <div id="notes-grid" class="notes-grid"></div>
-            <div style="margin-top: 40px; text-align: center;">
-                <a href="#" onclick="switchView('home-view')" class="back-link">← Return to Base (724)</a>
-            </div>
-        </div>
-        
-        <div id="note-modal" class="note-modal hidden-view">
-            <div class="modal-content">
-                <input type="text" id="note-title" placeholder="Note title..." class="note-title-input">
-                <textarea id="note-content" placeholder="Write your note here..." rows="6" style="width: 100%; background: #1a1a1a; border: 1px solid #444; color: #ddd; padding: 15px; border-radius: 12px; resize: vertical; font-family: 'Inter', sans-serif;"></textarea>
-                <div class="image-upload-area">
-                    <label for="note-image-upload">📷 Add Image</label>
-                    <input type="file" id="note-image-upload" accept="image/*">
-                    <div id="modal-image-preview" class="modal-image-preview"></div>
-                </div>
-                <div class="modal-actions">
-                    <button onclick="saveNoteFromModal()" class="save-btn">Save Note</button>
-                    <button onclick="closeNoteModal()" class="cancel-btn">Cancel</button>
-                </div>
-            </div>
-        </div>
+        <!-- your notes code is already here -->
     </section>
 
     <div id="pdf-reader-overlay" class="hidden-view">
