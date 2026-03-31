@@ -13,11 +13,11 @@
     --font-ui: 'Inter', sans-serif;
 
     /* Rarity Gradients for Simulation 21008 (The Matrix) */
-    --rare-common: linear-gradient(to bottom, #FFD700, #8A2BE2);     /* Gold/Purple */
-    --rare-uncommon: linear-gradient(to bottom, #00FFFF, #008080);   /* Cyan/Teal */
-    --rare-rare: linear-gradient(to bottom, #50C878, #228B22);       /* Emerald */
-    --rare-legendary: linear-gradient(to bottom, #FF4444, #8B0000);  /* Crimson */
-    --rare-divine: linear-gradient(to bottom, #FFFFFF, #E0E0E0);     /* Pure White */
+    --rare-common: linear-gradient(to bottom, #FFD700, #8A2BE2);
+    --rare-uncommon: linear-gradient(to bottom, #00FFFF, #008080);
+    --rare-rare: linear-gradient(to bottom, #50C878, #228B22);
+    --rare-legendary: linear-gradient(to bottom, #FF4444, #8B0000);
+    --rare-divine: linear-gradient(to bottom, #FFFFFF, #E0E0E0);
 }
 
 body {
@@ -221,30 +221,25 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
    ========================================= */
 .next-sim-body {
     background: radial-gradient(circle at center, #1a0b2e 0%, #000000 80%);
-    perspective: 1200px; /* Deep 3D space */
+    perspective: 1200px;
     overflow: hidden;
 }
 
-/* The "Louvre" Gallery Frame */
 .gallery-container {
     position: relative;
     z-index: 10; 
     padding: 20px;
-    pointer-events: none; /* Pass click to nav */
+    pointer-events: none;
 }
 
 .gallery-frame {
     position: relative;
-    /* Match specific image ratio 1856x2304 ~= 4:5 aspect */
     aspect-ratio: 1856 / 2304;
     height: 75vh; 
     width: auto;
-    
     border-radius: 12px;
-    /* The "Breathing" Glow Animation */
     animation: breatheGlow 8s infinite alternate ease-in-out;
-    
-    transform: rotateX(2deg); /* Slight tilt for majesty */
+    transform: rotateX(2deg);
     overflow: hidden;
     border: 1px solid rgba(255, 215, 0, 0.1);
     pointer-events: auto;
@@ -253,7 +248,7 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
 .gallery-art {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Fallback for desktop */
+    object-fit: cover;
     object-position: center;
     display: block;
 }
@@ -276,7 +271,6 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     }
 }
 
-/* The Matrix Rain */
 .matrix-overlay {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -289,54 +283,46 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     position: absolute;
     top: -150vh; 
     writing-mode: vertical-rl;
-    -webkit-writing-mode: vertical-rl; /* Safari fix */
+    -webkit-writing-mode: vertical-rl;
     text-orientation: upright;
-    -webkit-text-orientation: upright; /* Safari fix */
+    -webkit-text-orientation: upright;
     font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-size: 0.85rem;
     letter-spacing: 0.4em;
-    
-    /* Default Gradient Text (Common) */
     background: var(--rare-common);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
-    
     opacity: 0.7;
     white-space: nowrap;
     animation: matrixFall linear infinite;
 }
 
-/* Rarity Variants with Fixed Clips */
 .rare-common { background: var(--rare-common); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 .rare-uncommon { background: var(--rare-uncommon); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 5px rgba(0,255,255,0.5); }
 .rare-rare { background: var(--rare-rare); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 5px rgba(80,200,120,0.5); }
 .rare-legendary { background: var(--rare-legendary); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 8px rgba(255,0,0,0.6); font-weight: 900; }
 .rare-divine { background: var(--rare-divine); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 15px rgba(255,255,255,0.9), 0 0 30px rgba(255,255,255,0.6); z-index: 5; opacity: 1 !important; }
 
-/* Glow Effect */
 .glow-pulse { animation: matrixFall linear infinite, pulseGlow 2s ease-in-out infinite; }
 @keyframes pulseGlow {
     0%, 100% { filter: brightness(1); }
     50% { filter: brightness(1.5) drop-shadow(0 0 10px currentColor); }
 }
 
-
 @keyframes matrixFall {
     0% { transform: translateY(0); }
     100% { transform: translateY(250vh); }
 }
 
-/* Randomize speeds */
-.s0 { animation-duration: 8s; } /* Blitz speed */
+.s0 { animation-duration: 8s; }
 .s1 { animation-duration: 15s; }
 .s2 { animation-duration: 20s; }
 .s3 { animation-duration: 25s; }
 .s4 { animation-duration: 30s; }
-.s5 { animation-duration: 40s; } /* Glacial speed */
-/* Randomize delays */
+.s5 { animation-duration: 40s; }
 .d1 { animation-delay: -5s; }
 .d2 { animation-delay: -12s; }
 .d3 { animation-delay: -8s; }
@@ -345,40 +331,9 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
 
 
 /* =========================================
-   10. CONSOLIDATED MOBILE QUERIES
+   10. VIBE NOTES STYLES
    ========================================= */
-@media (max-width: 1024px) {
-    .hero-section, .research-section { flex-direction: column-reverse; padding: 40px 20px; gap: 40px; justify-content: center; }
-    .hero-content-left, .research-content-left { text-align: center; align-items: center; width: 100%; }
-    .clock-container-left, .footer-link-container { text-align: center; margin: 20px auto; align-items: center; }
-    #digital-clock { margin: 0 auto; }
-    .hero-image-right { width: 100%; max-width: 100%; height: 50vh; }
-    .research-image-right { width: 100%; max-width: 100%; height: 50vh; aspect-ratio: auto; }
-    .main-title, .sub-title { font-size: 3.5rem; }
-}
-
-@media (max-width: 768px) {
-    .viblog-header { font-size: 5rem; }
-    .viblog-wrapper { padding: 40px 20px; }
-    #pdf-reader-overlay { padding: 0; }
-    #pdf-frame { width: 100%; height: 100%; border-radius: 0; margin-bottom: 0; }
-    .close-reader-btn { position: absolute; bottom: 20px; right: 20px; margin-bottom: 0; }
-    .bookshelf-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .book-item { max-width: 140px; }
-    .matrix-col { font-size: 0.8rem; letter-spacing: 0.3em; opacity: 0.6; }
-}
-
-@media (max-width: 600px) { 
-    .bookshelf-grid { grid-template-columns: 1fr; gap: 25px; }
-    .paper-item { flex-direction: column; align-items: flex-start; gap: 10px; }
-    .paper-id { width: auto; margin-bottom: 5px; }
-    .paper-arrow { display: none; }
-    .preface-image-container { height: 250px; }
-    .preface-actions { flex-direction: column; }
-    
-    /* MOBILE FIX: Shrink frame so rain is visible */
-    .gallery-frame { max-height: 50vh; width: 85%; margin: 0 auto; transform: rotateX(0); }
-}.notes-container {
+.notes-container {
     padding: 20px;
     max-width: 1400px;
     margin: 0 auto;
@@ -400,6 +355,7 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s;
+    font-family: var(--font-ui);
 }
 
 .new-note-btn:hover {
@@ -420,7 +376,6 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     transition: transform 0.3s, box-shadow 0.3s;
     position: relative;
-    overflow: hidden;
     border: 1px solid rgba(255,255,255,0.1);
 }
 
@@ -441,12 +396,14 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     margin: 0 0 10px 0;
     color: #fff;
     font-size: 1.3rem;
+    font-family: var(--font-display);
 }
 
 .note-card p {
     color: #ccc;
     line-height: 1.5;
     margin-bottom: 15px;
+    font-family: var(--font-ui);
 }
 
 .note-card .note-actions {
@@ -467,6 +424,7 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     left: 0;
     width: 100%;
     height: 6px;
+    border-radius: 16px 16px 0 0;
 }
 
 .delete-btn {
@@ -476,18 +434,26 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     padding: 6px 12px;
     border-radius: 20px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    font-family: var(--font-ui);
+    transition: all 0.2s;
 }
 
-/* Modal */
+.delete-btn:hover {
+    background: #ff6666;
+    transform: scale(1.05);
+}
+
+/* Note Modal */
 .note-modal {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.9);
+    background: rgba(0,0,0,0.95);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    backdrop-filter: blur(10px);
 }
 
 .modal-content {
@@ -507,6 +473,11 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     font-size: 1.5rem;
     margin-bottom: 15px;
     outline: none;
+    font-family: var(--font-display);
+}
+
+.note-title-input::placeholder {
+    color: #666;
 }
 
 #note-content {
@@ -518,11 +489,36 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     padding: 15px;
     border-radius: 12px;
     resize: vertical;
-    font-family: inherit;
+    font-family: var(--font-ui);
+    font-size: 0.95rem;
+}
+
+#note-content:focus {
+    outline: none;
+    border-color: #ff00cc;
 }
 
 .image-upload-area {
     margin: 15px 0;
+}
+
+.image-upload-area label {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font-ui);
+    transition: all 0.2s;
+}
+
+.image-upload-area label:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#note-image-upload {
+    display: none;
 }
 
 .modal-image-preview img {
@@ -530,11 +526,50 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     border-radius: 12px;
     margin-top: 10px;
 }
-/* =========================================
-   11. WEB3 ENHANCEMENTS - CRYPTO & BLOCKCHAIN
-   ========================================= */
 
-/* Subtle blockchain pulse animation */
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.save-btn, .cancel-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 30px;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.save-btn {
+    background: linear-gradient(135deg, #ff00cc, #00ffcc);
+    color: #000;
+}
+
+.save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 0, 204, 0.4);
+}
+
+.cancel-btn {
+    background: transparent;
+    color: #8b8b8b;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cancel-btn:hover {
+    border-color: #ff4444;
+    color: #ff4444;
+}
+
+
+/* =========================================
+   11. WEB3 ENHANCEMENTS
+   ========================================= */
 @keyframes hashPulse {
     0% { text-shadow: 0 0 0 rgba(255,255,255,0); border-color: rgba(255,255,255,0.1); }
     100% { text-shadow: 0 0 8px rgba(100,200,255,0.3); border-color: rgba(100,200,255,0.4); }
@@ -544,7 +579,6 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     animation: hashPulse 2s ease-in-out;
 }
 
-/* Wallet connection button - minimalist */
 .wallet-status {
     position: fixed;
     bottom: 20px;
@@ -575,7 +609,6 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     text-shadow: 0 0 5px rgba(0,255,170,0.3);
 }
 
-/* Simulation hash display - fits your existing style */
 .simulation-hash {
     font-family: monospace;
     font-size: 0.65rem;
@@ -587,10 +620,53 @@ body.no-scroll { overflow: hidden; height: 100vh; position: fixed; width: 100%; 
     text-align: center;
 }
 
-/* IPFS pin indicator - subtle */
-.ipfs-pinned::after {
-    content: "⛓️";
+.ipfs-pinned {
+    position: absolute;
+    top: 8px;
+    right: 8px;
     font-size: 0.7rem;
-    margin-left: 6px;
-    opacity: 0.6;
+    font-family: var(--font-ui);
+    background: rgba(0,0,0,0.6);
+    padding: 2px 6px;
+    border-radius: 12px;
+    pointer-events: none;
+    color: #00ffaa;
+}
+
+
+/* =========================================
+   12. CONSOLIDATED MOBILE QUERIES
+   ========================================= */
+@media (max-width: 1024px) {
+    .hero-section, .research-section { flex-direction: column-reverse; padding: 40px 20px; gap: 40px; justify-content: center; }
+    .hero-content-left, .research-content-left { text-align: center; align-items: center; width: 100%; }
+    .clock-container-left, .footer-link-container { text-align: center; margin: 20px auto; align-items: center; }
+    #digital-clock { margin: 0 auto; }
+    .hero-image-right { width: 100%; max-width: 100%; height: 50vh; }
+    .research-image-right { width: 100%; max-width: 100%; height: 50vh; aspect-ratio: auto; }
+    .main-title, .sub-title { font-size: 3.5rem; }
+}
+
+@media (max-width: 768px) {
+    .viblog-header { font-size: 5rem; }
+    .viblog-wrapper { padding: 40px 20px; }
+    #pdf-reader-overlay { padding: 0; }
+    #pdf-frame { width: 100%; height: 100%; border-radius: 0; margin-bottom: 0; }
+    .close-reader-btn { position: absolute; bottom: 20px; right: 20px; margin-bottom: 0; }
+    .bookshelf-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .book-item { max-width: 140px; }
+    .matrix-col { font-size: 0.8rem; letter-spacing: 0.3em; opacity: 0.6; }
+    .notes-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+}
+
+@media (max-width: 600px) { 
+    .bookshelf-grid { grid-template-columns: 1fr; gap: 25px; }
+    .paper-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .paper-id { width: auto; margin-bottom: 5px; }
+    .paper-arrow { display: none; }
+    .preface-image-container { height: 250px; }
+    .preface-actions { flex-direction: column; }
+    .gallery-frame { max-height: 50vh; width: 85%; margin: 0 auto; transform: rotateX(0); }
+    .notes-header { flex-direction: column; gap: 15px; }
+    .new-note-btn { width: 100%; }
 }
