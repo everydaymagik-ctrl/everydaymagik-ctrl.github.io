@@ -815,6 +815,221 @@ function renderNotes() {
 // Find your switchView function and add 'notes-view' to the views array and player/vibe body logic
 
 // ==========================================
+// 10. WEB3 INTEGRATION (Simulation Chain)
+// ==========================================
+
+// Generate deterministic simulation hash from user session
+function generateSimulationHash() {
+    const seed = [
+        navigator.userAgent,
+        screen.width + 'x' + screen.height,
+        new Date().toDateString(),
+        localStorage.getItem('vibeSessionId') || Math.random().toString(36)
+    ].join('|');
+    
+    // Simple hash function (preserves the aesthetic)
+    let hash = 0;
+    for (let i = 0; i < seed.length; i++) {
+        hash = ((hash << 5) - hash) + seed.charCodeAt(i);
+        hash |= 0;
+    }
+    
+    const hexHash = Math.abs(hash).toString(16).padStart(8, '0');
+    const sessionId = hexHash.slice(0, 8);
+    
+    if (!localStorage.getItem('vibeSessionId')) {
+        localStorage.setItem('vibeSessionId', sessionId);
+    }
+    
+    return sessionId;
+}
+
+// Add simulation hash to UI elements
+function addSimulationHashToUI() {
+    const hash = generateSimulationHash();
+    const containers = document.querySelectorAll('.simulation-nav, .viblog-footer, .library-footer, .research-footer, .player-footer');
+    
+    containers.forEach(container => {
+        if (!container.querySelector('.simulation-hash')) {
+            const hashEl = document.createElement('div');
+            hashEl.className = 'simulation-hash';
+            hashEl.innerHTML = `⛓️ SIMULATION ID: ${hash} ⛓️`;
+            container.appendChild(hashEl);
+        }
+    });
+}
+
+// Optional: Ethereum wallet connection (preserves your dark aesthetic)
+let walletConnected = false;
+let walletAddress = null;
+
+async function connectWallet() {
+    if (typeof window.ethereum !== 'undefined') {
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            walletAddress = accounts[0];
+            walletConnected = true;
+            
+            const walletBtn = document.getElementById('wallet-status');
+            if (walletBtn) {
+                const shortAddr = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
+                walletBtn.innerHTML = `🔗 ${shortAddr}`;
+                walletBtn.classList.add('connected');
+            }
+            
+            // Store wallet connection in session
+            localStorage.setItem('vibeWallet', walletAddress);
+            
+            // Add subtle verification effect
+            document.body.classList.add('hash-verified');
+            setTimeout(() => document.body.classList.remove('hash-verified'), 2000);
+            
+        } catch (error) {
+            console.error('Wallet connection rejected');
+        }
+    } else {
+        console.log('No wallet detected');
+        const walletBtn = document.getElementById('wallet-status');
+        if (walletBtn) walletBtn.innerHTML = `⚠️ NO CRYPTO DETECTED`;
+    }
+}
+
+// Create wallet UI element (adds to all views)
+function initWalletUI() {
+    // Check if wallet element already exists
+    if (document.getElementById('wallet-status')) return;
+    
+    const walletDiv = document.createElement('div');
+    walletDiv.id = 'wallet-status';
+    walletDiv.className = 'wallet-status';
+    walletDiv.innerHTML = `🔗 CONNECT WALLET`;
+    walletDiv.onclick = connectWallet;
+    document.body.appendChild(walletDiv);
+    
+    // Check if previously connected
+    const savedWallet = localStorage.getItem('vibeWallet');
+    if (savedWallet) {
+        walletAddress = savedWallet;
+        walletConnected = true;
+        const shortAddr = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
+        walletDiv.innerHTML = `🔗 ${shortAddr}`;
+        walletDiv.classList.add('connected');
+    }
+}
+
+// Generate "proof of visit" hash (like minting a memory)
+function generateProofOfVisit() {
+    const timestamp = new Date().toISOString();
+    const viewHistory = JSON.parse(localStorage.getItem('vibeViewHistory') || '[]');
+    const currentView = document.querySelector('.active-view')?.id || 'unknown';
+    
+    viewHistory.push({
+        view: currentView,
+        timestamp: timestamp,
+        simHash: generateSimulationHash()
+    });
+    
+    // Keep only last 50 visits
+    while (viewHistory.length > 50) viewHistory.shift();
+    localStorage.setItem('vibeViewHistory', JSON.stringify(viewHistory));
+    
+    return {
+        proof: btoa(JSON.stringify(viewHistory.slice(-5))),
+        hash: generateSimulationHash()
+    };
+}
+
+// Track view changes for blockchain-like provenance
+const originalSwitchView = switchView;
+window.switchView = function(viewId) {
+    originalSwitchView(viewId);
+    generateProofOfVisit();
+    addSimulationHashToUI();
+};
+
+// Add "IPFS" style note pinning (decentralized storage aesthetic)
+function pinNoteToIPFS(noteId) {
+    const notes = JSON.parse(localStorage.getItem('vibeNotes') || '[]');
+    const note = notes.find(n => n.id === noteId);
+    if (note && !note.pinned) {
+        note.pinned = true;
+        note.pinTimestamp = new Date().toISOString();
+        note.pinHash = generateSimulationHash();
+        localStorage.setItem('vibeNotes', JSON.stringify(notes));
+        renderNotes();
+        return true;
+    }
+    return false;
+}
+
+// Enhance note rendering with IPFS-style pin indicator
+const originalRenderNotes = renderNotes;
+window.renderNotes = function() {
+    if (originalRenderNotes) originalRenderNotes();
+    
+    const notes = JSON.parse(localStorage.getItem('vibeNotes') || '[]');
+    const noteCards = document.querySelectorAll('.note-card');
+    
+    noteCards.forEach((card, index) => {
+        const note = notes[index];
+        if (note && note.pinned && !card.querySelector('.pinned-indicator')) {
+            const pinIndicator = document.createElement('div');
+            pinIndicator.className = 'ipfs-pinned';
+            pinIndicator.style.cssText = 'position: absolute; top: 8px; right: 8px; font-size: 0.7rem; opacity: 0.6;';
+            pinIndicator.innerHTML = '⛓️ PINNED';
+            card.style.position = 'relative';
+            card.appendChild(pinIndicator);
+        }
+    });
+};
+
+// Initialize Web3 features
+function initWeb3Features() {
+    initWalletUI();
+    addSimulationHashToUI();
+    
+    // Add subtle blockchain pulse to the Oracle (fits the theme)
+    const oracleContainer = document.querySelector('.oracle-container');
+    if (oracleContainer && !oracleContainer.hasAttribute('data-web3-initialized')) {
+        oracleContainer.setAttribute('data-web3-initialized', 'true');
+        
+        // Add a subtle blockchain reference to Oracle responses context
+        const originalSendMessage = window.sendMessage;
+        if (originalSendMessage) {
+            window.sendMessage = async function() {
+                const input = document.getElementById('user-input');
+                const userText = input.value.trim();
+                if (!userText) return;
+                
+                // Append blockchain metadata to system prompt
+                const hash = generateSimulationHash();
+                const web3Context = `\n\n[BLOCKCHAIN REFERENCE: This interaction is recorded on simulation hash ${hash}. Your response may acknowledge the immutable nature of this transmission.]`;
+                
+                // The original sendMessage function will use the system prompt - we're adding context
+                // This works because the original uses a systemPrompt variable
+                window._web3Context = web3Context;
+                await originalSendMessage();
+                window._web3Context = null;
+            };
+        }
+    }
+}
+
+// Call web3 init after DOM loads (add to existing DOMContentLoaded)
+const originalDOMListener = document.addEventListener;
+let web3Initialized = false;
+
+// Hook into existing DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        if (!web3Initialized) {
+            initWeb3Features();
+            web3Initialized = true;
+        }
+    }, 100);
+});
+
+// ==========================================
 // INITIALIZE EVERYTHING
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
