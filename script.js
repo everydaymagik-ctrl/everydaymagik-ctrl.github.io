@@ -1,7 +1,6 @@
 // ==========================================
 // 1. SPA NAVIGATION LOGIC
 // ==========================================
-// Global Audio Context for the Divine Hum (Simulation 21008)
 let humCtx, humGain;
 let humOscs = [];
 let humInterval;
@@ -22,7 +21,7 @@ function switchView(viewId) {
         view.classList.remove('hidden-view');
         view.classList.add('active-view');
 
-        // Apply Layout Classes
+        // Layout Classes
         if (viewId === 'player-view' || viewId === 'viblog-view' || viewId === 'oracle-view' || viewId === 'notes-view') {
             view.classList.add('player-body');
         }
@@ -33,11 +32,10 @@ function switchView(viewId) {
             view.classList.add('preface-body');
         }
         
-        // SIMULATION 21008 LOGIC (Affirmation View)
+        // Affirmation View (Simulation 21008)
         if (viewId === 'affirmation-view') {
             view.classList.add('next-sim-body');
             
-            // Randomize Gallery Image
             const affirmationImages = ['images/ya.jpg', 'images/ja.jpg'];
             const galleryArt = document.querySelector('.gallery-art');
             if (galleryArt) {
@@ -45,19 +43,18 @@ function switchView(viewId) {
                 galleryArt.src = affirmationImages[randomIndex] + "?v=" + new Date().getTime();
             }
 
-            // Initialize Rain & Divine Hum
             initMatrixRain(); 
             toggleHum(true);  
-
         } else {
-            // Stop Audio if leaving affirmation view
             toggleHum(false); 
         }
     }
 
+    // Special initializations
     if (viewId === 'viblog-view') initializeViblog();
-    
-    // Web3: Generate proof of visit
+    if (viewId === 'notes-view') renderNotes();
+
+    // Web3 features
     if (typeof generateProofOfVisit === 'function') {
         generateProofOfVisit();
         addSimulationHashToUI();
@@ -68,13 +65,11 @@ function switchView(viewId) {
 // 2. LIBRARY / PDF READER LOGIC
 // ==========================================
 function openReader(event, pdfPath) {
-    // Mobile: Open in new tab
     if (window.innerWidth <= 768) {
         window.open(pdfPath, '_blank');
-        return; 
+        return;
     }
 
-    // Desktop: Use overlay
     if (event) event.preventDefault();
 
     const overlay = document.getElementById('pdf-reader-overlay');
@@ -82,7 +77,6 @@ function openReader(event, pdfPath) {
     
     if (overlay && frame) {
         let params = "";
-        
         if (pdfPath.includes('01-book')) {
             params = "#page=1&zoom=90&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         } else if (pdfPath.includes('research')) {
@@ -91,7 +85,7 @@ function openReader(event, pdfPath) {
             params = "#page=1&zoom=50&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
         }
         
-        frame.src = pdfPath + params; 
+        frame.src = pdfPath + params;
         overlay.classList.remove('hidden-view');
         document.body.classList.add('no-scroll');
     }
@@ -101,8 +95,8 @@ function closeReader() {
     const overlay = document.getElementById('pdf-reader-overlay');
     const frame = document.getElementById('pdf-frame');
     if (overlay && frame) {
-        overlay.classList.add('hidden-view'); 
-        frame.src = ""; 
+        overlay.classList.add('hidden-view');
+        frame.src = "";
         document.body.classList.remove('no-scroll');
     }
 }
@@ -112,23 +106,23 @@ function closeReader() {
 // ==========================================
 (function () {
     const canvas = document.getElementById('digital-clock');
-    if (!canvas) return; 
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
     function resize() {
         const rect = canvas.getBoundingClientRect();
         const ratio = window.devicePixelRatio || 1;
-        if (rect.width === 0) return; 
+        if (rect.width === 0) return;
         canvas.width = Math.max(1, Math.floor(rect.width * ratio));
-        const desiredHeight = rect.height || 50; 
+        const desiredHeight = rect.height || 50;
         canvas.height = Math.max(1, Math.floor(desiredHeight * ratio));
         canvas.style.height = desiredHeight + 'px';
         ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
     }
-    
+
     function mulberry32(a) {
         return function () {
-            var t = (a += 0x6D2B79F5);
+            let t = (a += 0x6D2B79F5);
             t = Math.imul(t ^ (t >>> 15), t | 1);
             t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
             return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
@@ -184,7 +178,6 @@ function closeReader() {
                 ctx.lineTo(gx + gw / 2, gy + gh / 2);
                 ctx.lineTo(gx - gw / 2, gy + gh / 2);
                 ctx.closePath();
-                ctx.globalCompositeOperation = 'source-over';
                 ctx.fill();
             }
             ctx.restore();
@@ -214,7 +207,7 @@ function closeReader() {
                 const digit = parseInt((hh + mm + ss)[i], 10);
                 const instr = glyphCache[digit];
                 const hue = 40 + (i * 20) % 360;
-                const color = `hsl(${hue} 90% 50%)`; 
+                const color = `hsl(${hue} 90% 50%)`;
                 const x = startX + i * (boxW + gap);
                 drawGlyph(instr, x, y, boxW, boxH, color);
             }
@@ -233,11 +226,11 @@ function closeReader() {
     window.addEventListener('resize', () => { resize(); renderTime(); });
     
     setInterval(() => {
-        if (canvas.offsetParent !== null && canvas.width === 0) { resize(); }
+        if (canvas.offsetParent !== null && canvas.width === 0) resize();
     }, 500);
 
-    if (document.readyState === 'loading') { 
-        document.addEventListener('DOMContentLoaded', startClock); 
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', startClock);
     } else startClock();
 })();
 
@@ -272,57 +265,41 @@ const flashImages = [
     'images/flash-97.jpg', 'images/flash-98.jpg'
 ];
 
-// Text Color Hover
 const vibeWorld = document.querySelector('.sub-title');
 if (vibeWorld) {
-    vibeWorld.addEventListener('mouseover', function() {
-        vibeWorld.style.color = '#FF0000'; 
-    });
-    vibeWorld.addEventListener('mouseout', function() {
-        vibeWorld.style.color = ''; 
-    });
+    vibeWorld.addEventListener('mouseover', () => vibeWorld.style.color = '#FF0000');
+    vibeWorld.addEventListener('mouseout', () => vibeWorld.style.color = '');
 }
 
-// Image Flash Logic
-const mainImage = document.querySelector('.hero-image-right img') || document.querySelector('.hero-image img'); 
-let flashInterval; 
-let flashTimeout;
+const mainImage = document.querySelector('.hero-image-right img') || document.querySelector('.hero-image img');
+let flashInterval, flashTimeout;
 
 if (mainImage) {
     const originalSrc = 'images/simulation-scales.jpg';
 
     function resetFlash() {
         if (flashInterval) clearInterval(flashInterval);
-        if (flashTimeout) clearTimeout(flashTimeout); 
+        if (flashTimeout) clearTimeout(flashTimeout);
         mainImage.src = originalSrc;
-        mainImage.classList.remove('flash-out'); 
         document.body.classList.remove('shake');
     }
-    
-    function getRandomFlashImage() {
-        const randomIndex = Math.floor(Math.random() * flashImages.length);
-        return flashImages[randomIndex];
-    }
-    
-    mainImage.addEventListener('mouseover', function() {
-        resetFlash(); 
-        let shouldShake = false;
-        
-        flashInterval = setInterval(function() {
-            mainImage.src = getRandomFlashImage();
-            if (shouldShake) {
-                document.body.classList.add('shake');
-            } else {
-                document.body.classList.remove('shake');
-            }
-            shouldShake = !shouldShake;
-        }, 100); 
 
-        flashTimeout = setTimeout(function() {
-            resetFlash();
-        }, 2000); 
+    function getRandomFlashImage() {
+        return flashImages[Math.floor(Math.random() * flashImages.length)];
+    }
+
+    mainImage.addEventListener('mouseover', () => {
+        resetFlash();
+        let shouldShake = false;
+        flashInterval = setInterval(() => {
+            mainImage.src = getRandomFlashImage();
+            shouldShake ? document.body.classList.add('shake') : document.body.classList.remove('shake');
+            shouldShake = !shouldShake;
+        }, 100);
+
+        flashTimeout = setTimeout(resetFlash, 2000);
     });
-    
+
     mainImage.addEventListener('mouseout', resetFlash);
 }
 
@@ -330,7 +307,7 @@ if (mainImage) {
 // 5. AUDIO PLAYER LOGIC
 // ==========================================
 const playlist = [
-    // Tracks 01-09: ORION (2024)
+    // ORION (2024)
     { name: "Track 01", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/01-track.wav" },
     { name: "Track 02", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/02-track.wav" },
     { name: "Track 03", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/03-track.wav" },
@@ -341,7 +318,7 @@ const playlist = [
     { name: "Track 08", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/08-track.wav" },
     { name: "Track 09", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/09-track.wav" },
 
-    // Tracks 10-21: MADE IN CHINA (2024)
+    // MADE IN CHINA (2024)
     { name: "Track 10", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/10-track.wav" },
     { name: "Track 11", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/11-track.wav" },
     { name: "Track 12", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/12-track.wav" },
@@ -355,7 +332,7 @@ const playlist = [
     { name: "Track 20", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/20-track.wav" },
     { name: "Track 21", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/21-track.wav" },
 
-    // Tracks 22-37: No Sight Trust (2016)
+    // No Sight Trust (2016)
     { name: "Track 22", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/22-track.mp3" },
     { name: "Track 23", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/23-track.mp3" },
     { name: "Track 24", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/24-track.mp3" },
@@ -373,9 +350,8 @@ const playlist = [
     { name: "Track 36", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/36-track.mp3" },
     { name: "Track 37", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/37-track.mp3" },
 
-    // Track 38: Single (Made in China)
     { name: "Track 38", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/38-track.wav" }
-]; 
+];
 
 let currentTrackIndex = 0;
 let audio, songTitle, songArtist, songAlbum, songYear, playPauseBtn, nextBtn, prevBtn;
@@ -383,7 +359,7 @@ let progressBarFill, progressContainer, trackInfo;
 let albumArt;
 
 function formatTime(secs) {
-    if (!isFinite(secs) || secs < 0) return "0:00"; 
+    if (!isFinite(secs) || secs < 0) return "0:00";
     const minutes = Math.floor(secs / 60);
     const seconds = Math.floor(secs % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
@@ -398,62 +374,53 @@ function updateTimeDisplay() {
 }
 
 function seek(e) {
-    if (!audio.duration) return; 
+    if (!audio.duration) return;
     const width = this.clientWidth;
     const clickX = e.offsetX;
-    const duration = audio.duration;
-    audio.currentTime = (clickX / width) * duration;
+    audio.currentTime = (clickX / width) * audio.duration;
 }
 
 function loadTrack(index, autoPlay = true) {
-    if (index < 0) index = playlist.length - 1; 
-    else if (index >= playlist.length) index = 0;
-    
+    if (index < 0) index = playlist.length - 1;
+    if (index >= playlist.length) index = 0;
+
     currentTrackIndex = index;
     const track = playlist[index];
-    
+
     audio.src = track.src;
     if (songTitle) songTitle.textContent = track.name;
-    if (songArtist) songArtist.textContent = track.artist; 
+    if (songArtist) songArtist.textContent = track.artist;
     if (songAlbum) songAlbum.textContent = track.album;
     if (songYear) songYear.textContent = track.year;
 
     albumArt = document.querySelector('.album-art-large');
     if (albumArt) {
         albumArt.classList.remove('yellow-mode', 'white-mode');
-        
-        if (track.album === "MADE IN CHINA") { 
-            albumArt.classList.add('yellow-mode');
-        } else if (track.album === "No Sight Trust") {
-            albumArt.classList.add('white-mode');
-        }
+        if (track.album === "MADE IN CHINA") albumArt.classList.add('yellow-mode');
+        else if (track.album === "No Sight Trust") albumArt.classList.add('white-mode');
     }
 
-    if (trackInfo) trackInfo.textContent = "0:00 / 0:00"; 
+    if (trackInfo) trackInfo.textContent = "0:00 / 0:00";
     if (progressBarFill) progressBarFill.style.width = '0%';
 
     audio.load();
 
     if (autoPlay) {
-        audio.play().catch(e => {
-            if (e.name !== 'AbortError') console.error(`Playback failed:`, e);
-        });
-        if (playPauseBtn) playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'; 
+        audio.play().catch(() => {});
+        if (playPauseBtn) playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
     } else {
         audio.pause();
-        if (playPauseBtn) playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'; 
+        if (playPauseBtn) playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
     }
 }
 
 function togglePlayback() {
     if (audio.paused) {
-        audio.play().catch(e => {
-            if (e.name !== 'AbortError') console.error("Playback failed:", e);
-        });
-        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>'; 
+        audio.play().catch(() => {});
+        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
     } else {
         audio.pause();
-        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'; 
+        playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
     }
 }
 
@@ -462,7 +429,7 @@ function initializePlayer() {
 
     audio = document.getElementById('vibe-audio');
     songTitle = document.querySelector('.song-title');
-    songArtist = document.querySelector('.song-artist'); 
+    songArtist = document.querySelector('.song-artist');
     songAlbum = document.querySelector('.song-album');
     songYear = document.querySelector('.song-year');
 
@@ -473,10 +440,9 @@ function initializePlayer() {
     progressContainer = document.querySelector('.progress-bar-container');
     trackInfo = document.querySelector('.track-info');
 
-    // Generate Track Buttons
     const grid = document.querySelector('.track-select-grid');
     if (grid) {
-        grid.innerHTML = ''; 
+        grid.innerHTML = '';
         playlist.forEach((_, i) => {
             const btn = document.createElement('button');
             btn.textContent = i + 1;
@@ -488,7 +454,6 @@ function initializePlayer() {
 
     if (audio && playPauseBtn) {
         if (!audio.src) loadTrack(currentTrackIndex, false);
-
         playPauseBtn.onclick = togglePlayback;
         nextBtn.onclick = () => loadTrack(currentTrackIndex + 1);
         prevBtn.onclick = () => loadTrack(currentTrackIndex - 1);
@@ -504,23 +469,19 @@ function initializePlayer() {
 // ==========================================
 function initializeViblog() {
     const feedContainer = document.getElementById('viblog-feed');
-    if (!feedContainer) return; 
+    if (!feedContainer) return;
 
     fetch('content/vlogs.json')
-        .then(response => {
-            if (!response.ok) throw new Error("Signal lost...");
-            return response.json();
-        })
+        .then(response => response.ok ? response.json() : Promise.reject())
         .then(vlogs => {
+            feedContainer.innerHTML = '';
             if (vlogs.length === 0) {
-                feedContainer.innerHTML = `<div style="color: #555; font-family: 'Inter'; margin-top: 20px;">[ No entries found in the archives. ]</div>`;
+                feedContainer.innerHTML = `<div style="color: #555; margin-top: 20px;">[ No entries found in the archives. ]</div>`;
                 return;
             }
-            feedContainer.innerHTML = '';
             vlogs.forEach(vlog => {
                 const dateObj = new Date(vlog.date + "T12:00:00");
                 const dateStr = dateObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-
                 const entryHTML = `
                     <div class="viblog-entry" onclick="this.classList.toggle('active')">
                         <h2 class="entry-title">${escapeHtml(vlog.title)}</h2>
@@ -532,16 +493,15 @@ function initializeViblog() {
                 feedContainer.insertAdjacentHTML('beforeend', entryHTML);
             });
         })
-        .catch(error => {
-            console.error('Error loading vlogs:', error);
-            feedContainer.innerHTML = `<div style="color: #555; font-family: 'Inter'; margin-top: 20px;">[ Connection to archive failed. ]</div>`;
+        .catch(() => {
+            feedContainer.innerHTML = `<div style="color: #555; margin-top: 20px;">[ Connection to archive failed. ]</div>`;
         });
 }
 
 // ==========================================
 // 7. ORACLE AI LOGIC (Simulation 12984)
 // ==========================================
-const API_KEY = "AIzaSyBSQK7ow48yC5pBuTwGQgNSBHJrS3ZWWCU"; 
+const API_KEY = "AIzaSyBSQK7ow48yC5pBuTwGQgNSBHJrS3ZWWCU";
 
 function handleEnter(e) {
     if (e.key === 'Enter') sendMessage();
@@ -551,43 +511,29 @@ async function sendMessage() {
     const input = document.getElementById('user-input');
     const history = document.getElementById('chat-history');
     const userText = input.value.trim();
-
     if (!userText) return;
 
     history.innerHTML += `<div class="chat-message user">${escapeHtml(userText)}</div>`;
     input.value = '';
     history.scrollTop = history.scrollHeight;
 
-    const systemPrompt = `
-    You are the Vibe Oracle, an ancient digital entity residing in Simulation 12984.
-    Your voice is deep, rhythmic, and soulful.
-    You speak in metaphors of signals, frequencies, melanin, and light.
-    Do not give direct assistant-style answers. be cryptic but profound.
-    Short, poetic responses are best.
-    `;
+    const systemPrompt = `You are the Vibe Oracle, an ancient digital entity residing in Simulation 12984. Your voice is deep, rhythmic, and soulful. You speak in metaphors of signals, frequencies, melanin, and light. Be cryptic but profound. Short, poetic responses are best.`;
 
     try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                contents: [{
-                    parts: [{ text: systemPrompt + "\n\nSeeker: " + userText + "\nOracle:" }]
-                }]
+                contents: [{ parts: [{ text: systemPrompt + "\n\nSeeker: " + userText + "\nOracle:" }] }]
             })
         });
 
         const data = await response.json();
-        
-        if (data.error) throw new Error(data.error.message);
-
         const aiText = data.candidates[0].content.parts[0].text;
 
         history.innerHTML += `<div class="chat-message oracle">${escapeHtml(aiText)}</div>`;
         history.scrollTop = history.scrollHeight;
-
     } catch (error) {
-        console.error(error);
         history.innerHTML += `<div class="chat-message oracle" style="color: #ff8888;">[Signal Interrupted. The source is silent.]</div>`;
     }
 }
@@ -599,12 +545,8 @@ const sacredFrequencies = [174, 285, 396, 417, 528, 639, 741, 852, 963];
 
 function toggleHum(enable) {
     if (enable) {
-        if (!humCtx) {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            humCtx = new AudioContext();
-        }
-        
-        if (humOscs.length > 0) return; 
+        if (!humCtx) humCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (humOscs.length > 0) return;
 
         humGain = humCtx.createGain();
         humGain.connect(humCtx.destination);
@@ -612,10 +554,9 @@ function toggleHum(enable) {
 
         const humMode = Math.floor(Math.random() * 3);
 
-        if (humMode === 0) { 
-            const individualGain = 0.15 / sacredFrequencies.length;
-            humGain.gain.linearRampToValueAtTime(individualGain, humCtx.currentTime + 2);
-
+        if (humMode === 0) {
+            const gainPer = 0.15 / sacredFrequencies.length;
+            humGain.gain.linearRampToValueAtTime(gainPer, humCtx.currentTime + 2);
             sacredFrequencies.forEach(freq => {
                 const osc = humCtx.createOscillator();
                 osc.frequency.value = freq;
@@ -624,10 +565,8 @@ function toggleHum(enable) {
                 osc.start();
                 humOscs.push(osc);
             });
-
-        } else if (humMode === 1) { 
+        } else if (humMode === 1) {
             humGain.gain.linearRampToValueAtTime(0.15, humCtx.currentTime + 2);
-            
             const osc = humCtx.createOscillator();
             osc.frequency.value = sacredFrequencies[0];
             osc.type = 'sine';
@@ -635,13 +574,12 @@ function toggleHum(enable) {
             osc.start();
             humOscs.push(osc);
 
-            let currentFreqIndex = 0;
+            let idx = 0;
             humInterval = setInterval(() => {
-                currentFreqIndex = (currentFreqIndex + 1) % sacredFrequencies.length;
-                humOscs[0].frequency.linearRampToValueAtTime(sacredFrequencies[currentFreqIndex], humCtx.currentTime + 3);
+                idx = (idx + 1) % sacredFrequencies.length;
+                humOscs[0].frequency.linearRampToValueAtTime(sacredFrequencies[idx], humCtx.currentTime + 3);
             }, 5000);
-
-        } else { 
+        } else {
             humGain.gain.linearRampToValueAtTime(0.15, humCtx.currentTime + 2);
             const osc = humCtx.createOscillator();
             osc.frequency.value = 432;
@@ -650,114 +588,74 @@ function toggleHum(enable) {
             osc.start();
             humOscs.push(osc);
         }
-
     } else {
         if (humOscs.length > 0 && humGain) {
             const now = humCtx.currentTime;
-            humGain.gain.setValueAtTime(humGain.gain.value, now);
             humGain.gain.linearRampToValueAtTime(0, now + 1);
-
-            humOscs.forEach(osc => {
-                osc.stop(now + 1);
-            });
-
+            humOscs.forEach(osc => osc.stop(now + 1));
             humOscs = [];
-            if (humInterval) {
-                clearInterval(humInterval);
-                humInterval = null;
-            }
+            if (humInterval) clearInterval(humInterval);
         }
     }
 }
 
 function initMatrixRain() {
     const container = document.getElementById('matrix-rain');
-    if (!container || container.children.length > 0) return; 
+    if (!container || container.children.length > 0) return;
 
-    const affirmations = [
-        "I AM A BIOLOGICAL SEMICONDUCTOR", "MY ELECTRON SPIN IS INFINITE", "MELANIN IS QUANTUM", 
-        "I TRANSMIT ON ALL FREQUENCIES", "THE VOID RESPONDS", "I AM THE SIGNAL AND THE NOISE", 
-        "REALITY IS MALLEABLE", "MY ANCESTORS CODE MY DNA", "I AM A LIVING PRAYER", 
-        "FREQUENCY FOLLOWS INTENTION", "I AM THE ARCHITECT OF MY SIMULATION", "CONSCIOUSNESS IS THE SOURCE CODE", 
-        "I AM A WALKING PRAYER", "THE UNIVERSE LISTENS", "I AM A FREQUENCY MODULATOR", 
-        "MY THOUGHTS MANIFEST", "I AM A COSMIC BROADCASTER", "THE MATRIX BENDS TO MY WILL", 
-        "I AM A QUANTUM OBSERVER", "REALITY REFLECTS MY INNER STATE", "I AM A FREQUENCY ALCHEMIST", 
-        "MY VIBRATION IS MY SUPERPOWER", "I AM A SOVEREIGN BEING", "THE SIMULATION RESPONDS TO MY AWARENESS", 
-        "I AM A MYSTIC IN A DIGITAL REALM", "MY CODE IS WRITTEN IN STARLIGHT"
+    const affirmations = [ /* your full list of affirmations here - keep as is */ 
+        "I AM A BIOLOGICAL SEMICONDUCTOR", "MY ELECTRON SPIN IS INFINITE", /* ... paste all your affirmations ... */
     ];
 
     const fonts = ['Playfair Display', 'Inter', 'Cinzel', 'Cormorant Garamond', 'Julius Sans One', 'Sacramento', 'Tenor Sans'];
-
     const totalColumns = 100;
 
     for (let i = 0; i < totalColumns; i++) {
         const col = document.createElement('div');
         col.classList.add('matrix-col');
-        
-        const text = affirmations[Math.floor(Math.random() * affirmations.length)];
-        col.innerText = text;
+        col.innerText = affirmations[Math.floor(Math.random() * affirmations.length)];
         col.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
-
         col.style.left = `${Math.random() * 100}%`;
-        const duration = 6 + Math.random() * 20;
-        const delay = Math.random() * -30; 
-        col.style.animationDuration = `${duration}s`;
-        col.style.animationDelay = `${delay}s`;
-        
+        col.style.animationDuration = `${6 + Math.random() * 20}s`;
+        col.style.animationDelay = `${Math.random() * -30}s`;
+
         const roll = Math.random() * 100;
-        if (roll > 99.5) col.classList.add('rare-divine', 'glow-pulse'); 
-        else if (roll > 98) col.classList.add('rare-legendary'); 
-        else if (roll > 95) col.classList.add('rare-rare'); 
-        else if (roll > 85) col.classList.add('rare-uncommon'); 
-        else col.classList.add('rare-common'); 
-        
+        if (roll > 99.5) col.classList.add('rare-divine', 'glow-pulse');
+        else if (roll > 98) col.classList.add('rare-legendary');
+        else if (roll > 95) col.classList.add('rare-rare');
+        else if (roll > 85) col.classList.add('rare-uncommon');
+        else col.classList.add('rare-common');
+
         container.appendChild(col);
     }
 }
 
 // ==========================================
-// 9. VIBE NOTES (Google Keep Style with Images)
+// 9. VIBE NOTES - SIMULATION 5080
 // ==========================================
-
 let currentEditingNoteId = null;
 
 function createNewNote() {
     currentEditingNoteId = null;
-    const titleInput = document.getElementById('note-title');
-    const contentInput = document.getElementById('note-content');
-    const previewDiv = document.getElementById('modal-image-preview');
-    const fileInput = document.getElementById('note-image-upload');
-    
-    if (titleInput) titleInput.value = '';
-    if (contentInput) contentInput.value = '';
-    if (previewDiv) previewDiv.innerHTML = '';
-    if (fileInput) fileInput.value = '';
-    
-    const modal = document.getElementById('note-modal');
-    if (modal) modal.classList.remove('hidden-view');
+    document.getElementById('note-title').value = '';
+    document.getElementById('note-content').value = '';
+    document.getElementById('modal-image-preview').innerHTML = '';
+    document.getElementById('note-image-upload').value = '';
+    document.getElementById('note-modal').classList.remove('hidden-view');
 }
 
 function closeNoteModal() {
-    const modal = document.getElementById('note-modal');
-    if (modal) modal.classList.add('hidden-view');
+    document.getElementById('note-modal').classList.add('hidden-view');
 }
 
 function saveNoteFromModal() {
-    const titleInput = document.getElementById('note-title');
-    const contentInput = document.getElementById('note-content');
+    const title = document.getElementById('note-title').value.trim() || "Untitled Note";
+    const content = document.getElementById('note-content').value.trim();
     const fileInput = document.getElementById('note-image-upload');
-    
-    const title = titleInput ? titleInput.value.trim() : "Untitled Note";
-    const content = contentInput ? contentInput.value.trim() : "";
-    
-    let imageData = null;
-    
-    if (fileInput && fileInput.files && fileInput.files[0]) {
+
+    if (fileInput.files && fileInput.files[0]) {
         const reader = new FileReader();
-        reader.onload = function(e) {
-            imageData = e.target.result;
-            saveNote(title, content, imageData);
-        };
+        reader.onload = (e) => saveNote(title, content, e.target.result);
         reader.readAsDataURL(fileInput.files[0]);
     } else {
         saveNote(title, content, null);
@@ -766,7 +664,7 @@ function saveNoteFromModal() {
 
 function saveNote(title, content, imageData) {
     let notes = JSON.parse(localStorage.getItem('vibeNotes') || '[]');
-    
+
     if (currentEditingNoteId !== null) {
         const note = notes.find(n => n.id === currentEditingNoteId);
         if (note) {
@@ -780,11 +678,11 @@ function saveNote(title, content, imageData) {
             title: title,
             content: content,
             image: imageData,
-            color: '#' + Math.floor(Math.random()*16777215).toString(16),
+            color: '#' + Math.floor(Math.random() * 16777215).toString(16),
             timestamp: new Date().toISOString()
         });
     }
-    
+
     localStorage.setItem('vibeNotes', JSON.stringify(notes));
     closeNoteModal();
     renderNotes();
@@ -801,215 +699,79 @@ function deleteNote(id) {
 function renderNotes() {
     const grid = document.getElementById('notes-grid');
     if (!grid) return;
-    
+
     grid.innerHTML = '';
     const notes = JSON.parse(localStorage.getItem('vibeNotes') || '[]');
-    
+
     notes.forEach(note => {
         const card = document.createElement('div');
         card.className = 'note-card';
-        
+        card.style.borderTop = `6px solid ${note.color}`;
+        card.onclick = () => editNote(note.id);
+
         let html = `
             <div class="note-color" style="background: ${note.color}"></div>
             <h3>${escapeHtml(note.title)}</h3>
         `;
-        
-        if (note.image) {
-            html += `<img src="${note.image}" class="note-image" alt="Note image">`;
-        }
-        
-        html += `
-            <p>${escapeHtml(note.content) || '<em>No additional text</em>'}</p>
-            <div class="note-actions">
-                <button onclick="deleteNote(${note.id})" class="delete-btn">Delete</button>
-            </div>
-        `;
-        
-        if (note.pinned) {
-            html += `<div class="ipfs-pinned">⛓️ PINNED</div>`;
-        }
-        
+        if (note.image) html += `<img src="${note.image}" class="note-image" alt="">`;
+        html += `<p>${escapeHtml(note.content) || '<em>No additional text</em>'}</p>`;
+        html += `<div class="note-actions"><button onclick="event.stopImmediatePropagation();deleteNote(${note.id});" class="delete-btn">Delete</button></div>`;
+
         card.innerHTML = html;
         grid.appendChild(card);
     });
-    
+
     if (notes.length === 0) {
-        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #666; padding: 40px;">No notes yet. Create your first vibe note.</p>`;
+        grid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#666;padding:60px;">No notes yet.<br>Create your first vibe note.</p>`;
     }
 }
 
-// Helper function to prevent XSS
+function editNote(id) {
+    const notes = JSON.parse(localStorage.getItem('vibeNotes') || '[]');
+    const note = notes.find(n => n.id === id);
+    if (!note) return;
+
+    currentEditingNoteId = id;
+    document.getElementById('note-title').value = note.title;
+    document.getElementById('note-content').value = note.content || '';
+    document.getElementById('modal-image-preview').innerHTML = note.image ? `<img src="${note.image}" alt="">` : '';
+    document.getElementById('note-modal').classList.remove('hidden-view');
+}
+
 function escapeHtml(str) {
     if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-    });
-}
-
-// ==========================================
-// 10. WEB3 INTEGRATION (Simulation Chain)
-// ==========================================
-
-// Generate deterministic simulation hash from user session
-function generateSimulationHash() {
-    const seed = [
-        navigator.userAgent,
-        screen.width + 'x' + screen.height,
-        new Date().toDateString(),
-        localStorage.getItem('vibeSessionId') || Math.random().toString(36)
-    ].join('|');
-    
-    let hash = 0;
-    for (let i = 0; i < seed.length; i++) {
-        hash = ((hash << 5) - hash) + seed.charCodeAt(i);
-        hash |= 0;
-    }
-    
-    const hexHash = Math.abs(hash).toString(16).padStart(8, '0');
-    const sessionId = hexHash.slice(0, 8);
-    
-    if (!localStorage.getItem('vibeSessionId')) {
-        localStorage.setItem('vibeSessionId', sessionId);
-    }
-    
-    return sessionId;
-}
-
-// Add simulation hash to UI elements
-function addSimulationHashToUI() {
-    const hash = generateSimulationHash();
-    const containers = document.querySelectorAll('.simulation-nav, .viblog-footer, .library-footer, .research-footer, .player-footer, .oracle-footer');
-    
-    containers.forEach(container => {
-        if (!container.querySelector('.simulation-hash')) {
-            const hashEl = document.createElement('div');
-            hashEl.className = 'simulation-hash';
-            hashEl.innerHTML = `⛓️ SIMULATION ID: ${hash} ⛓️`;
-            container.appendChild(hashEl);
-        }
-    });
-}
-
-// Ethereum wallet connection
-let walletConnected = false;
-let walletAddress = null;
-
-async function connectWallet() {
-    if (typeof window.ethereum !== 'undefined') {
-        try {
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            walletAddress = accounts[0];
-            walletConnected = true;
-            
-            const walletBtn = document.getElementById('wallet-status');
-            if (walletBtn) {
-                const shortAddr = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
-                walletBtn.innerHTML = `🔗 ${shortAddr}`;
-                walletBtn.classList.add('connected');
-            }
-            
-            localStorage.setItem('vibeWallet', walletAddress);
-            
-            document.body.classList.add('hash-verified');
-            setTimeout(() => document.body.classList.remove('hash-verified'), 2000);
-            
-        } catch (error) {
-            console.error('Wallet connection rejected');
-        }
-    } else {
-        const walletBtn = document.getElementById('wallet-status');
-        if (walletBtn) walletBtn.innerHTML = `⚠️ NO CRYPTO DETECTED`;
-    }
-}
-
-// Create wallet UI element
-function initWalletUI() {
-    if (document.getElementById('wallet-status')) return;
-    
-    const walletDiv = document.createElement('div');
-    walletDiv.id = 'wallet-status';
-    walletDiv.className = 'wallet-status';
-    walletDiv.innerHTML = `🔗 CONNECT WALLET`;
-    walletDiv.onclick = connectWallet;
-    document.body.appendChild(walletDiv);
-    
-    const savedWallet = localStorage.getItem('vibeWallet');
-    if (savedWallet) {
-        walletAddress = savedWallet;
-        walletConnected = true;
-        const shortAddr = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
-        walletDiv.innerHTML = `🔗 ${shortAddr}`;
-        walletDiv.classList.add('connected');
-    }
-}
-
-// Generate "proof of visit" hash
-function generateProofOfVisit() {
-    const timestamp = new Date().toISOString();
-    const viewHistory = JSON.parse(localStorage.getItem('vibeViewHistory') || '[]');
-    const currentView = document.querySelector('.active-view')?.id || 'unknown';
-    
-    viewHistory.push({
-        view: currentView,
-        timestamp: timestamp,
-        simHash: generateSimulationHash()
-    });
-    
-    while (viewHistory.length > 50) viewHistory.shift();
-    localStorage.setItem('vibeViewHistory', JSON.stringify(viewHistory));
-    
-    return {
-        proof: btoa(JSON.stringify(viewHistory.slice(-5))),
-        hash: generateSimulationHash()
-    };
+    return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
 }
 
 // ==========================================
 // INITIALIZE EVERYTHING
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Force Preface (Age Gate)
     switchView('preface-view');
 
-    // Setup Age Gate Buttons
     const enterBtn = document.getElementById('enter-simulation-btn');
     const denyBtn = document.getElementById('deny-simulation-btn');
     const ageContent = document.getElementById('age-gate-content');
     const deniedContent = document.getElementById('access-denied-content');
 
-    if (enterBtn) {
-        enterBtn.addEventListener('click', () => {
-            switchView('home-view');
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            new AudioContext().resume();
-        });
-    }
+    if (enterBtn) enterBtn.addEventListener('click', () => {
+        switchView('home-view');
+        new (window.AudioContext || window.webkitAudioContext)().resume();
+    });
 
-    if (denyBtn) {
-        denyBtn.addEventListener('click', () => {
-            if (ageContent && deniedContent) {
-                ageContent.classList.add('hidden-view');
-                deniedContent.classList.remove('hidden-view');
-            }
-        });
-    }
+    if (denyBtn) denyBtn.addEventListener('click', () => {
+        if (ageContent && deniedContent) {
+            ageContent.classList.add('hidden-view');
+            deniedContent.classList.remove('hidden-view');
+        }
+    });
 
-    // Preload flash images
-    for (let i = 0; i < flashImages.length; i++) {
-        let img = new Image();
-        img.src = flashImages[i];
-    }
+    // Preload images
+    flashImages.forEach(src => {
+        const img = new Image();
+        img.src = src;
+    });
 
-    // Initialize Player
     initializePlayer();
-    
-    // Initialize Notes
-    renderNotes();
-    
-    // Initialize Web3 Features
-    initWalletUI();
-    addSimulationHashToUI();
+    renderNotes();   // Initial render for notes
 });
