@@ -56,9 +56,126 @@ body.no-scroll {
     to { opacity: 1; } 
 }
 
-.sr-only { 
-    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; 
-    overflow: hidden; clip: rect(0,0,0,0); border: 0; 
+/* =========================================
+   PREFACE / AGE-GATE (18+) SCREEN - FIXED
+   ========================================= */
+.preface-body {
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.preface-content-wrapper {
+    max-width: 520px;
+    width: 90%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.preface-image-container {
+    width: 100%;
+    max-width: 520px;
+    height: 420px;                    /* Controlled height - original aesthetic */
+    overflow: hidden;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9);
+    margin: 0 auto;
+    background: #000;
+}
+
+.preface-visual {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;                /* Keeps proportions and prevents overflow */
+    object-position: center;
+    display: block;
+    opacity: 0.92;
+    transition: opacity 0.6s ease, transform 0.8s ease;
+}
+
+.preface-content-wrapper:hover .preface-visual {
+    opacity: 1;
+    transform: scale(1.03);           /* subtle cinematic zoom */
+}
+
+/* Text content */
+.preface-title {
+    font-family: var(--font-ui);
+    font-weight: 900;
+    font-size: 1.25rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin: 0;
+    color: #ffffff;
+    opacity: 0.95;
+}
+
+.preface-warning {
+    font-family: var(--font-ui);
+    font-size: 0.95rem;
+    color: #aaaaaa;
+    line-height: 1.55;
+    margin: 0;
+    border-left: 3px solid #ff4444;
+    padding-left: 18px;
+    text-align: left;
+}
+
+.preface-question {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    line-height: 1.45;
+    margin: 12px 0 20px 0;
+}
+
+.preface-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.preface-btn {
+    flex: 1;
+    max-width: 240px;
+    padding: 16px 24px;
+    border-radius: 30px;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.35s ease;
+}
+
+.enter-btn {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.enter-btn:hover {
+    background: #fff;
+    color: #000;
+    transform: translateY(-3px);
+}
+
+.exit-btn {
+    background: transparent;
+    color: #aaaaaa;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.exit-btn:hover {
+    border-color: #ff4444;
+    color: #ff4444;
 }
 
 /* =========================================
@@ -373,16 +490,8 @@ body.no-scroll {
 }
 
 /* =========================================
-   11. OTHER SECTIONS (Player, Viblog, Library, Research, Oracle, etc.)
+   MOBILE RESPONSIVENESS
    ========================================= */
-/* You can keep the rest of your existing CSS for these sections as-is.
-   Only the notes section was missing proper styling before. */
-
-.player-center-wrapper, .viblog-wrapper, .library-container, .research-container, .oracle-container {
-    /* your existing styles */
-}
-
-/* Mobile Responsiveness */
 @media (max-width: 768px) {
     .notes-grid {
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -394,10 +503,16 @@ body.no-scroll {
     .new-note-btn {
         width: 100%;
     }
+    .preface-image-container {
+        height: 300px;
+    }
 }
 
 @media (max-width: 600px) {
     .note-card {
         padding: 16px;
+    }
+    .preface-image-container {
+        height: 260px;
     }
 }
