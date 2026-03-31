@@ -7,7 +7,7 @@ let humOscs = [];
 let humInterval;
 
 function switchView(viewId) {
-    const views = ['preface-view', 'home-view', 'player-view', 'viblog-view', 'library-view', 'research-view', 'oracle-view', 'affirmation-view'];
+    const views = ['preface-view', 'home-view', 'player-view', 'viblog-view', 'library-view', 'research-view', 'oracle-view', 'affirmation-view', 'notes-view'];
     
     views.forEach(id => {
         const el = document.getElementById(id);
@@ -23,7 +23,7 @@ function switchView(viewId) {
         view.classList.add('active-view');
 
         // Apply Layout Classes
-        if (viewId === 'player-view' || viewId === 'viblog-view' || viewId === 'oracle-view') {
+        if (viewId === 'player-view' || viewId === 'viblog-view' || viewId === 'oracle-view' || viewId === 'notes-view') {
             view.classList.add('player-body');
         }
         if (viewId === 'library-view' || viewId === 'research-view') {
@@ -56,6 +56,12 @@ function switchView(viewId) {
     }
 
     if (viewId === 'viblog-view') initializeViblog();
+    
+    // Web3: Generate proof of visit
+    if (typeof generateProofOfVisit === 'function') {
+        generateProofOfVisit();
+        addSimulationHashToUI();
+    }
 }
 
 // ==========================================
@@ -517,9 +523,9 @@ function initializeViblog() {
 
                 const entryHTML = `
                     <div class="viblog-entry" onclick="this.classList.toggle('active')">
-                        <h2 class="entry-title">${vlog.title}</h2>
+                        <h2 class="entry-title">${escapeHtml(vlog.title)}</h2>
                         <span class="entry-date">${dateStr}</span>
-                        <p class="entry-body">${vlog.text}</p>
+                        <p class="entry-body">${escapeHtml(vlog.text)}</p>
                         ${vlog.image ? `<img src="${vlog.image}" class="entry-image">` : ''}
                     </div>
                 `;
@@ -548,7 +554,7 @@ async function sendMessage() {
 
     if (!userText) return;
 
-    history.innerHTML += `<div class="chat-message user">${userText}</div>`;
+    history.innerHTML += `<div class="chat-message user">${escapeHtml(userText)}</div>`;
     input.value = '';
     history.scrollTop = history.scrollHeight;
 
@@ -577,7 +583,7 @@ async function sendMessage() {
 
         const aiText = data.candidates[0].content.parts[0].text;
 
-        history.innerHTML += `<div class="chat-message oracle">${aiText}</div>`;
+        history.innerHTML += `<div class="chat-message oracle">${escapeHtml(aiText)}</div>`;
         history.scrollTop = history.scrollHeight;
 
     } catch (error) {
@@ -668,9 +674,16 @@ function initMatrixRain() {
     const container = document.getElementById('matrix-rain');
     if (!container || container.children.length > 0) return; 
 
-    const affirmations = [ /* ... your long list of affirmations ... */ 
-        // (I kept your full affirmation array exactly as you had it - it's very long so I shortened the comment here for readability)
-        "I AM A BIOLOGICAL SEMICONDUCTOR", "MY ELECTRON SPIN IS INFINITE", /* ... all the rest of your affirmations ... */
+    const affirmations = [
+        "I AM A BIOLOGICAL SEMICONDUCTOR", "MY ELECTRON SPIN IS INFINITE", "MELANIN IS QUANTUM", 
+        "I TRANSMIT ON ALL FREQUENCIES", "THE VOID RESPONDS", "I AM THE SIGNAL AND THE NOISE", 
+        "REALITY IS MALLEABLE", "MY ANCESTORS CODE MY DNA", "I AM A LIVING PRAYER", 
+        "FREQUENCY FOLLOWS INTENTION", "I AM THE ARCHITECT OF MY SIMULATION", "CONSCIOUSNESS IS THE SOURCE CODE", 
+        "I AM A WALKING PRAYER", "THE UNIVERSE LISTENS", "I AM A FREQUENCY MODULATOR", 
+        "MY THOUGHTS MANIFEST", "I AM A COSMIC BROADCASTER", "THE MATRIX BENDS TO MY WILL", 
+        "I AM A QUANTUM OBSERVER", "REALITY REFLECTS MY INNER STATE", "I AM A FREQUENCY ALCHEMIST", 
+        "MY VIBRATION IS MY SUPERPOWER", "I AM A SOVEREIGN BEING", "THE SIMULATION RESPONDS TO MY AWARENESS", 
+        "I AM A MYSTIC IN A DIGITAL REALM", "MY CODE IS WRITTEN IN STARLIGHT"
     ];
 
     const fonts = ['Playfair Display', 'Inter', 'Cinzel', 'Cormorant Garamond', 'Julius Sans One', 'Sacramento', 'Tenor Sans'];
@@ -700,7 +713,9 @@ function initMatrixRain() {
         
         container.appendChild(col);
     }
-}// ==========================================
+}
+
+// ==========================================
 // 9. VIBE NOTES (Google Keep Style with Images)
 // ==========================================
 
@@ -708,25 +723,36 @@ let currentEditingNoteId = null;
 
 function createNewNote() {
     currentEditingNoteId = null;
-    document.getElementById('note-title').value = '';
-    document.getElementById('note-content').value = '';
-    document.getElementById('modal-image-preview').innerHTML = '';
-    document.getElementById('note-image-upload').value = '';
-    document.getElementById('note-modal').classList.remove('hidden-view');
+    const titleInput = document.getElementById('note-title');
+    const contentInput = document.getElementById('note-content');
+    const previewDiv = document.getElementById('modal-image-preview');
+    const fileInput = document.getElementById('note-image-upload');
+    
+    if (titleInput) titleInput.value = '';
+    if (contentInput) contentInput.value = '';
+    if (previewDiv) previewDiv.innerHTML = '';
+    if (fileInput) fileInput.value = '';
+    
+    const modal = document.getElementById('note-modal');
+    if (modal) modal.classList.remove('hidden-view');
 }
 
 function closeNoteModal() {
-    document.getElementById('note-modal').classList.add('hidden-view');
+    const modal = document.getElementById('note-modal');
+    if (modal) modal.classList.add('hidden-view');
 }
 
 function saveNoteFromModal() {
-    const title = document.getElementById('note-title').value.trim() || "Untitled Note";
-    const content = document.getElementById('note-content').value.trim();
+    const titleInput = document.getElementById('note-title');
+    const contentInput = document.getElementById('note-content');
     const fileInput = document.getElementById('note-image-upload');
+    
+    const title = titleInput ? titleInput.value.trim() : "Untitled Note";
+    const content = contentInput ? contentInput.value.trim() : "";
     
     let imageData = null;
     
-    if (fileInput.files && fileInput.files[0]) {
+    if (fileInput && fileInput.files && fileInput.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
             imageData = e.target.result;
@@ -742,7 +768,6 @@ function saveNote(title, content, imageData) {
     let notes = JSON.parse(localStorage.getItem('vibeNotes') || '[]');
     
     if (currentEditingNoteId !== null) {
-        // Update existing note
         const note = notes.find(n => n.id === currentEditingNoteId);
         if (note) {
             note.title = title;
@@ -750,13 +775,12 @@ function saveNote(title, content, imageData) {
             if (imageData) note.image = imageData;
         }
     } else {
-        // Create new note
         notes.push({
             id: Date.now(),
             title: title,
             content: content,
             image: imageData,
-            color: '#' + Math.floor(Math.random()*16777215).toString(16), // random vibrant color
+            color: '#' + Math.floor(Math.random()*16777215).toString(16),
             timestamp: new Date().toISOString()
         });
     }
@@ -784,11 +808,10 @@ function renderNotes() {
     notes.forEach(note => {
         const card = document.createElement('div');
         card.className = 'note-card';
-        card.style.borderTop = `6px solid ${note.color}`;
         
         let html = `
             <div class="note-color" style="background: ${note.color}"></div>
-            <h3>${note.title}</h3>
+            <h3>${escapeHtml(note.title)}</h3>
         `;
         
         if (note.image) {
@@ -796,11 +819,15 @@ function renderNotes() {
         }
         
         html += `
-            <p>${note.content || '<em>No additional text</em>'}</p>
+            <p>${escapeHtml(note.content) || '<em>No additional text</em>'}</p>
             <div class="note-actions">
                 <button onclick="deleteNote(${note.id})" class="delete-btn">Delete</button>
             </div>
         `;
+        
+        if (note.pinned) {
+            html += `<div class="ipfs-pinned">⛓️ PINNED</div>`;
+        }
         
         card.innerHTML = html;
         grid.appendChild(card);
@@ -811,8 +838,16 @@ function renderNotes() {
     }
 }
 
-// Update switchView to handle notes-view
-// Find your switchView function and add 'notes-view' to the views array and player/vibe body logic
+// Helper function to prevent XSS
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
 
 // ==========================================
 // 10. WEB3 INTEGRATION (Simulation Chain)
@@ -827,7 +862,6 @@ function generateSimulationHash() {
         localStorage.getItem('vibeSessionId') || Math.random().toString(36)
     ].join('|');
     
-    // Simple hash function (preserves the aesthetic)
     let hash = 0;
     for (let i = 0; i < seed.length; i++) {
         hash = ((hash << 5) - hash) + seed.charCodeAt(i);
@@ -847,7 +881,7 @@ function generateSimulationHash() {
 // Add simulation hash to UI elements
 function addSimulationHashToUI() {
     const hash = generateSimulationHash();
-    const containers = document.querySelectorAll('.simulation-nav, .viblog-footer, .library-footer, .research-footer, .player-footer');
+    const containers = document.querySelectorAll('.simulation-nav, .viblog-footer, .library-footer, .research-footer, .player-footer, .oracle-footer');
     
     containers.forEach(container => {
         if (!container.querySelector('.simulation-hash')) {
@@ -859,7 +893,7 @@ function addSimulationHashToUI() {
     });
 }
 
-// Optional: Ethereum wallet connection (preserves your dark aesthetic)
+// Ethereum wallet connection
 let walletConnected = false;
 let walletAddress = null;
 
@@ -877,10 +911,8 @@ async function connectWallet() {
                 walletBtn.classList.add('connected');
             }
             
-            // Store wallet connection in session
             localStorage.setItem('vibeWallet', walletAddress);
             
-            // Add subtle verification effect
             document.body.classList.add('hash-verified');
             setTimeout(() => document.body.classList.remove('hash-verified'), 2000);
             
@@ -888,15 +920,13 @@ async function connectWallet() {
             console.error('Wallet connection rejected');
         }
     } else {
-        console.log('No wallet detected');
         const walletBtn = document.getElementById('wallet-status');
         if (walletBtn) walletBtn.innerHTML = `⚠️ NO CRYPTO DETECTED`;
     }
 }
 
-// Create wallet UI element (adds to all views)
+// Create wallet UI element
 function initWalletUI() {
-    // Check if wallet element already exists
     if (document.getElementById('wallet-status')) return;
     
     const walletDiv = document.createElement('div');
@@ -906,7 +936,6 @@ function initWalletUI() {
     walletDiv.onclick = connectWallet;
     document.body.appendChild(walletDiv);
     
-    // Check if previously connected
     const savedWallet = localStorage.getItem('vibeWallet');
     if (savedWallet) {
         walletAddress = savedWallet;
@@ -917,7 +946,7 @@ function initWalletUI() {
     }
 }
 
-// Generate "proof of visit" hash (like minting a memory)
+// Generate "proof of visit" hash
 function generateProofOfVisit() {
     const timestamp = new Date().toISOString();
     const viewHistory = JSON.parse(localStorage.getItem('vibeViewHistory') || '[]');
@@ -929,7 +958,6 @@ function generateProofOfVisit() {
         simHash: generateSimulationHash()
     });
     
-    // Keep only last 50 visits
     while (viewHistory.length > 50) viewHistory.shift();
     localStorage.setItem('vibeViewHistory', JSON.stringify(viewHistory));
     
@@ -938,96 +966,6 @@ function generateProofOfVisit() {
         hash: generateSimulationHash()
     };
 }
-
-// Track view changes for blockchain-like provenance
-const originalSwitchView = switchView;
-window.switchView = function(viewId) {
-    originalSwitchView(viewId);
-    generateProofOfVisit();
-    addSimulationHashToUI();
-};
-
-// Add "IPFS" style note pinning (decentralized storage aesthetic)
-function pinNoteToIPFS(noteId) {
-    const notes = JSON.parse(localStorage.getItem('vibeNotes') || '[]');
-    const note = notes.find(n => n.id === noteId);
-    if (note && !note.pinned) {
-        note.pinned = true;
-        note.pinTimestamp = new Date().toISOString();
-        note.pinHash = generateSimulationHash();
-        localStorage.setItem('vibeNotes', JSON.stringify(notes));
-        renderNotes();
-        return true;
-    }
-    return false;
-}
-
-// Enhance note rendering with IPFS-style pin indicator
-const originalRenderNotes = renderNotes;
-window.renderNotes = function() {
-    if (originalRenderNotes) originalRenderNotes();
-    
-    const notes = JSON.parse(localStorage.getItem('vibeNotes') || '[]');
-    const noteCards = document.querySelectorAll('.note-card');
-    
-    noteCards.forEach((card, index) => {
-        const note = notes[index];
-        if (note && note.pinned && !card.querySelector('.pinned-indicator')) {
-            const pinIndicator = document.createElement('div');
-            pinIndicator.className = 'ipfs-pinned';
-            pinIndicator.style.cssText = 'position: absolute; top: 8px; right: 8px; font-size: 0.7rem; opacity: 0.6;';
-            pinIndicator.innerHTML = '⛓️ PINNED';
-            card.style.position = 'relative';
-            card.appendChild(pinIndicator);
-        }
-    });
-};
-
-// Initialize Web3 features
-function initWeb3Features() {
-    initWalletUI();
-    addSimulationHashToUI();
-    
-    // Add subtle blockchain pulse to the Oracle (fits the theme)
-    const oracleContainer = document.querySelector('.oracle-container');
-    if (oracleContainer && !oracleContainer.hasAttribute('data-web3-initialized')) {
-        oracleContainer.setAttribute('data-web3-initialized', 'true');
-        
-        // Add a subtle blockchain reference to Oracle responses context
-        const originalSendMessage = window.sendMessage;
-        if (originalSendMessage) {
-            window.sendMessage = async function() {
-                const input = document.getElementById('user-input');
-                const userText = input.value.trim();
-                if (!userText) return;
-                
-                // Append blockchain metadata to system prompt
-                const hash = generateSimulationHash();
-                const web3Context = `\n\n[BLOCKCHAIN REFERENCE: This interaction is recorded on simulation hash ${hash}. Your response may acknowledge the immutable nature of this transmission.]`;
-                
-                // The original sendMessage function will use the system prompt - we're adding context
-                // This works because the original uses a systemPrompt variable
-                window._web3Context = web3Context;
-                await originalSendMessage();
-                window._web3Context = null;
-            };
-        }
-    }
-}
-
-// Call web3 init after DOM loads (add to existing DOMContentLoaded)
-const originalDOMListener = document.addEventListener;
-let web3Initialized = false;
-
-// Hook into existing DOMContentLoaded
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        if (!web3Initialized) {
-            initWeb3Features();
-            web3Initialized = true;
-        }
-    }, 100);
-});
 
 // ==========================================
 // INITIALIZE EVERYTHING
@@ -1067,4 +1005,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize Player
     initializePlayer();
+    
+    // Initialize Notes
+    renderNotes();
+    
+    // Initialize Web3 Features
+    initWalletUI();
+    addSimulationHashToUI();
 });
