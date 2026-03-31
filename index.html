@@ -227,5 +227,40 @@
     <audio id="vibe-audio" preload="auto"></audio>
     
     <script src="script.js"></script>
+    <section id="notes-view" class="vibe-body hidden-view">
+    <div class="notes-container">
+        <div class="notes-header">
+            <h1 class="library-title">vibeNotes_</h1>
+            <button onclick="createNewNote()" class="new-note-btn">+ New Note</button>
+        </div>
+        
+        <div id="notes-grid" class="notes-grid"></div>
+        
+        <!-- New Note Modal -->
+        <div id="note-modal" class="note-modal hidden-view">
+            <div class="modal-content">
+                <input type="text" id="note-title" placeholder="Note title..." class="note-title-input">
+                
+                <textarea id="note-content" placeholder="Write your note here..."></textarea>
+                
+                <div class="image-upload-area">
+                    <label for="note-image-upload">Add Image</label>
+                    <input type="file" id="note-image-upload" accept="image/*">
+                    <div id="modal-image-preview" class="modal-image-preview"></div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button onclick="saveNoteFromModal()" class="save-btn">Save Note</button>
+                    <button onclick="closeNoteModal()" class="cancel-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Back navigation -->
+    <div style="margin-top: 40px; text-align: center;">
+        <a href="#" onclick="switchView('home-view')" class="back-link">← Return to Base (724)</a>
+    </div>
+</section>
 </body>
 </html>
