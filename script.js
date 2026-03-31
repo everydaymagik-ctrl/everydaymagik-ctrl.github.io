@@ -700,7 +700,119 @@ function initMatrixRain() {
         
         container.appendChild(col);
     }
+}// ==========================================
+// 9. VIBE NOTES (Google Keep Style with Images)
+// ==========================================
+
+let currentEditingNoteId = null;
+
+function createNewNote() {
+    currentEditingNoteId = null;
+    document.getElementById('note-title').value = '';
+    document.getElementById('note-content').value = '';
+    document.getElementById('modal-image-preview').innerHTML = '';
+    document.getElementById('note-image-upload').value = '';
+    document.getElementById('note-modal').classList.remove('hidden-view');
 }
+
+function closeNoteModal() {
+    document.getElementById('note-modal').classList.add('hidden-view');
+}
+
+function saveNoteFromModal() {
+    const title = document.getElementById('note-title').value.trim() || "Untitled Note";
+    const content = document.getElementById('note-content').value.trim();
+    const fileInput = document.getElementById('note-image-upload');
+    
+    let imageData = null;
+    
+    if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            imageData = e.target.result;
+            saveNote(title, content, imageData);
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        saveNote(title, content, null);
+    }
+}
+
+function saveNote(title, content, imageData) {
+    let notes = JSON.parse(localStorage.getItem('vibeNotes') || '[]');
+    
+    if (currentEditingNoteId !== null) {
+        // Update existing note
+        const note = notes.find(n => n.id === currentEditingNoteId);
+        if (note) {
+            note.title = title;
+            note.content = content;
+            if (imageData) note.image = imageData;
+        }
+    } else {
+        // Create new note
+        notes.push({
+            id: Date.now(),
+            title: title,
+            content: content,
+            image: imageData,
+            color: '#' + Math.floor(Math.random()*16777215).toString(16), // random vibrant color
+            timestamp: new Date().toISOString()
+        });
+    }
+    
+    localStorage.setItem('vibeNotes', JSON.stringify(notes));
+    closeNoteModal();
+    renderNotes();
+}
+
+function deleteNote(id) {
+    if (!confirm("Delete this note?")) return;
+    let notes = JSON.parse(localStorage.getItem('vibeNotes') || '[]');
+    notes = notes.filter(n => n.id !== id);
+    localStorage.setItem('vibeNotes', JSON.stringify(notes));
+    renderNotes();
+}
+
+function renderNotes() {
+    const grid = document.getElementById('notes-grid');
+    if (!grid) return;
+    
+    grid.innerHTML = '';
+    const notes = JSON.parse(localStorage.getItem('vibeNotes') || '[]');
+    
+    notes.forEach(note => {
+        const card = document.createElement('div');
+        card.className = 'note-card';
+        card.style.borderTop = `6px solid ${note.color}`;
+        
+        let html = `
+            <div class="note-color" style="background: ${note.color}"></div>
+            <h3>${note.title}</h3>
+        `;
+        
+        if (note.image) {
+            html += `<img src="${note.image}" class="note-image" alt="Note image">`;
+        }
+        
+        html += `
+            <p>${note.content || '<em>No additional text</em>'}</p>
+            <div class="note-actions">
+                <button onclick="deleteNote(${note.id})" class="delete-btn">Delete</button>
+            </div>
+        `;
+        
+        card.innerHTML = html;
+        grid.appendChild(card);
+    });
+    
+    if (notes.length === 0) {
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #666; padding: 40px;">No notes yet. Create your first vibe note.</p>`;
+    }
+}
+
+// Update switchView to handle notes-view
+// Find your switchView function and add 'notes-view' to the views array and player/vibe body logic
 
 // ==========================================
 // INITIALIZE EVERYTHING
