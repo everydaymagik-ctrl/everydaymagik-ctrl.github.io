@@ -819,73 +819,104 @@ function escapeHtml(str) {
 }
 
 // ==========================================
-// INITIALIZE EVERYTHING - FIXED
+// INITIALIZE EVERYTHING - FIXED AGE GATE
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Ensure preface view is visible by default
+    console.log("DOM loaded, initializing...");
+    
+    // Get all views
     const prefaceView = document.getElementById('preface-view');
     const homeView = document.getElementById('home-view');
-    
-    if (prefaceView) {
-        prefaceView.classList.remove('hidden-view');
-        prefaceView.classList.add('active-view', 'preface-body');
-    }
-    if (homeView) {
-        homeView.classList.add('hidden-view');
-        homeView.classList.remove('active-view');
-    }
-    
-    // Get buttons
-    const enterBtn = document.getElementById('enter-simulation-btn');
-    const denyBtn = document.getElementById('deny-simulation-btn');
     const ageContent = document.getElementById('age-gate-content');
     const deniedContent = document.getElementById('access-denied-content');
     
-    // Check if already verified
-    if (isAgeVerified()) {
+    // CRITICAL: Make sure preface is visible and home is hidden on initial load
+    if (prefaceView) {
+        prefaceView.classList.remove('hidden-view');
+        prefaceView.classList.add('active-view', 'preface-body');
+        console.log("Preface view activated");
+    }
+    
+    if (homeView) {
+        homeView.classList.add('hidden-view');
+        homeView.classList.remove('active-view');
+        console.log("Home view hidden");
+    }
+    
+    // Get buttons (use direct reference, no cloning needed)
+    const enterBtn = document.getElementById('enter-simulation-btn');
+    const denyBtn = document.getElementById('deny-simulation-btn');
+    
+    // Check if user already verified age
+    const alreadyVerified = isAgeVerified();
+    console.log("Already verified:", alreadyVerified);
+    
+    if (alreadyVerified) {
+        console.log("User already verified, skipping age gate");
         switchView('home-view');
     }
     
-    // Enter button handler
+    // ENTER BUTTON HANDLER - CLEAR AND SIMPLE
     if (enterBtn) {
+        // Remove any existing listeners by replacing with clone
         const newEnterBtn = enterBtn.cloneNode(true);
         enterBtn.parentNode.replaceChild(newEnterBtn, enterBtn);
         
-        newEnterBtn.addEventListener('click', (e) => {
+        newEnterBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
+            console.log("ENTER button clicked - navigating to home");
+            
+            // Set verification in localStorage
             setAgeVerified(true);
+            
+            // Switch to home view
             switchView('home-view');
             
+            // Resume audio context
             try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                const audioCtx = new AudioContext();
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                const audioCtx = new AudioCtx();
                 audioCtx.resume();
+                console.log("Audio context resumed");
             } catch(err) {
-                // Silent fail
+                console.log("Audio resume failed:", err);
             }
         });
+        console.log("Enter button handler attached");
+    } else {
+        console.error("Enter button not found in DOM");
     }
     
-    // Deny button handler
+    // DENY BUTTON HANDLER
     if (denyBtn) {
         const newDenyBtn = denyBtn.cloneNode(true);
         denyBtn.parentNode.replaceChild(newDenyBtn, denyBtn);
         
-        newDenyBtn.addEventListener('click', (e) => {
+        newDenyBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            console.log("DENY button clicked - showing denied message");
+            
             if (ageContent && deniedContent) {
                 ageContent.classList.add('hidden-view');
                 deniedContent.classList.remove('hidden-view');
+                console.log("Access denied message shown");
             }
         });
     }
     
     // Preload flash images
-    flashImages.forEach(src => {
-        const img = new Image();
-        img.src = src;
-    });
+    if (typeof flashImages !== 'undefined') {
+        flashImages.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
+    }
     
     // Initial render for notes
-    renderNotes();
+    if (typeof renderNotes === 'function') {
+        renderNotes();
+    }
+    
+    console.log("Initialization complete");
 });
