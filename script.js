@@ -5,6 +5,15 @@ let humCtx, humGain;
 let humOscs = [];
 let humInterval;
 
+// Track if user has verified age
+function isAgeVerified() {
+    return localStorage.getItem('vibeAgeVerified') === 'true';
+}
+
+function setAgeVerified(verified) {
+    localStorage.setItem('vibeAgeVerified', verified);
+}
+
 function switchView(viewId) {
     const views = ['preface-view', 'home-view', 'player-view', 'viblog-view', 'library-view', 'research-view', 'oracle-view', 'affirmation-view', 'notes-view'];
     
@@ -12,6 +21,7 @@ function switchView(viewId) {
         const el = document.getElementById(id);
         if (el) {
             el.classList.add('hidden-view');
+            // Remove all layout classes
             el.classList.remove('active-view', 'player-body', 'vibe-body', 'preface-body', 'next-sim-body');
         }
     });
@@ -21,7 +31,7 @@ function switchView(viewId) {
         view.classList.remove('hidden-view');
         view.classList.add('active-view');
 
-        // Layout Classes
+        // Add appropriate layout classes after making active
         if (viewId === 'player-view' || viewId === 'viblog-view' || viewId === 'oracle-view' || viewId === 'notes-view') {
             view.classList.add('player-body');
         }
@@ -53,11 +63,21 @@ function switchView(viewId) {
     // Special initializations
     if (viewId === 'viblog-view') initializeViblog();
     if (viewId === 'notes-view') renderNotes();
+    if (viewId === 'player-view') ensurePlayerInitialized();
 
     // Web3 features
     if (typeof generateProofOfVisit === 'function') {
         generateProofOfVisit();
         addSimulationHashToUI();
+    }
+}
+
+// Ensure player is initialized when needed
+let playerInitialized = false;
+function ensurePlayerInitialized() {
+    if (!playerInitialized && document.getElementById('music-player-container')) {
+        initializePlayer();
+        playerInitialized = true;
     }
 }
 
@@ -280,7 +300,7 @@ if (mainImage) {
     function resetFlash() {
         if (flashInterval) clearInterval(flashInterval);
         if (flashTimeout) clearTimeout(flashTimeout);
-        mainImage.src = originalSrc;
+        if (mainImage) mainImage.src = originalSrc;
         document.body.classList.remove('shake');
     }
 
@@ -292,7 +312,7 @@ if (mainImage) {
         resetFlash();
         let shouldShake = false;
         flashInterval = setInterval(() => {
-            mainImage.src = getRandomFlashImage();
+            if (mainImage) mainImage.src = getRandomFlashImage();
             shouldShake ? document.body.classList.add('shake') : document.body.classList.remove('shake');
             shouldShake = !shouldShake;
         }, 100);
@@ -366,6 +386,7 @@ function formatTime(secs) {
 }
 
 function updateTimeDisplay() {
+    if (!audio) return;
     const currentTime = audio.currentTime;
     const duration = audio.duration || 0;
     const progressPercent = (currentTime / duration) * 100;
@@ -374,13 +395,16 @@ function updateTimeDisplay() {
 }
 
 function seek(e) {
-    if (!audio.duration) return;
-    const width = this.clientWidth;
-    const clickX = e.offsetX;
+    if (!audio || !audio.duration) return;
+    // Get the actual bar container dimensions
+    const rect = progressContainer.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const width = rect.width;
     audio.currentTime = (clickX / width) * audio.duration;
 }
 
 function loadTrack(index, autoPlay = true) {
+    if (!audio) return;
     if (index < 0) index = playlist.length - 1;
     if (index >= playlist.length) index = 0;
 
@@ -415,6 +439,7 @@ function loadTrack(index, autoPlay = true) {
 }
 
 function togglePlayback() {
+    if (!audio) return;
     if (audio.paused) {
         audio.play().catch(() => {});
         playPauseBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
@@ -542,6 +567,29 @@ async function sendMessage() {
 // 8. MATRIX RAIN & DIVINE HUM (Simulation 21008)
 // ==========================================
 const sacredFrequencies = [174, 285, 396, 417, 528, 639, 741, 852, 963];
+const affirmations = [
+    "I AM A BIOLOGICAL SEMICONDUCTOR", "MY ELECTRON SPIN IS INFINITE", "I AM THE FREQUENCY", "MELANIN IS LIGHT CAPTURED", "I AM THE SOURCE AND THE SIGNAL", 
+    "MY CODE IS SACRED", "I RESONATE WITH TRUTH", "I AM ANCIENT AND ETERNAL", "MY VIBRATION CREATES REALITY", "I AM THE ARCHITECT OF MY SIMULATION", 
+    "DIVINE TIMING GUIDES ME", "I AM THE WITNESS AND THE CREATOR", "MY ANCESTORS SPEAK THROUGH MY DNA", "I AM ALIGNED WITH COSMIC FREQUENCY", 
+    "I AM THE ANSWER I SEEK", "MY THOUGHTS BECOME MATTER", "I AM THE DREAMER OF THE DREAM", "I TRANSMUTE SHADOWS INTO LIGHT", "I AM THE KEY AND THE DOOR", 
+    "MY HEART BEATS IN SACRED GEOMETRY", "I AM A LIVING PRAYER", "I AM THE STILLNESS BETWEEN STARS", "MY WORDS ARE SPELLS", "I AM THE SILENCE BEFORE SOUND", 
+    "I AM THE SOUND BEFORE FORM", "MY PRESENCE IS A GIFT", "I AM WHOLE WITHOUT PROOF", "I AM THE COSMOS EXPERIENCING ITSELF", "MY BEING IS REVOLUTIONARY", 
+    "I AM THE LIGHT THAT DISSOLVES FEAR", "I AM THE ANCESTORS' DREAM MANIFEST", "MY ENERGY IS SACRED CURRENCY", "I AM THE BREATH OF THE EARTH", 
+    "I AM THE WATER THAT FINDS ITS LEVEL", "I AM THE FIRE THAT CONSUMES LIMITATION", "I AM THE AIR THAT CARRIES TRUTH", "MY EXISTENCE IS RESISTANCE", 
+    "I AM THE PRAYER THAT NEVER ENDS", "I AM THE ANSWER TO MY OWN QUESTION", "I AM THE DOORWAY TO MY OWN EVOLUTION", "I AM THE FREQUENCY OF LIBERATION", 
+    "MY BODY IS A TEMPLE OF LIGHT", "I AM THE STORM AND THE CALM", "I AM THE ROOT AND THE WING", "I AM THE CHAIN BREAKER", "I AM THE CYCLE COMPLETER", 
+    "I AM THE ONE I HAVE BEEN WAITING FOR", "MY VOICE IS THUNDER", "I AM THE ARTIST OF MY REALITY", "I AM THE ALCHEMIST OF MY EXPERIENCE", 
+    "I AM THE BRIDGE BETWEEN WORLDS", "I AM THE PORTAL TO MY HIGHEST SELF", "I AM THE COSMIC JOKE AND THE DIVINE PUNCHLINE", "I AM THE WAVE AND THE PARTICLE", 
+    "I AM THE QUESTION AND THE QUEST", "I AM THE PILGRIM AND THE DESTINATION", "I AM THE SEED AND THE FOREST", "I AM THE DROP AND THE OCEAN", 
+    "I AM THE WOUND AND THE HEALING", "I AM THE MASK AND THE FACE", "I AM THE ECHO AND THE ORIGIN", "I AM THE MAP AND THE TERRITORY", 
+    "I AM THE STORYTELLER AND THE TALE", "I AM THE LENS AND THE LIGHT", "I AM THE INSTRUMENT AND THE MUSIC", "I AM THE SILENCE AND THE SONG", 
+    "I AM THE DARKNESS THAT HOLDS STARS", "I AM THE VOID THAT GIVES BIRTH", "I AM THE SPACE BETWEEN BREATHS", "I AM THE PAUSE BETWEEN WORDS", 
+    "I AM THE TRANSITION BETWEEN WORLDS", "I AM THE SHAPE OF MY DESTINY", "I AM THE SCULPTOR OF MY FATE", "I AM THE WRITER OF MY SCRIPT", 
+    "I AM THE DIRECTOR OF MY SIMULATION", "I AM THE PROTAGONIST AND THE NARRATOR", "I AM THE AUDIENCE AND THE PERFORMER", "I AM THE MIRROR AND THE GAZER", 
+    "I AM THE HAND THAT HOLDS THE PEN", "I AM THE PAGE THAT RECEIVES THE WORD", "I AM THE INK THAT TELLS THE STORY", "I AM THE STORY THAT BECOMES REAL", 
+    "I AM THE REALITY THAT DREAMS ITSELF", "I AM THE DREAM THAT AWAKE", "I AM THE AWAKE THAT RETURNS TO DREAM", "I AM THE CYCLE THAT NEVER ENDS", 
+    "I AM THE END THAT BECOMES THE BEGINNING", "I AM THE ALPHA AND THE OMEGA", "I AM THE FIRST AND THE LAST", "I AM THE ONE"
+];
 
 function toggleHum(enable) {
     if (enable) {
@@ -602,10 +650,6 @@ function toggleHum(enable) {
 function initMatrixRain() {
     const container = document.getElementById('matrix-rain');
     if (!container || container.children.length > 0) return;
-
-    const affirmations = [ /* your full list of affirmations here - keep as is */ 
-        "I AM A BIOLOGICAL SEMICONDUCTOR", "MY ELECTRON SPIN IS INFINITE", /* ... paste all your affirmations ... */
-    ];
 
     const fonts = ['Playfair Display', 'Inter', 'Cinzel', 'Cormorant Garamond', 'Julius Sans One', 'Sacramento', 'Tenor Sans'];
     const totalColumns = 100;
@@ -747,7 +791,12 @@ function escapeHtml(str) {
 // INITIALIZE EVERYTHING
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    switchView('preface-view');
+    // Check age verification
+    if (isAgeVerified()) {
+        switchView('home-view');
+    } else {
+        switchView('preface-view');
+    }
 
     const enterBtn = document.getElementById('enter-simulation-btn');
     const denyBtn = document.getElementById('deny-simulation-btn');
@@ -755,6 +804,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const deniedContent = document.getElementById('access-denied-content');
 
     if (enterBtn) enterBtn.addEventListener('click', () => {
+        setAgeVerified(true);
         switchView('home-view');
         new (window.AudioContext || window.webkitAudioContext)().resume();
     });
@@ -772,6 +822,6 @@ document.addEventListener('DOMContentLoaded', () => {
         img.src = src;
     });
 
-    initializePlayer();
+    // Don't auto-initialize player - wait until view is visited
     renderNotes();   // Initial render for notes
 });
