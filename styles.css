@@ -776,9 +776,8 @@ body.no-scroll {
     text-align: center;
     margin-top: 30px;
 }
-
 /* =========================================
-   8. AFFIRMATION / MATRIX RAIN STYLES - FIXED
+   8. AFFIRMATION / MATRIX RAIN STYLES - FULL SENTENCES
    ========================================= */
 .next-sim-body {
     position: relative;
@@ -793,111 +792,48 @@ body.no-scroll {
     height: 100%;
     pointer-events: none;
     z-index: 1;
+    user-select: none;
 }
 
 .matrix-drop {
     position: absolute;
-    top: -20px;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 16px;
+    top: -60px;
+    color: rgba(255, 255, 255, 0.75);
     white-space: nowrap;
     pointer-events: none;
-    text-shadow: 0 0 5px currentColor;
-    animation: fall linear infinite;
+    text-shadow: 0 0 8px currentColor;
+    animation: matrixFall linear forwards;
     font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
-@keyframes fall {
-    0% {
-        transform: translateY(-100vh) rotate(0deg);
-        opacity: 0;
-    }
-    5% {
-        opacity: 1;
-    }
-    90% {
-        opacity: 0.8;
-    }
-    100% {
-        transform: translateY(100vh) rotate(360deg);
+@keyframes matrixFall {
+    to {
+        transform: translateY(calc(100vh + 120px));
         opacity: 0;
     }
 }
 
-.rare-common { 
-    color: #FFD700; 
-    text-shadow: 0 0 8px #FFD700; 
-}
-.rare-uncommon { 
-    color: #00FFFF; 
-    text-shadow: 0 0 8px #00FFFF; 
-}
-.rare-rare { 
-    color: #50C878; 
-    text-shadow: 0 0 10px #50C878; 
-}
-.rare-legendary { 
-    color: #FF4444; 
-    text-shadow: 0 0 12px #FF4444; 
-    animation-duration: 3s !important; 
-}
-.rare-divine { 
-    color: #FFFFFF; 
-    text-shadow: 0 0 15px #FFFFFF, 0 0 25px #FFFFFF; 
-    animation-duration: 2.5s !important; 
+/* Rarity colors (matching your :root variables) */
+.rare-common   { color: #FFD700; text-shadow: 0 0 10px #FFD700; }
+.rare-uncommon { color: #00FFFF; text-shadow: 0 0 10px #00FFFF; }
+.rare-rare     { color: #50C878; text-shadow: 0 0 12px #50C878; }
+.rare-legendary{ color: #FF4444; text-shadow: 0 0 14px #FF4444; animation-duration: 4s !important; }
+.rare-divine   { 
+    color: #ffffff; 
+    text-shadow: 0 0 15px #fff, 0 0 30px #fff; 
+    animation-duration: 3.2s !important; 
 }
 
 .glow-pulse {
-    animation: glowPulse 1s ease-in-out infinite;
+    animation: glowPulse 2s ease-in-out infinite alternate;
 }
 
 @keyframes glowPulse {
-    0%, 100% { text-shadow: 0 0 10px #fff, 0 0 20px #fff; }
-    50% { text-shadow: 0 0 20px #fff, 0 0 40px #fff; }
+    from { text-shadow: 0 0 12px currentColor, 0 0 25px currentColor; }
+    to   { text-shadow: 0 0 20px currentColor, 0 0 45px currentColor; }
 }
-
-.affirmation-center {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(20px);
-    padding: 40px;
-    border-radius: 40px;
-    max-width: 600px;
-    margin: 20px;
-}
-
-.gallery-art {
-    max-width: 100%;
-    border-radius: 20px;
-    margin-bottom: 30px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-}
-
-.affirmation-main-text {
-    font-family: var(--font-display);
-    font-size: 1.8rem;
-    color: var(--text-main);
-    margin: 30px 0;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-}
-
-.affirmation-back-link {
-    display: inline-block;
-    color: var(--text-muted);
-    text-decoration: none;
-    font-family: var(--font-ui);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    transition: all 0.3s ease;
-}
-
-.affirmation-back-link:hover {
-    color: var(--text-main);
-    letter-spacing: 0.15em;
-}
-
 /* =========================================
    9. VIBE NOTES STYLES
    ========================================= */
