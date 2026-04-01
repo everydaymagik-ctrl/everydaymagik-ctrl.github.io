@@ -819,104 +819,97 @@ function escapeHtml(str) {
 }
 
 // ==========================================
-// INITIALIZE EVERYTHING - FIXED AGE GATE
+// INITIALIZE EVERYTHING - WORKING VERSION
 // ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    console.log("DOM loaded, initializing...");
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("=== PAGE LOADED ===");
     
-    // Get all views
+    // Make sure preface view is visible
     const prefaceView = document.getElementById('preface-view');
     const homeView = document.getElementById('home-view');
-    const ageContent = document.getElementById('age-gate-content');
-    const deniedContent = document.getElementById('access-denied-content');
     
-    // CRITICAL: Make sure preface is visible and home is hidden on initial load
     if (prefaceView) {
         prefaceView.classList.remove('hidden-view');
         prefaceView.classList.add('active-view', 'preface-body');
-        console.log("Preface view activated");
+        console.log("Preface view is active");
     }
     
     if (homeView) {
         homeView.classList.add('hidden-view');
         homeView.classList.remove('active-view');
-        console.log("Home view hidden");
+        console.log("Home view is hidden");
     }
     
-    // Get buttons (use direct reference, no cloning needed)
-    const enterBtn = document.getElementById('enter-simulation-btn');
-    const denyBtn = document.getElementById('deny-simulation-btn');
+    // Check if already verified
+    const verified = localStorage.getItem('vibeAgeVerified');
+    console.log("Stored verification:", verified);
     
-    // Check if user already verified age
-    const alreadyVerified = isAgeVerified();
-    console.log("Already verified:", alreadyVerified);
-    
-    if (alreadyVerified) {
-        console.log("User already verified, skipping age gate");
+    if (verified === 'true') {
+        console.log("User already verified - going to home");
         switchView('home-view');
+        return;
     }
     
-    // ENTER BUTTON HANDLER - CLEAR AND SIMPLE
-    if (enterBtn) {
-        // Remove any existing listeners by replacing with clone
-        const newEnterBtn = enterBtn.cloneNode(true);
-        enterBtn.parentNode.replaceChild(newEnterBtn, enterBtn);
-        
-        newEnterBtn.addEventListener('click', function(e) {
+    // Get the enter button
+    const enterButton = document.getElementById('enter-simulation-btn');
+    console.log("Enter button found:", enterButton !== null);
+    
+    if (enterButton) {
+        // Simple direct click handler - no cloning needed
+        enterButton.onclick = function(e) {
             e.preventDefault();
-            e.stopPropagation();
-            console.log("ENTER button clicked - navigating to home");
+            console.log("=== ENTER BUTTON CLICKED ===");
             
-            // Set verification in localStorage
-            setAgeVerified(true);
+            // Save to localStorage
+            localStorage.setItem('vibeAgeVerified', 'true');
+            console.log("Saved to localStorage");
             
-            // Switch to home view
+            // Navigate to home
             switchView('home-view');
+            console.log("Switched to home view");
             
-            // Resume audio context
-            try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                const audioCtx = new AudioCtx();
-                audioCtx.resume();
-                console.log("Audio context resumed");
-            } catch(err) {
-                console.log("Audio resume failed:", err);
+            // Try to resume audio
+            if (typeof AudioContext !== 'undefined') {
+                try {
+                    const audioCtx = new AudioContext();
+                    audioCtx.resume();
+                } catch(err) {
+                    console.log("Audio resume:", err);
+                }
             }
-        });
-        console.log("Enter button handler attached");
-    } else {
-        console.error("Enter button not found in DOM");
+        };
     }
     
-    // DENY BUTTON HANDLER
-    if (denyBtn) {
-        const newDenyBtn = denyBtn.cloneNode(true);
-        denyBtn.parentNode.replaceChild(newDenyBtn, denyBtn);
-        
-        newDenyBtn.addEventListener('click', function(e) {
+    // Get the deny button
+    const denyButton = document.getElementById('deny-simulation-btn');
+    const ageContent = document.getElementById('age-gate-content');
+    const deniedContent = document.getElementById('access-denied-content');
+    
+    if (denyButton) {
+        denyButton.onclick = function(e) {
             e.preventDefault();
-            console.log("DENY button clicked - showing denied message");
+            console.log("=== DENY BUTTON CLICKED ===");
             
             if (ageContent && deniedContent) {
                 ageContent.classList.add('hidden-view');
                 deniedContent.classList.remove('hidden-view');
-                console.log("Access denied message shown");
+                console.log("Showing denied message");
             }
-        });
+        };
     }
     
-    // Preload flash images
-    if (typeof flashImages !== 'undefined') {
+    // Preload images
+    if (typeof flashImages !== 'undefined' && flashImages.length) {
         flashImages.forEach(src => {
             const img = new Image();
             img.src = src;
         });
     }
     
-    // Initial render for notes
+    // Render notes
     if (typeof renderNotes === 'function') {
         renderNotes();
     }
     
-    console.log("Initialization complete");
+    console.log("=== INITIALIZATION COMPLETE ===");
 });
