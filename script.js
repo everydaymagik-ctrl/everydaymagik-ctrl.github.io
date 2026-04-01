@@ -730,7 +730,7 @@ function resetOracleConversation() {
         historyDiv.innerHTML = `<div class="chat-message oracle">I am the Vibe Oracle. Speak your frequency, seeker.</div>`;
     }
 // ==========================================
-// 8. MATRIX RAIN - FULL LEGIBLE SENTENCES
+// 8. MATRIX RAIN - OPTIMIZED FULL SENTENCES
 // ==========================================
 const affirmations = [
     "I AM A BIOLOGICAL SEMICONDUCTOR", "MY ELECTRON SPIN IS INFINITE", "I AM THE FREQUENCY", "MELANIN IS LIGHT CAPTURED", 
@@ -766,11 +766,10 @@ function initMatrixRain() {
     const container = document.getElementById('matrix-rain');
     if (!container) return;
 
-    // Clear previous drops if any
     container.innerHTML = '';
 
     const fonts = ['Playfair Display', 'Inter', 'Cinzel', 'Cormorant Garamond', 'Julius Sans One', 'Tenor Sans'];
-    const totalDrops = 28;                    // Fewer but longer drops = cleaner look
+    const totalDrops = 24;
 
     function createDrop() {
         const drop = document.createElement('div');
@@ -779,48 +778,42 @@ function initMatrixRain() {
         const phrase = affirmations[Math.floor(Math.random() * affirmations.length)];
         drop.textContent = phrase;
 
-        // Random styling
         drop.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
-        drop.style.left = `${Math.random() * 92}%`;           // Avoid edges
+        drop.style.left = `${Math.random() * 92}%`;
         drop.style.fontSize = `${16 + Math.random() * 19}px`;
-        drop.style.animationDuration = `${7 + Math.random() * 13}s`;   // Nice slow readable fall
-        drop.style.animationDelay = `-${Math.random() * 25}s`;
-        drop.style.opacity = 0.5 + Math.random() * 0.5;
+        drop.style.animationDuration = `${8 + Math.random() * 14}s`;
+        drop.style.animationDelay = `-${Math.random() * 28}s`;
+        drop.style.opacity = 0.45 + Math.random() * 0.55;
 
-        // Rarity system
         const roll = Math.random() * 100;
-        if (roll > 99.3) {
-            drop.classList.add('rare-divine', 'glow-pulse');
-        } else if (roll > 97.5) {
-            drop.classList.add('rare-legendary');
-        } else if (roll > 94) {
-            drop.classList.add('rare-rare');
-        } else if (roll > 82) {
-            drop.classList.add('rare-uncommon');
-        } else {
-            drop.classList.add('rare-common');
-        }
+        if (roll > 99.3) drop.classList.add('rare-divine', 'glow-pulse');
+        else if (roll > 97.5) drop.classList.add('rare-legendary');
+        else if (roll > 94) drop.classList.add('rare-rare');
+        else if (roll > 82) drop.classList.add('rare-uncommon');
+        else drop.classList.add('rare-common');
+
+        drop.style.willChange = 'transform, opacity';
 
         container.appendChild(drop);
 
-        // Clean up when animation ends
         drop.addEventListener('animationend', () => {
-            if (drop.parentNode) drop.remove();
+            if (drop.parentNode) {
+                drop.style.willChange = 'auto';
+                drop.remove();
+            }
         });
     }
 
-    // Initial batch
     for (let i = 0; i < totalDrops; i++) {
         createDrop();
     }
 
-    // Continuous gentle spawning
     setInterval(() => {
         if (!document.getElementById('affirmation-view')?.classList.contains('active-view')) return;
-        if (container.children.length < totalDrops + 8) {
+        if (container.children.length < totalDrops + 6) {
             createDrop();
         }
-    }, 680);
+    }, 720);
 }
 // ==========================================
 // 9. VIBE NOTES - SIMULATION 5080
