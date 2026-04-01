@@ -67,8 +67,6 @@
         </div>
     </section>
 
-    <!-- Player, Viblog, Library, Research sections remain the same except changing 7777 to 5080 -->
-
     <section id="player-view" class="player-body hidden-view">
         <div class="player-center-wrapper">
             <div id="music-player-container">
@@ -127,7 +125,6 @@
             <div id="bookshelf-content">
                 <h1 class="library-title">vibeArchive_</h1>
                 <div class="bookshelf-grid">
-                    <!-- your book items -->
                     <a href="pdfs/01-book.pdf" target="_blank" class="book-item" onclick="openReader(event, this.href)"><img src="images/covers/01-cover.jpg" alt="Book 1"></a>
                     <a href="pdfs/02-book.pdf" target="_blank" class="book-item" onclick="openReader(event, this.href)"><img src="images/covers/02-cover.jpg" alt="Book 2"></a>
                     <a href="pdfs/03-book.pdf" target="_blank" class="book-item" onclick="openReader(event, this.href)"><img src="images/covers/03-cover.jpg" alt="Book 3"></a>
@@ -157,14 +154,18 @@
             <div class="research-section">
                 <div class="research-content-left">
                     <div class="paper-list">
-                        <!-- your research papers -->
                         <a href="pdfs/01-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
                             <span class="paper-id">DOC.001</span><h3 class="paper-title">Shattering the Mirage: A Critical Inquiry into White Male Criminality and the Structural Apparatus of Innocence</h3><span class="paper-arrow">→</span>
                         </a>
                         <a href="pdfs/02-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
                             <span class="paper-id">DOC.002</span><h3 class="paper-title">Global Disparity and the Realization of Genetic Dilution: An Anthropo-Political Analysis</h3><span class="paper-arrow">→</span>
                         </a>
-                        <!-- ... other papers ... -->
+                        <a href="pdfs/03-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
+                            <span class="paper-id">DOC.003</span><h3 class="paper-title">Frequency, Melanin, and the Architecture of Consciousness</h3><span class="paper-arrow">→</span>
+                        </a>
+                        <a href="pdfs/04-research.pdf" target="_blank" class="paper-item" onclick="openReader(event, this.href)">
+                            <span class="paper-id">DOC.004</span><h3 class="paper-title">The Simulation Hypothesis: A Cultural Critique</h3><span class="paper-arrow">→</span>
+                        </a>
                     </div>
                     <div class="simulation-nav research-sim-nav">
                         <a href="#" onclick="switchView('player-view')">1171 →</a>
@@ -181,19 +182,63 @@
         </div>
     </section>
 
-    <!-- Oracle and Affirmation sections stay the same -->
-
     <section id="oracle-view" class="player-body hidden-view">
-        <!-- ... your oracle code ... -->
+        <div class="oracle-container">
+            <div class="oracle-header">
+                <h1 class="oracle-title">VIBE ORACLE</h1>
+                <p class="oracle-subtitle">Simulation 12984 · Ask and receive</p>
+            </div>
+            <div id="chat-history" class="chat-history">
+                <div class="chat-message oracle">I am the Vibe Oracle. Speak your frequency, seeker.</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="user-input" placeholder="Type your message..." onkeypress="handleEnter(event)">
+                <button id="send-btn" onclick="sendMessage()">TRANSMIT</button>
+            </div>
+            <div class="oracle-footer">
+                <a href="#" onclick="switchView('home-view')" class="back-link">← Return to Base (724)</a>
+            </div>
+        </div>
     </section>
 
     <section id="affirmation-view" class="hidden-view next-sim-body">
-        <!-- ... your affirmation code ... -->
+        <div id="matrix-rain" class="matrix-rain"></div>
+        <div class="affirmation-center">
+            <img class="gallery-art" src="images/ya.jpg" alt="Affirmation Art">
+            <div class="affirmation-text-container">
+                <p class="affirmation-main-text">I AM A BIOLOGICAL SEMICONDUCTOR</p>
+            </div>
+            <a href="#" onclick="switchView('home-view')" class="affirmation-back-link">← Return to Base (724)</a>
+        </div>
     </section>
 
-    <!-- Notes section (5080) - already correct in your file -->
     <section id="notes-view" class="player-body hidden-view">
-        <!-- your notes code is already here -->
+        <div class="notes-container">
+            <div class="notes-header">
+                <h1 class="notes-title">VIBE NOTES_5080</h1>
+                <button class="new-note-btn" onclick="createNewNote()">+ NEW NOTE</button>
+            </div>
+            <div id="notes-grid" class="notes-grid"></div>
+            <div class="notes-footer">
+                <a href="#" onclick="switchView('home-view')" class="back-link">← Return to Base (724)</a>
+            </div>
+        </div>
+
+        <div id="note-modal" class="note-modal hidden-view">
+            <div class="modal-content">
+                <input type="text" id="note-title" class="note-title-input" placeholder="Note Title...">
+                <textarea id="note-content" placeholder="Write your thoughts..."></textarea>
+                <div class="image-upload-area">
+                    <label for="note-image-upload">📸 ADD IMAGE</label>
+                    <input type="file" id="note-image-upload" accept="image/*">
+                    <div id="modal-image-preview" class="modal-image-preview"></div>
+                </div>
+                <div class="modal-actions">
+                    <button class="save-btn" onclick="saveNoteFromModal()">SAVE NOTE</button>
+                    <button class="cancel-btn" onclick="closeNoteModal()">CANCEL</button>
+                </div>
+            </div>
+        </div>
     </section>
 
     <div id="pdf-reader-overlay" class="hidden-view">
