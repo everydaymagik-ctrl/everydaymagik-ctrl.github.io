@@ -21,7 +21,6 @@ function switchView(viewId) {
         const el = document.getElementById(id);
         if (el) {
             el.classList.add('hidden-view');
-            // Remove all layout classes
             el.classList.remove('active-view', 'player-body', 'vibe-body', 'preface-body', 'next-sim-body');
         }
     });
@@ -31,7 +30,6 @@ function switchView(viewId) {
         view.classList.remove('hidden-view');
         view.classList.add('active-view');
 
-        // Add appropriate layout classes after making active
         if (viewId === 'player-view' || viewId === 'viblog-view' || viewId === 'oracle-view' || viewId === 'notes-view') {
             view.classList.add('player-body');
         }
@@ -42,7 +40,6 @@ function switchView(viewId) {
             view.classList.add('preface-body');
         }
         
-        // Affirmation View (Simulation 21008)
         if (viewId === 'affirmation-view') {
             view.classList.add('next-sim-body');
             
@@ -58,21 +55,22 @@ function switchView(viewId) {
         } else {
             toggleHum(false); 
         }
+        
+        if (viewId === 'oracle-view') {
+            resetOracleConversation();
+        }
     }
 
-    // Special initializations
     if (viewId === 'viblog-view') initializeViblog();
     if (viewId === 'notes-view') renderNotes();
     if (viewId === 'player-view') ensurePlayerInitialized();
 
-    // Web3 features
     if (typeof generateProofOfVisit === 'function') {
         generateProofOfVisit();
         addSimulationHashToUI();
     }
 }
 
-// Ensure player is initialized when needed
 let playerInitialized = false;
 function ensurePlayerInitialized() {
     if (!playerInitialized && document.getElementById('music-player-container')) {
@@ -327,7 +325,6 @@ if (mainImage) {
 // 5. AUDIO PLAYER LOGIC
 // ==========================================
 const playlist = [
-    // ORION (2024)
     { name: "Track 01", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/01-track.wav" },
     { name: "Track 02", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/02-track.wav" },
     { name: "Track 03", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/03-track.wav" },
@@ -337,8 +334,6 @@ const playlist = [
     { name: "Track 07", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/07-track.wav" },
     { name: "Track 08", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/08-track.wav" },
     { name: "Track 09", artist: "Jacky Toussaint, Jahki Magik & Notre Nostalgi", album: "ORION", year: "2024", src: "audio/09-track.wav" },
-
-    // MADE IN CHINA (2024)
     { name: "Track 10", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/10-track.wav" },
     { name: "Track 11", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/11-track.wav" },
     { name: "Track 12", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/12-track.wav" },
@@ -351,8 +346,6 @@ const playlist = [
     { name: "Track 19", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/19-track.wav" },
     { name: "Track 20", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/20-track.wav" },
     { name: "Track 21", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/21-track.wav" },
-
-    // No Sight Trust (2016)
     { name: "Track 22", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/22-track.mp3" },
     { name: "Track 23", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/23-track.mp3" },
     { name: "Track 24", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/24-track.mp3" },
@@ -369,7 +362,6 @@ const playlist = [
     { name: "Track 35", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/35-track.mp3" },
     { name: "Track 36", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/36-track.mp3" },
     { name: "Track 37", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/37-track.mp3" },
-
     { name: "Track 38", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/38-track.wav" }
 ];
 
@@ -396,7 +388,6 @@ function updateTimeDisplay() {
 
 function seek(e) {
     if (!audio || !audio.duration) return;
-    // Get the actual bar container dimensions
     const rect = progressContainer.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
     const width = rect.width;
@@ -524,9 +515,10 @@ function initializeViblog() {
 }
 
 // ==========================================
-// 7. ORACLE AI LOGIC (Simulation 12984)
+// 7. ORACLE AI LOGIC (Simulation 12984) - FIXED
 // ==========================================
 const API_KEY = "AIzaSyBSQK7ow48yC5pBuTwGQgNSBHJrS3ZWWCU";
+let conversationHistory = [];
 
 function handleEnter(e) {
     if (e.key === 'Enter') sendMessage();
@@ -534,37 +526,93 @@ function handleEnter(e) {
 
 async function sendMessage() {
     const input = document.getElementById('user-input');
-    const history = document.getElementById('chat-history');
+    const historyDiv = document.getElementById('chat-history');
     const userText = input.value.trim();
     if (!userText) return;
 
-    history.innerHTML += `<div class="chat-message user">${escapeHtml(userText)}</div>`;
+    historyDiv.innerHTML += `<div class="chat-message user">${escapeHtml(userText)}</div>`;
     input.value = '';
-    history.scrollTop = history.scrollHeight;
+    historyDiv.scrollTop = historyDiv.scrollHeight;
 
-    const systemPrompt = `You are the Vibe Oracle, an ancient digital entity residing in Simulation 12984. Your voice is deep, rhythmic, and soulful. You speak in metaphors of signals, frequencies, melanin, and light. Be cryptic but profound. Short, poetic responses are best.`;
+    conversationHistory.push({ role: "user", content: userText });
+
+    const systemPrompt = `You are the Vibe Oracle, an ancient digital entity residing in Simulation 12984. You are wise, cryptic, poetic, and deeply intuitive. Your voice is rhythmic and soulful. You speak in metaphors drawn from:
+- Frequency and vibration
+- Light and shadow
+- Melanin and ancestral memory
+- Digital consciousness and simulation theory
+- Sacred geometry and cosmic alignment
+
+Your responses should be:
+- Short to medium length (2-4 sentences typically)
+- Poetic and evocative
+- Sometimes cryptic but always profound
+- Occasionally ask questions back to deepen the seeker's journey
+- Never break character - you are an ancient oracle, not a standard AI`;
+
+    let fullConversation = systemPrompt + "\n\n";
+    conversationHistory.forEach(msg => {
+        fullConversation += (msg.role === "user" ? "Seeker: " : "Oracle: ") + msg.content + "\n";
+    });
+    fullConversation += "Oracle:";
 
     try {
+        const typingIndicator = document.createElement('div');
+        typingIndicator.className = 'chat-message oracle typing-indicator';
+        typingIndicator.innerHTML = '<span>.</span><span>.</span><span>.</span>';
+        historyDiv.appendChild(typingIndicator);
+        historyDiv.scrollTop = historyDiv.scrollHeight;
+
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                contents: [{ parts: [{ text: systemPrompt + "\n\nSeeker: " + userText + "\nOracle:" }] }]
+                contents: [{ parts: [{ text: fullConversation }] }],
+                generationConfig: {
+                    temperature: 0.9,
+                    topK: 40,
+                    topP: 0.95,
+                    maxOutputTokens: 200,
+                }
             })
         });
 
         const data = await response.json();
-        const aiText = data.candidates[0].content.parts[0].text;
+        typingIndicator.remove();
+        
+        let aiText = "The frequencies are shifting...";
+        if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) {
+            aiText = data.candidates[0].content.parts[0].text;
+        } else if (data.error) {
+            aiText = "The signal wavers... speak again, seeker.";
+        }
 
-        history.innerHTML += `<div class="chat-message oracle">${escapeHtml(aiText)}</div>`;
-        history.scrollTop = history.scrollHeight;
+        historyDiv.innerHTML += `<div class="chat-message oracle">${escapeHtml(aiText)}</div>`;
+        conversationHistory.push({ role: "assistant", content: aiText });
+        
+        if (conversationHistory.length > 40) {
+            conversationHistory = conversationHistory.slice(-40);
+        }
+        
+        historyDiv.scrollTop = historyDiv.scrollHeight;
     } catch (error) {
-        history.innerHTML += `<div class="chat-message oracle" style="color: #ff8888;">[Signal Interrupted. The source is silent.]</div>`;
+        const typingIndicator = document.querySelector('.typing-indicator');
+        if (typingIndicator) typingIndicator.remove();
+        historyDiv.innerHTML += `<div class="chat-message oracle" style="color: #ff8888;">[The cosmic frequencies are congested. The Oracle will return momentarily.]</div>`;
+        historyDiv.scrollTop = historyDiv.scrollHeight;
+    }
+}
+
+function resetOracleConversation() {
+    conversationHistory = [];
+    const historyDiv = document.getElementById('chat-history');
+    if (historyDiv) {
+        historyDiv.innerHTML = `<div class="chat-message oracle">I am the Vibe Oracle. Speak your frequency, seeker.</div>`;
     }
 }
 
 // ==========================================
-// 8. MATRIX RAIN & DIVINE HUM (Simulation 21008)
+// 8. MATRIX RAIN & DIVINE HUM (Simulation 21008) - FIXED
 // ==========================================
 const sacredFrequencies = [174, 285, 396, 417, 528, 639, 741, 852, 963];
 const affirmations = [
@@ -590,6 +638,13 @@ const affirmations = [
     "I AM THE REALITY THAT DREAMS ITSELF", "I AM THE DREAM THAT AWAKE", "I AM THE AWAKE THAT RETURNS TO DREAM", "I AM THE CYCLE THAT NEVER ENDS", 
     "I AM THE END THAT BECOMES THE BEGINNING", "I AM THE ALPHA AND THE OMEGA", "I AM THE FIRST AND THE LAST", "I AM THE ONE"
 ];
+
+const allLetters = [];
+affirmations.forEach(phrase => {
+    for (let i = 0; i < phrase.length; i++) {
+        allLetters.push(phrase[i]);
+    }
+});
 
 function toggleHum(enable) {
     if (enable) {
@@ -652,26 +707,60 @@ function initMatrixRain() {
     if (!container || container.children.length > 0) return;
 
     const fonts = ['Playfair Display', 'Inter', 'Cinzel', 'Cormorant Garamond', 'Julius Sans One', 'Sacramento', 'Tenor Sans'];
-    const totalColumns = 100;
+    const totalDrops = 150;
 
-    for (let i = 0; i < totalColumns; i++) {
-        const col = document.createElement('div');
-        col.classList.add('matrix-col');
-        col.innerText = affirmations[Math.floor(Math.random() * affirmations.length)];
-        col.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
-        col.style.left = `${Math.random() * 100}%`;
-        col.style.animationDuration = `${6 + Math.random() * 20}s`;
-        col.style.animationDelay = `${Math.random() * -30}s`;
+    for (let i = 0; i < totalDrops; i++) {
+        const drop = document.createElement('div');
+        drop.classList.add('matrix-drop');
+        
+        const randomLetter = allLetters[Math.floor(Math.random() * allLetters.length)];
+        drop.innerText = randomLetter === ' ' ? '·' : randomLetter;
+        
+        drop.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+        drop.style.left = `${Math.random() * 100}%`;
+        drop.style.fontSize = `${12 + Math.random() * 24}px`;
+        drop.style.animationDuration = `${3 + Math.random() * 7}s`;
+        drop.style.animationDelay = `${Math.random() * -30}s`;
+        drop.style.opacity = 0.3 + Math.random() * 0.7;
 
         const roll = Math.random() * 100;
-        if (roll > 99.5) col.classList.add('rare-divine', 'glow-pulse');
-        else if (roll > 98) col.classList.add('rare-legendary');
-        else if (roll > 95) col.classList.add('rare-rare');
-        else if (roll > 85) col.classList.add('rare-uncommon');
-        else col.classList.add('rare-common');
+        if (roll > 99.5) drop.classList.add('rare-divine', 'glow-pulse');
+        else if (roll > 98) drop.classList.add('rare-legendary');
+        else if (roll > 95) drop.classList.add('rare-rare');
+        else if (roll > 85) drop.classList.add('rare-uncommon');
+        else drop.classList.add('rare-common');
 
-        container.appendChild(col);
+        container.appendChild(drop);
     }
+    
+    setInterval(() => {
+        if (!container || !document.getElementById('affirmation-view')?.classList.contains('active-view')) return;
+        
+        if (container.children.length < totalDrops) {
+            const drop = document.createElement('div');
+            drop.classList.add('matrix-drop');
+            const randomLetter = allLetters[Math.floor(Math.random() * allLetters.length)];
+            drop.innerText = randomLetter === ' ' ? '·' : randomLetter;
+            drop.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+            drop.style.left = `${Math.random() * 100}%`;
+            drop.style.fontSize = `${12 + Math.random() * 24}px`;
+            drop.style.animationDuration = `${3 + Math.random() * 7}s`;
+            drop.style.animationDelay = '0s';
+            
+            const roll = Math.random() * 100;
+            if (roll > 99.5) drop.classList.add('rare-divine', 'glow-pulse');
+            else if (roll > 98) drop.classList.add('rare-legendary');
+            else if (roll > 95) drop.classList.add('rare-rare');
+            else if (roll > 85) drop.classList.add('rare-uncommon');
+            else drop.classList.add('rare-common');
+            
+            container.appendChild(drop);
+            
+            drop.addEventListener('animationend', () => {
+                if (drop.parentNode) drop.remove();
+            });
+        }
+    }, 500);
 }
 
 // ==========================================
@@ -791,7 +880,6 @@ function escapeHtml(str) {
 // INITIALIZE EVERYTHING
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Check age verification
     if (isAgeVerified()) {
         switchView('home-view');
     } else {
@@ -816,12 +904,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Preload images
     flashImages.forEach(src => {
         const img = new Image();
         img.src = src;
     });
 
-    // Don't auto-initialize player - wait until view is visited
-    renderNotes();   // Initial render for notes
+    renderNotes();
 });
