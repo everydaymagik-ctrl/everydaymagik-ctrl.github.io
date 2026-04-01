@@ -80,7 +80,7 @@ body.no-scroll {
 .preface-image-container {
     width: 100%;
     max-width: 520px;
-    height: 420px;                    /* Controlled height - original aesthetic */
+    height: 420px;
     overflow: hidden;
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -92,7 +92,7 @@ body.no-scroll {
 .preface-visual {
     width: 100%;
     height: 100%;
-    object-fit: cover;                /* Keeps proportions and prevents overflow */
+    object-fit: cover;
     object-position: center;
     display: block;
     opacity: 0.92;
@@ -101,10 +101,9 @@ body.no-scroll {
 
 .preface-content-wrapper:hover .preface-visual {
     opacity: 1;
-    transform: scale(1.03);           /* subtle cinematic zoom */
+    transform: scale(1.03);
 }
 
-/* Text content */
 .preface-title {
     font-family: var(--font-ui);
     font-weight: 900;
@@ -267,12 +266,605 @@ body.no-scroll {
 }
 
 /* =========================================
-   10. VIBE NOTES (Simulation 5080) STYLES
+   3. PLAYER VIEW STYLES
+   ========================================= */
+.player-center-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+#music-player-container {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(20px);
+    border-radius: 40px;
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.player-visuals {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.album-art-large {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, #333, #111);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.album-art-large.yellow-mode {
+    background: linear-gradient(135deg, #FFD700, #B8860B);
+}
+
+.album-art-large.white-mode {
+    background: linear-gradient(135deg, #FFFFFF, #CCCCCC);
+}
+
+.track-details {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.song-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    margin: 0 0 10px 0;
+    color: var(--text-main);
+}
+
+.song-artist, .song-album, .song-year {
+    color: var(--text-muted);
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+.progress-area {
+    margin: 30px 0;
+}
+
+.progress-bar-container {
+    background: var(--progress-bg);
+    height: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.progress-bar-fill {
+    background: var(--progress-fill);
+    height: 100%;
+    border-radius: 4px;
+    width: 0%;
+    position: relative;
+    transition: width 0.1s linear;
+}
+
+.progress-handle {
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    background: var(--text-main);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.track-info {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-family: monospace;
+}
+
+.bottom-controls {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 30px 0;
+}
+
+.control-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+.control-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
+.main-btn {
+    background: rgba(255, 255, 255, 0.15);
+    width: 60px;
+    height: 60px;
+}
+
+.track-select-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 12px;
+    margin: 30px 0;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.track-number-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-main);
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: monospace;
+    transition: all 0.3s ease;
+}
+
+.track-number-btn:hover {
+    background: var(--text-main);
+    color: var(--bg-dark);
+    transform: translateY(-2px);
+}
+
+.player-footer {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.player-footer-links {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.player-footer-home-link {
+    margin: 0 auto;
+}
+
+/* =========================================
+   4. VIBLOG STYLES
+   ========================================= */
+.viblog-wrapper {
+    max-width: 800px;
+    width: 100%;
+    padding: 40px;
+}
+
+.viblog-header {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--text-main);
+}
+
+#viblog-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.viblog-entry {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.viblog-entry:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.entry-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    margin: 0 0 10px 0;
+    color: var(--text-main);
+}
+
+.entry-date {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.entry-body {
+    color: #ccc;
+    line-height: 1.6;
+    margin: 0 0 15px 0;
+}
+
+.entry-image {
+    max-width: 100%;
+    border-radius: 12px;
+    margin-top: 15px;
+}
+
+.viblog-footer {
+    text-align: center;
+    margin-top: 40px;
+}
+
+/* =========================================
+   5. LIBRARY STYLES
+   ========================================= */
+.library-container {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+.library-title {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 40px;
+    color: var(--text-main);
+}
+
+.bookshelf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.book-item {
+    display: block;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.book-item img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.book-item:hover {
+    transform: translateY(-10px);
+}
+
+.book-item:hover img {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+}
+
+.simulation-nav {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 40px 0 20px;
+}
+
+/* =========================================
+   6. RESEARCH STYLES
+   ========================================= */
+.research-container {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+.research-section {
+    display: flex;
+    gap: 60px;
+    align-items: flex-start;
+}
+
+.research-content-left {
+    flex: 2;
+}
+
+.research-image-right {
+    flex: 1;
+}
+
+.research-image-right img {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.paper-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 40px 0;
+}
+
+.paper-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.paper-item:hover {
+    transform: translateX(10px);
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.paper-id {
+    font-family: monospace;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.paper-title {
+    flex: 1;
+    font-family: var(--font-ui);
+    font-size: 1rem;
+    margin: 0;
+    color: var(--text-main);
+}
+
+.paper-arrow {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.paper-item:hover .paper-arrow {
+    transform: translateX(5px);
+    color: var(--text-main);
+}
+
+/* =========================================
+   7. ORACLE STYLES
+   ========================================= */
+.oracle-container {
+    max-width: 800px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(20px);
+    border-radius: 40px;
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.oracle-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.oracle-title {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    margin: 0;
+    background: linear-gradient(135deg, #fff, #8b8b8b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.oracle-subtitle {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.chat-history {
+    height: 400px;
+    overflow-y: auto;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+
+.chat-message {
+    margin-bottom: 20px;
+    padding: 12px 18px;
+    border-radius: 20px;
+    max-width: 80%;
+    animation: fadeIn 0.3s ease;
+}
+
+.chat-message.user {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    margin-left: auto;
+    text-align: right;
+}
+
+.chat-message.oracle {
+    background: rgba(255, 255, 255, 0.1);
+    margin-right: auto;
+    border-left: 3px solid #667eea;
+}
+
+.chat-input-area {
+    display: flex;
+    gap: 15px;
+}
+
+#user-input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 15px 20px;
+    border-radius: 30px;
+    color: var(--text-main);
+    font-family: var(--font-ui);
+    font-size: 1rem;
+}
+
+#user-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+#send-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    padding: 15px 30px;
+    border-radius: 30px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#send-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+.oracle-footer {
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* =========================================
+   8. AFFIRMATION / MATRIX RAIN STYLES
+   ========================================= */
+.next-sim-body {
+    position: relative;
+    overflow: hidden;
+}
+
+.matrix-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.matrix-col {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    white-space: nowrap;
+    opacity: 0;
+    animation: fall linear infinite;
+    pointer-events: none;
+    text-shadow: 0 0 5px currentColor;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.rare-common { color: #FFD700; text-shadow: 0 0 10px #FFD700; }
+.rare-uncommon { color: #00FFFF; text-shadow: 0 0 10px #00FFFF; }
+.rare-rare { color: #50C878; text-shadow: 0 0 10px #50C878; }
+.rare-legendary { color: #FF4444; text-shadow: 0 0 15px #FF4444; animation-duration: 4s !important; }
+.rare-divine { color: #FFFFFF; text-shadow: 0 0 20px #FFFFFF, 0 0 30px #FFFFFF; animation-duration: 3s !important; }
+
+.glow-pulse {
+    animation: glowPulse 1s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+    0%, 100% { text-shadow: 0 0 10px #fff, 0 0 20px #fff; }
+    50% { text-shadow: 0 0 20px #fff, 0 0 40px #fff, 0 0 60px #fff; }
+}
+
+.affirmation-center {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(20px);
+    padding: 40px;
+    border-radius: 40px;
+    max-width: 600px;
+    margin: 20px;
+}
+
+.gallery-art {
+    max-width: 100%;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.affirmation-main-text {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--text-main);
+    margin: 30px 0;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.affirmation-back-link {
+    display: inline-block;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-family: var(--font-ui);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+}
+
+.affirmation-back-link:hover {
+    color: var(--text-main);
+    letter-spacing: 0.15em;
+}
+
+/* =========================================
+   9. VIBE NOTES - SIMULATION 5080 STYLES
    ========================================= */
 .notes-container {
     padding: 40px 20px;
     max-width: 1400px;
     margin: 0 auto;
+    width: 100%;
 }
 
 .notes-header {
@@ -282,6 +874,13 @@ body.no-scroll {
     margin-bottom: 40px;
     flex-wrap: wrap;
     gap: 15px;
+}
+
+.notes-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    margin: 0;
+    color: var(--text-main);
 }
 
 .new-note-btn {
@@ -307,6 +906,7 @@ body.no-scroll {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 24px;
+    margin-bottom: 40px;
 }
 
 .note-card {
@@ -382,6 +982,11 @@ body.no-scroll {
 .delete-btn:hover {
     background: #ff5555;
     transform: scale(1.05);
+}
+
+.notes-footer {
+    text-align: center;
+    margin-top: 40px;
 }
 
 /* Note Modal */
@@ -490,21 +1095,125 @@ body.no-scroll {
 }
 
 /* =========================================
+   10. PDF READER OVERLAY
+   ========================================= */
+#pdf-reader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-reader-btn {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    transition: all 0.3s ease;
+    z-index: 10001;
+}
+
+.close-reader-btn:hover {
+    background: #ff4444;
+    transform: scale(1.05);
+}
+
+#pdf-frame {
+    width: 90%;
+    height: 90%;
+    border: none;
+    background: white;
+    border-radius: 12px;
+}
+
+/* =========================================
    MOBILE RESPONSIVENESS
    ========================================= */
+@media (max-width: 1024px) {
+    .hero-section {
+        flex-direction: column;
+        padding: 40px;
+        text-align: center;
+    }
+    
+    .hero-content-left {
+        text-align: center;
+    }
+    
+    .footer-link-container {
+        align-items: center;
+    }
+    
+    .research-section {
+        flex-direction: column;
+    }
+    
+    .research-image-right {
+        order: -1;
+    }
+}
+
 @media (max-width: 768px) {
     .notes-grid {
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     }
+    
     .notes-header {
         flex-direction: column;
         align-items: stretch;
     }
+    
     .new-note-btn {
         width: 100%;
     }
+    
     .preface-image-container {
         height: 300px;
+    }
+    
+    .player-center-wrapper {
+        padding: 20px;
+    }
+    
+    #music-player-container {
+        padding: 20px;
+    }
+    
+    .track-select-grid {
+        grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    }
+    
+    .bookshelf-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 20px;
+    }
+    
+    .paper-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .oracle-container {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    .chat-message {
+        max-width: 90%;
     }
 }
 
@@ -512,7 +1221,20 @@ body.no-scroll {
     .note-card {
         padding: 16px;
     }
+    
     .preface-image-container {
         height: 260px;
+    }
+    
+    .song-title {
+        font-size: 1.5rem;
+    }
+    
+    .affirmation-main-text {
+        font-size: 1.2rem;
+    }
+    
+    .gallery-art {
+        max-width: 90%;
     }
 }
