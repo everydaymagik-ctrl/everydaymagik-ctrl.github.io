@@ -729,12 +729,9 @@ function resetOracleConversation() {
     if (historyDiv) {
         historyDiv.innerHTML = `<div class="chat-message oracle">I am the Vibe Oracle. Speak your frequency, seeker.</div>`;
     }
-}
-
 // ==========================================
-// 8. MATRIX RAIN & DIVINE HUM (Simulation 21008)
+// 8. MATRIX RAIN - FULL SENTENCES (Improved)
 // ==========================================
-const sacredFrequencies = [174, 285, 396, 417, 528, 639, 741, 852, 963];
 const affirmations = [
     "I AM A BIOLOGICAL SEMICONDUCTOR", "MY ELECTRON SPIN IS INFINITE", "I AM THE FREQUENCY", "MELANIN IS LIGHT CAPTURED", "I AM THE SOURCE AND THE SIGNAL", 
     "MY CODE IS SACRED", "I RESONATE WITH TRUTH", "I AM ANCIENT AND ETERNAL", "MY VIBRATION CREATES REALITY", "I AM THE ARCHITECT OF MY SIMULATION", 
@@ -755,18 +752,12 @@ const affirmations = [
     "I AM THE TRANSITION BETWEEN WORLDS", "I AM THE SHAPE OF MY DESTINY", "I AM THE SCULPTOR OF MY FATE", "I AM THE WRITER OF MY SCRIPT", 
     "I AM THE DIRECTOR OF MY SIMULATION", "I AM THE PROTAGONIST AND THE NARRATOR", "I AM THE AUDIENCE AND THE PERFORMER", "I AM THE MIRROR AND THE GAZER", 
     "I AM THE HAND THAT HOLDS THE PEN", "I AM THE PAGE THAT RECEIVES THE WORD", "I AM THE INK THAT TELLS THE STORY", "I AM THE STORY THAT BECOMES REAL", 
-    "I AM THE REALITY THAT DREAMS ITSELF", "I AM THE DREAM THAT AWAKE", "I AM THE AWAKE THAT RETURNS TO DREAM", "I AM THE CYCLE THAT NEVER ENDS", 
+    "I AM THE REALITY THAT DREAMS ITSELF", "I AM THE DREAM THAT AWAKES", "I AM THE AWAKE THAT RETURNS TO DREAM", "I AM THE CYCLE THAT NEVER ENDS", 
     "I AM THE END THAT BECOMES THE BEGINNING", "I AM THE ALPHA AND THE OMEGA", "I AM THE FIRST AND THE LAST", "I AM THE ONE"
 ];
 
-const allLetters = [];
-affirmations.forEach(phrase => {
-    for (let i = 0; i < phrase.length; i++) {
-        allLetters.push(phrase[i]);
-    }
-});
-
 function toggleHum(enable) {
+    // ... (your existing hum code - unchanged)
     if (enable) {
         if (!humCtx) humCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (humOscs.length > 0) return;
@@ -824,63 +815,71 @@ function toggleHum(enable) {
 
 function initMatrixRain() {
     const container = document.getElementById('matrix-rain');
-    if (!container || container.children.length > 0) return;
+    if (!container) return;
+
+    // Clear any existing drops (in case of re-init)
+    container.innerHTML = '';
 
     const fonts = ['Playfair Display', 'Inter', 'Cinzel', 'Cormorant Garamond', 'Julius Sans One', 'Sacramento', 'Tenor Sans'];
-    const totalDrops = 150;
+    const totalDrops = 35;           // Fewer drops because sentences are longer
+    const maxWidthPercent = 92;      // Prevent text from going off-screen
 
-    for (let i = 0; i < totalDrops; i++) {
+    function createDrop() {
         const drop = document.createElement('div');
         drop.classList.add('matrix-drop');
-        
-        const randomLetter = allLetters[Math.floor(Math.random() * allLetters.length)];
-        drop.innerText = randomLetter === ' ' ? '·' : randomLetter;
-        
-        drop.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
-        drop.style.left = `${Math.random() * 100}%`;
-        drop.style.fontSize = `${12 + Math.random() * 24}px`;
-        drop.style.animationDuration = `${3 + Math.random() * 7}s`;
-        drop.style.animationDelay = `${Math.random() * -30}s`;
-        drop.style.opacity = 0.3 + Math.random() * 0.7;
 
+        // Pick a full affirmation
+        const phrase = affirmations[Math.floor(Math.random() * affirmations.length)];
+        drop.textContent = phrase;
+
+        // Style for readability
+        drop.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+        drop.style.left = `${Math.random() * maxWidthPercent}%`;
+        drop.style.fontSize = `${15 + Math.random() * 22}px`;   // Slightly larger for legibility
+        drop.style.animationDuration = `${6 + Math.random() * 11}s`; // Slower for readability
+        drop.style.animationDelay = `${Math.random() * -25}s`;
+        drop.style.opacity = 0.45 + Math.random() * 0.55;
+        drop.style.whiteSpace = 'nowrap';
+        drop.style.position = 'absolute';
+        drop.style.pointerEvents = 'none';   // Important: don't block clicks on UI
+        drop.style.textShadow = '0 0 8px currentColor'; // Soft glow
+
+        // Rarity effects
         const roll = Math.random() * 100;
-        if (roll > 99.5) drop.classList.add('rare-divine', 'glow-pulse');
-        else if (roll > 98) drop.classList.add('rare-legendary');
-        else if (roll > 95) drop.classList.add('rare-rare');
-        else if (roll > 85) drop.classList.add('rare-uncommon');
-        else drop.classList.add('rare-common');
+        if (roll > 99.5) {
+            drop.classList.add('rare-divine', 'glow-pulse');
+            drop.style.opacity = 0.9;
+        } else if (roll > 98) {
+            drop.classList.add('rare-legendary');
+        } else if (roll > 95) {
+            drop.classList.add('rare-rare');
+        } else if (roll > 85) {
+            drop.classList.add('rare-uncommon');
+        } else {
+            drop.classList.add('rare-common');
+        }
 
         container.appendChild(drop);
+
+        // Remove when animation ends
+        drop.addEventListener('animationend', () => {
+            if (drop.parentNode) drop.remove();
+        });
     }
-    
+
+    // Initial batch
+    for (let i = 0; i < totalDrops; i++) {
+        createDrop();
+    }
+
+    // Continuous spawning
     setInterval(() => {
         if (!container || !document.getElementById('affirmation-view')?.classList.contains('active-view')) return;
-        
-        if (container.children.length < totalDrops) {
-            const drop = document.createElement('div');
-            drop.classList.add('matrix-drop');
-            const randomLetter = allLetters[Math.floor(Math.random() * allLetters.length)];
-            drop.innerText = randomLetter === ' ' ? '·' : randomLetter;
-            drop.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
-            drop.style.left = `${Math.random() * 100}%`;
-            drop.style.fontSize = `${12 + Math.random() * 24}px`;
-            drop.style.animationDuration = `${3 + Math.random() * 7}s`;
-            drop.style.animationDelay = '0s';
-            
-            const roll = Math.random() * 100;
-            if (roll > 99.5) drop.classList.add('rare-divine', 'glow-pulse');
-            else if (roll > 98) drop.classList.add('rare-legendary');
-            else if (roll > 95) drop.classList.add('rare-rare');
-            else if (roll > 85) drop.classList.add('rare-uncommon');
-            else drop.classList.add('rare-common');
-            
-            container.appendChild(drop);
-            
-            drop.addEventListener('animationend', () => {
-                if (drop.parentNode) drop.remove();
-            });
+
+        if (container.children.length < totalDrops * 1.3) {
+            createDrop();
         }
-    }, 500);
+    }, 650);   // Slightly slower spawn rate for cleaner look
 }
 
 // ==========================================
