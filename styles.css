@@ -775,9 +775,8 @@ body.no-scroll {
 .oracle-footer {
     text-align: center;
     margin-top: 30px;
-}
 /* =========================================
-   8. AFFIRMATION / MATRIX RAIN STYLES - FULL SENTENCES
+   8. AFFIRMATION / MATRIX RAIN STYLES - OPTIMIZED
    ========================================= */
 .next-sim-body {
     position: relative;
@@ -793,46 +792,56 @@ body.no-scroll {
     pointer-events: none;
     z-index: 1;
     user-select: none;
+    contain: layout style paint;
 }
 
 .matrix-drop {
     position: absolute;
-    top: -60px;
+    top: -80px;
     color: rgba(255, 255, 255, 0.75);
     white-space: nowrap;
     pointer-events: none;
     text-shadow: 0 0 8px currentColor;
-    animation: matrixFall linear forwards;
     font-weight: 500;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
     text-transform: uppercase;
+    animation: matrixFall linear forwards;
 }
 
 @keyframes matrixFall {
-    to {
-        transform: translateY(calc(100vh + 120px));
+    0% {
+        transform: translateY(-100px);
+        opacity: 0;
+    }
+    8% {
+        opacity: 0.85;
+    }
+    92% {
+        opacity: 0.75;
+    }
+    100% {
+        transform: translateY(calc(100vh + 150px));
         opacity: 0;
     }
 }
 
-/* Rarity colors (matching your :root variables) */
+/* Rarity styles */
 .rare-common   { color: #FFD700; text-shadow: 0 0 10px #FFD700; }
 .rare-uncommon { color: #00FFFF; text-shadow: 0 0 10px #00FFFF; }
 .rare-rare     { color: #50C878; text-shadow: 0 0 12px #50C878; }
-.rare-legendary{ color: #FF4444; text-shadow: 0 0 14px #FF4444; animation-duration: 4s !important; }
+.rare-legendary{ color: #FF4444; text-shadow: 0 0 14px #FF4444; }
 .rare-divine   { 
     color: #ffffff; 
-    text-shadow: 0 0 15px #fff, 0 0 30px #fff; 
-    animation-duration: 3.2s !important; 
+    text-shadow: 0 0 15px #fff, 0 0 35px #fff; 
 }
 
 .glow-pulse {
-    animation: glowPulse 2s ease-in-out infinite alternate;
+    animation: glowPulse 2.2s ease-in-out infinite alternate;
 }
 
 @keyframes glowPulse {
     from { text-shadow: 0 0 12px currentColor, 0 0 25px currentColor; }
-    to   { text-shadow: 0 0 20px currentColor, 0 0 45px currentColor; }
+    to   { text-shadow: 0 0 22px currentColor, 0 0 48px currentColor; }
 }
 /* =========================================
    9. VIBE NOTES STYLES
