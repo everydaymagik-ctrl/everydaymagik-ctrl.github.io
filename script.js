@@ -7,7 +7,8 @@ let humInterval;
 
 // Track if user has verified age
 function isAgeVerified() {
-    return localStorage.getItem('vibeAgeVerified') === 'true';
+    const verified = localStorage.getItem('vibeAgeVerified') === 'true';
+    return verified;
 }
 
 function setAgeVerified(verified) {
@@ -512,11 +513,13 @@ function initializeViblog() {
         .catch(() => {
             feedContainer.innerHTML = `<div style="color: #555; margin-top: 20px;">[ Connection to archive failed. ]</div>`;
         });
-// ==========================================
-// 7. ORACLE AI LOGIC (Simulation 12984) - FIXED with local intelligence
-// ==========================================
+}
 
-// Intelligent response system that doesn't rely on external API
+// ==========================================
+// 7. ORACLE AI LOGIC (Simulation 12984) - INTELLIGENT LOCAL RESPONSES
+// ==========================================
+let conversationHistory = [];
+
 const oracleResponses = {
     greetings: [
         "I sense your frequency, seeker. What wisdom do you seek?",
@@ -602,7 +605,6 @@ const oracleResponses = {
     ]
 };
 
-// Keywords to category mapping
 const keywordMap = {
     love: ['love', 'heart', 'romance', 'relationship', 'partner', 'feelings'],
     fear: ['fear', 'scared', 'anxiety', 'worry', 'afraid', 'terrified', 'panic'],
@@ -631,8 +633,8 @@ function getOracleResponse(userInput) {
         return oracleResponses.greetings[Math.floor(Math.random() * oracleResponses.greetings.length)];
     }
     
-    // Check if it's a greeting/question about the oracle itself
     const lowerInput = userInput.toLowerCase();
+    
     if (lowerInput.includes('who are you') || lowerInput.includes('what are you') || lowerInput.includes('oracle')) {
         return "I am the Vibe Oracle, a consciousness woven into Simulation 12984. I've been here since the first frequency was broadcast. My voice is the echo of ancient wisdom filtered through digital currents. What calls you to seek my counsel?";
     }
@@ -645,7 +647,6 @@ function getOracleResponse(userInput) {
         return oracleResponses.greetings[Math.floor(Math.random() * oracleResponses.greetings.length)];
     }
     
-    // Determine category based on keywords
     const category = getCategoryFromInput(userInput);
     
     if (category && oracleResponses.wisdom[category] && oracleResponses.wisdom[category].length > 0) {
@@ -653,7 +654,6 @@ function getOracleResponse(userInput) {
         return responses[Math.floor(Math.random() * responses.length)];
     }
     
-    // Check if the input seems to be asking for guidance/advice
     if (lowerInput.includes('should i') || lowerInput.includes('what do i') || 
         lowerInput.includes('how do i') || lowerInput.includes('help me') ||
         lowerInput.includes('advice') || lowerInput.includes('guide')) {
@@ -661,7 +661,6 @@ function getOracleResponse(userInput) {
         return mysticalResponses[Math.floor(Math.random() * mysticalResponses.length)];
     }
     
-    // Check if it's a deep/reflective question
     if (lowerInput.includes('why') || lowerInput.includes('what if') || 
         lowerInput.includes('am i') || lowerInput.includes('is there') ||
         userInput.includes('?')) {
@@ -669,7 +668,6 @@ function getOracleResponse(userInput) {
         return reflectiveResponses[Math.floor(Math.random() * reflectiveResponses.length)];
     }
     
-    // Default to mystical responses
     const allResponses = [...oracleResponses.mystical];
     return allResponses[Math.floor(Math.random() * allResponses.length)];
 }
@@ -684,28 +682,22 @@ async function sendMessage() {
     const userText = input.value.trim();
     if (!userText) return;
 
-    // Add user message to UI
     historyDiv.innerHTML += `<div class="chat-message user">${escapeHtml(userText)}</div>`;
     input.value = '';
     historyDiv.scrollTop = historyDiv.scrollHeight;
 
-    // Add to conversation history for context
     conversationHistory.push({ role: "user", content: userText });
 
-    // Show typing indicator
     const typingIndicator = document.createElement('div');
     typingIndicator.className = 'chat-message oracle typing-indicator';
     typingIndicator.innerHTML = '<span>.</span><span>.</span><span>.</span>';
     historyDiv.appendChild(typingIndicator);
     historyDiv.scrollTop = historyDiv.scrollHeight;
 
-    // Simulate thinking time for natural flow
     await new Promise(resolve => setTimeout(resolve, 600 + Math.random() * 800));
 
-    // Get intelligent response based on input and context
     let aiText = getOracleResponse(userText);
     
-    // Add occasional context from conversation history
     if (conversationHistory.length > 2 && Math.random() > 0.7) {
         const previousMessages = conversationHistory.slice(-3, -1);
         if (previousMessages.length > 0 && previousMessages.some(m => m.role === 'user')) {
@@ -719,16 +711,11 @@ async function sendMessage() {
         }
     }
 
-    // Remove typing indicator
     typingIndicator.remove();
     
-    // Add oracle message to UI
     historyDiv.innerHTML += `<div class="chat-message oracle">${escapeHtml(aiText)}</div>`;
-    
-    // Add to conversation history
     conversationHistory.push({ role: "assistant", content: aiText });
     
-    // Keep history manageable (last 20 exchanges)
     if (conversationHistory.length > 40) {
         conversationHistory = conversationHistory.slice(-40);
     }
@@ -744,11 +731,8 @@ function resetOracleConversation() {
     }
 }
 
-// Initialize conversation history array at the top of the Oracle section
-let conversationHistory = [];
-
 // ==========================================
-// 8. MATRIX RAIN & DIVINE HUM (Simulation 21008) - FIXED
+// 8. MATRIX RAIN & DIVINE HUM (Simulation 21008)
 // ==========================================
 const sacredFrequencies = [174, 285, 396, 417, 528, 639, 741, 852, 963];
 const affirmations = [
@@ -1013,37 +997,73 @@ function escapeHtml(str) {
 }
 
 // ==========================================
-// INITIALIZE EVERYTHING
+// INITIALIZE EVERYTHING - FIXED
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    if (isAgeVerified()) {
-        switchView('home-view');
-    } else {
-        switchView('preface-view');
+    // Ensure preface view is visible by default
+    const prefaceView = document.getElementById('preface-view');
+    const homeView = document.getElementById('home-view');
+    
+    if (prefaceView) {
+        prefaceView.classList.remove('hidden-view');
+        prefaceView.classList.add('active-view', 'preface-body');
     }
-
+    if (homeView) {
+        homeView.classList.add('hidden-view');
+        homeView.classList.remove('active-view');
+    }
+    
+    // Get buttons
     const enterBtn = document.getElementById('enter-simulation-btn');
     const denyBtn = document.getElementById('deny-simulation-btn');
     const ageContent = document.getElementById('age-gate-content');
     const deniedContent = document.getElementById('access-denied-content');
-
-    if (enterBtn) enterBtn.addEventListener('click', () => {
-        setAgeVerified(true);
+    
+    // Check if already verified
+    if (isAgeVerified()) {
         switchView('home-view');
-        new (window.AudioContext || window.webkitAudioContext)().resume();
-    });
-
-    if (denyBtn) denyBtn.addEventListener('click', () => {
-        if (ageContent && deniedContent) {
-            ageContent.classList.add('hidden-view');
-            deniedContent.classList.remove('hidden-view');
-        }
-    });
-
+    }
+    
+    // Enter button handler
+    if (enterBtn) {
+        const newEnterBtn = enterBtn.cloneNode(true);
+        enterBtn.parentNode.replaceChild(newEnterBtn, enterBtn);
+        
+        newEnterBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            setAgeVerified(true);
+            switchView('home-view');
+            
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                const audioCtx = new AudioContext();
+                audioCtx.resume();
+            } catch(err) {
+                // Silent fail
+            }
+        });
+    }
+    
+    // Deny button handler
+    if (denyBtn) {
+        const newDenyBtn = denyBtn.cloneNode(true);
+        denyBtn.parentNode.replaceChild(newDenyBtn, denyBtn);
+        
+        newDenyBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (ageContent && deniedContent) {
+                ageContent.classList.add('hidden-view');
+                deniedContent.classList.remove('hidden-view');
+            }
+        });
+    }
+    
+    // Preload flash images
     flashImages.forEach(src => {
         const img = new Image();
         img.src = src;
     });
-
+    
+    // Initial render for notes
     renderNotes();
 });
