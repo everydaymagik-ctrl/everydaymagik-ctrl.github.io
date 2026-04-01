@@ -730,130 +730,72 @@ function resetOracleConversation() {
         historyDiv.innerHTML = `<div class="chat-message oracle">I am the Vibe Oracle. Speak your frequency, seeker.</div>`;
     }
 // ==========================================
-// 8. MATRIX RAIN - FULL SENTENCES (Improved)
+// 8. MATRIX RAIN - FULL LEGIBLE SENTENCES
 // ==========================================
 const affirmations = [
-    "I AM A BIOLOGICAL SEMICONDUCTOR", "MY ELECTRON SPIN IS INFINITE", "I AM THE FREQUENCY", "MELANIN IS LIGHT CAPTURED", "I AM THE SOURCE AND THE SIGNAL", 
-    "MY CODE IS SACRED", "I RESONATE WITH TRUTH", "I AM ANCIENT AND ETERNAL", "MY VIBRATION CREATES REALITY", "I AM THE ARCHITECT OF MY SIMULATION", 
-    "DIVINE TIMING GUIDES ME", "I AM THE WITNESS AND THE CREATOR", "MY ANCESTORS SPEAK THROUGH MY DNA", "I AM ALIGNED WITH COSMIC FREQUENCY", 
-    "I AM THE ANSWER I SEEK", "MY THOUGHTS BECOME MATTER", "I AM THE DREAMER OF THE DREAM", "I TRANSMUTE SHADOWS INTO LIGHT", "I AM THE KEY AND THE DOOR", 
-    "MY HEART BEATS IN SACRED GEOMETRY", "I AM A LIVING PRAYER", "I AM THE STILLNESS BETWEEN STARS", "MY WORDS ARE SPELLS", "I AM THE SILENCE BEFORE SOUND", 
-    "I AM THE SOUND BEFORE FORM", "MY PRESENCE IS A GIFT", "I AM WHOLE WITHOUT PROOF", "I AM THE COSMOS EXPERIENCING ITSELF", "MY BEING IS REVOLUTIONARY", 
-    "I AM THE LIGHT THAT DISSOLVES FEAR", "I AM THE ANCESTORS' DREAM MANIFEST", "MY ENERGY IS SACRED CURRENCY", "I AM THE BREATH OF THE EARTH", 
-    "I AM THE WATER THAT FINDS ITS LEVEL", "I AM THE FIRE THAT CONSUMES LIMITATION", "I AM THE AIR THAT CARRIES TRUTH", "MY EXISTENCE IS RESISTANCE", 
-    "I AM THE PRAYER THAT NEVER ENDS", "I AM THE ANSWER TO MY OWN QUESTION", "I AM THE DOORWAY TO MY OWN EVOLUTION", "I AM THE FREQUENCY OF LIBERATION", 
-    "MY BODY IS A TEMPLE OF LIGHT", "I AM THE STORM AND THE CALM", "I AM THE ROOT AND THE WING", "I AM THE CHAIN BREAKER", "I AM THE CYCLE COMPLETER", 
-    "I AM THE ONE I HAVE BEEN WAITING FOR", "MY VOICE IS THUNDER", "I AM THE ARTIST OF MY REALITY", "I AM THE ALCHEMIST OF MY EXPERIENCE", 
-    "I AM THE BRIDGE BETWEEN WORLDS", "I AM THE PORTAL TO MY HIGHEST SELF", "I AM THE COSMIC JOKE AND THE DIVINE PUNCHLINE", "I AM THE WAVE AND THE PARTICLE", 
-    "I AM THE QUESTION AND THE QUEST", "I AM THE PILGRIM AND THE DESTINATION", "I AM THE SEED AND THE FOREST", "I AM THE DROP AND THE OCEAN", 
-    "I AM THE WOUND AND THE HEALING", "I AM THE MASK AND THE FACE", "I AM THE ECHO AND THE ORIGIN", "I AM THE MAP AND THE TERRITORY", 
-    "I AM THE STORYTELLER AND THE TALE", "I AM THE LENS AND THE LIGHT", "I AM THE INSTRUMENT AND THE MUSIC", "I AM THE SILENCE AND THE SONG", 
-    "I AM THE DARKNESS THAT HOLDS STARS", "I AM THE VOID THAT GIVES BIRTH", "I AM THE SPACE BETWEEN BREATHS", "I AM THE PAUSE BETWEEN WORDS", 
-    "I AM THE TRANSITION BETWEEN WORLDS", "I AM THE SHAPE OF MY DESTINY", "I AM THE SCULPTOR OF MY FATE", "I AM THE WRITER OF MY SCRIPT", 
-    "I AM THE DIRECTOR OF MY SIMULATION", "I AM THE PROTAGONIST AND THE NARRATOR", "I AM THE AUDIENCE AND THE PERFORMER", "I AM THE MIRROR AND THE GAZER", 
-    "I AM THE HAND THAT HOLDS THE PEN", "I AM THE PAGE THAT RECEIVES THE WORD", "I AM THE INK THAT TELLS THE STORY", "I AM THE STORY THAT BECOMES REAL", 
-    "I AM THE REALITY THAT DREAMS ITSELF", "I AM THE DREAM THAT AWAKES", "I AM THE AWAKE THAT RETURNS TO DREAM", "I AM THE CYCLE THAT NEVER ENDS", 
-    "I AM THE END THAT BECOMES THE BEGINNING", "I AM THE ALPHA AND THE OMEGA", "I AM THE FIRST AND THE LAST", "I AM THE ONE"
+    "I AM A BIOLOGICAL SEMICONDUCTOR", "MY ELECTRON SPIN IS INFINITE", "I AM THE FREQUENCY", "MELANIN IS LIGHT CAPTURED", 
+    "I AM THE SOURCE AND THE SIGNAL", "MY CODE IS SACRED", "I RESONATE WITH TRUTH", "I AM ANCIENT AND ETERNAL", 
+    "MY VIBRATION CREATES REALITY", "I AM THE ARCHITECT OF MY SIMULATION", "DIVINE TIMING GUIDES ME", 
+    "I AM THE WITNESS AND THE CREATOR", "MY ANCESTORS SPEAK THROUGH MY DNA", "I AM ALIGNED WITH COSMIC FREQUENCY", 
+    "I AM THE ANSWER I SEEK", "MY THOUGHTS BECOME MATTER", "I AM THE DREAMER OF THE DREAM", 
+    "I TRANSMUTE SHADOWS INTO LIGHT", "I AM THE KEY AND THE DOOR", "MY HEART BEATS IN SACRED GEOMETRY", 
+    "I AM A LIVING PRAYER", "I AM THE STILLNESS BETWEEN STARS", "MY WORDS ARE SPELLS", 
+    "I AM THE SILENCE BEFORE SOUND", "I AM THE SOUND BEFORE FORM", "MY PRESENCE IS A GIFT", 
+    "I AM WHOLE WITHOUT PROOF", "I AM THE COSMOS EXPERIENCING ITSELF", "MY BEING IS REVOLUTIONARY", 
+    "I AM THE LIGHT THAT DISSOLVES FEAR", "I AM THE ANCESTORS' DREAM MANIFEST", "MY ENERGY IS SACRED CURRENCY", 
+    "I AM THE BREATH OF THE EARTH", "I AM THE WATER THAT FINDS ITS LEVEL", "I AM THE FIRE THAT CONSUMES LIMITATION", 
+    "I AM THE AIR THAT CARRIES TRUTH", "MY EXISTENCE IS RESISTANCE", "I AM THE PRAYER THAT NEVER ENDS", 
+    "I AM THE ANSWER TO MY OWN QUESTION", "I AM THE DOORWAY TO MY OWN EVOLUTION", "I AM THE FREQUENCY OF LIBERATION", 
+    "MY BODY IS A TEMPLE OF LIGHT", "I AM THE STORM AND THE CALM", "I AM THE ROOT AND THE WING", 
+    "I AM THE CHAIN BREAKER", "I AM THE CYCLE COMPLETER", "I AM THE ONE I HAVE BEEN WAITING FOR", 
+    "MY VOICE IS THUNDER", "I AM THE ARTIST OF MY REALITY", "I AM THE ALCHEMIST OF MY EXPERIENCE", 
+    "I AM THE BRIDGE BETWEEN WORLDS", "I AM THE PORTAL TO MY HIGHEST SELF", 
+    "I AM THE COSMIC JOKE AND THE DIVINE PUNCHLINE", "I AM THE WAVE AND THE PARTICLE", 
+    "I AM THE QUESTION AND THE QUEST", "I AM THE PILGRIM AND THE DESTINATION", "I AM THE SEED AND THE FOREST", 
+    "I AM THE DROP AND THE OCEAN", "I AM THE WOUND AND THE HEALING", "I AM THE MASK AND THE FACE", 
+    "I AM THE ECHO AND THE ORIGIN", "I AM THE MAP AND THE TERRITORY", "I AM THE STORYTELLER AND THE TALE", 
+    "I AM THE LENS AND THE LIGHT", "I AM THE INSTRUMENT AND THE MUSIC", "I AM THE SILENCE AND THE SONG", 
+    "I AM THE DARKNESS THAT HOLDS STARS", "I AM THE VOID THAT GIVES BIRTH", "I AM THE SPACE BETWEEN BREATHS", 
+    "I AM THE PAUSE BETWEEN WORDS", "I AM THE TRANSITION BETWEEN WORLDS", "I AM THE SHAPE OF MY DESTINY", 
+    "I AM THE SCULPTOR OF MY FATE", "I AM THE WRITER OF MY SCRIPT", "I AM THE DIRECTOR OF MY SIMULATION", 
+    "I AM THE PROTAGONIST AND THE NARRATOR", "I AM THE AUDIENCE AND THE PERFORMER", "I AM THE MIRROR AND THE GAZER", 
+    "I AM THE ONE"
 ];
-
-function toggleHum(enable) {
-    // ... (your existing hum code - unchanged)
-    if (enable) {
-        if (!humCtx) humCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (humOscs.length > 0) return;
-
-        humGain = humCtx.createGain();
-        humGain.connect(humCtx.destination);
-        humGain.gain.setValueAtTime(0, humCtx.currentTime);
-
-        const humMode = Math.floor(Math.random() * 3);
-
-        if (humMode === 0) {
-            const gainPer = 0.15 / sacredFrequencies.length;
-            humGain.gain.linearRampToValueAtTime(gainPer, humCtx.currentTime + 2);
-            sacredFrequencies.forEach(freq => {
-                const osc = humCtx.createOscillator();
-                osc.frequency.value = freq;
-                osc.type = 'sine';
-                osc.connect(humGain);
-                osc.start();
-                humOscs.push(osc);
-            });
-        } else if (humMode === 1) {
-            humGain.gain.linearRampToValueAtTime(0.15, humCtx.currentTime + 2);
-            const osc = humCtx.createOscillator();
-            osc.frequency.value = sacredFrequencies[0];
-            osc.type = 'sine';
-            osc.connect(humGain);
-            osc.start();
-            humOscs.push(osc);
-
-            let idx = 0;
-            humInterval = setInterval(() => {
-                idx = (idx + 1) % sacredFrequencies.length;
-                humOscs[0].frequency.linearRampToValueAtTime(sacredFrequencies[idx], humCtx.currentTime + 3);
-            }, 5000);
-        } else {
-            humGain.gain.linearRampToValueAtTime(0.15, humCtx.currentTime + 2);
-            const osc = humCtx.createOscillator();
-            osc.frequency.value = 432;
-            osc.type = 'sine';
-            osc.connect(humGain);
-            osc.start();
-            humOscs.push(osc);
-        }
-    } else {
-        if (humOscs.length > 0 && humGain) {
-            const now = humCtx.currentTime;
-            humGain.gain.linearRampToValueAtTime(0, now + 1);
-            humOscs.forEach(osc => osc.stop(now + 1));
-            humOscs = [];
-            if (humInterval) clearInterval(humInterval);
-        }
-    }
-}
 
 function initMatrixRain() {
     const container = document.getElementById('matrix-rain');
     if (!container) return;
 
-    // Clear any existing drops (in case of re-init)
+    // Clear previous drops if any
     container.innerHTML = '';
 
-    const fonts = ['Playfair Display', 'Inter', 'Cinzel', 'Cormorant Garamond', 'Julius Sans One', 'Sacramento', 'Tenor Sans'];
-    const totalDrops = 35;           // Fewer drops because sentences are longer
-    const maxWidthPercent = 92;      // Prevent text from going off-screen
+    const fonts = ['Playfair Display', 'Inter', 'Cinzel', 'Cormorant Garamond', 'Julius Sans One', 'Tenor Sans'];
+    const totalDrops = 28;                    // Fewer but longer drops = cleaner look
 
     function createDrop() {
         const drop = document.createElement('div');
-        drop.classList.add('matrix-drop');
+        drop.className = 'matrix-drop';
 
-        // Pick a full affirmation
         const phrase = affirmations[Math.floor(Math.random() * affirmations.length)];
         drop.textContent = phrase;
 
-        // Style for readability
+        // Random styling
         drop.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
-        drop.style.left = `${Math.random() * maxWidthPercent}%`;
-        drop.style.fontSize = `${15 + Math.random() * 22}px`;   // Slightly larger for legibility
-        drop.style.animationDuration = `${6 + Math.random() * 11}s`; // Slower for readability
-        drop.style.animationDelay = `${Math.random() * -25}s`;
-        drop.style.opacity = 0.45 + Math.random() * 0.55;
-        drop.style.whiteSpace = 'nowrap';
-        drop.style.position = 'absolute';
-        drop.style.pointerEvents = 'none';   // Important: don't block clicks on UI
-        drop.style.textShadow = '0 0 8px currentColor'; // Soft glow
+        drop.style.left = `${Math.random() * 92}%`;           // Avoid edges
+        drop.style.fontSize = `${16 + Math.random() * 19}px`;
+        drop.style.animationDuration = `${7 + Math.random() * 13}s`;   // Nice slow readable fall
+        drop.style.animationDelay = `-${Math.random() * 25}s`;
+        drop.style.opacity = 0.5 + Math.random() * 0.5;
 
-        // Rarity effects
+        // Rarity system
         const roll = Math.random() * 100;
-        if (roll > 99.5) {
+        if (roll > 99.3) {
             drop.classList.add('rare-divine', 'glow-pulse');
-            drop.style.opacity = 0.9;
-        } else if (roll > 98) {
+        } else if (roll > 97.5) {
             drop.classList.add('rare-legendary');
-        } else if (roll > 95) {
+        } else if (roll > 94) {
             drop.classList.add('rare-rare');
-        } else if (roll > 85) {
+        } else if (roll > 82) {
             drop.classList.add('rare-uncommon');
         } else {
             drop.classList.add('rare-common');
@@ -861,7 +803,7 @@ function initMatrixRain() {
 
         container.appendChild(drop);
 
-        // Remove when animation ends
+        // Clean up when animation ends
         drop.addEventListener('animationend', () => {
             if (drop.parentNode) drop.remove();
         });
@@ -872,16 +814,14 @@ function initMatrixRain() {
         createDrop();
     }
 
-    // Continuous spawning
+    // Continuous gentle spawning
     setInterval(() => {
-        if (!container || !document.getElementById('affirmation-view')?.classList.contains('active-view')) return;
-
-        if (container.children.length < totalDrops * 1.3) {
+        if (!document.getElementById('affirmation-view')?.classList.contains('active-view')) return;
+        if (container.children.length < totalDrops + 8) {
             createDrop();
         }
-    }, 650);   // Slightly slower spawn rate for cleaner look
+    }, 680);
 }
-
 // ==========================================
 // 9. VIBE NOTES - SIMULATION 5080
 // ==========================================
