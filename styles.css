@@ -12,7 +12,6 @@
     --font-display: 'Playfair Display', serif;
     --font-ui: 'Inter', sans-serif;
 
-    /* Rarity Gradients */
     --rare-common: linear-gradient(to bottom, #FFD700, #8A2BE2);
     --rare-uncommon: linear-gradient(to bottom, #00FFFF, #008080);
     --rare-rare: linear-gradient(to bottom, #50C878, #228B22);
@@ -37,7 +36,6 @@ body.no-scroll {
     width: 100%; 
 }
 
-/* --- SPA VIEW UTILITIES --- */
 .active-view { 
     display: block; 
     animation: fadeIn 0.5s ease; 
@@ -57,7 +55,7 @@ body.no-scroll {
 }
 
 /* =========================================
-   PREFACE / AGE-GATE (18+) SCREEN - FIXED
+   PREFACE / AGE-GATE SCREEN
    ========================================= */
 .preface-body {
     background: #000;
@@ -712,6 +710,31 @@ body.no-scroll {
     border-left: 3px solid #667eea;
 }
 
+.typing-indicator {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: 12px 18px;
+    width: fit-content;
+}
+
+.typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background: #667eea;
+    border-radius: 50%;
+    display: inline-block;
+    animation: typingBounce 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typingBounce {
+    0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
 .chat-input-area {
     display: flex;
     gap: 15px;
@@ -755,7 +778,7 @@ body.no-scroll {
 }
 
 /* =========================================
-   8. AFFIRMATION / MATRIX RAIN STYLES
+   8. AFFIRMATION / MATRIX RAIN STYLES - FIXED
    ========================================= */
 .next-sim-body {
     position: relative;
@@ -772,15 +795,16 @@ body.no-scroll {
     z-index: 1;
 }
 
-.matrix-col {
+.matrix-drop {
     position: absolute;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 14px;
+    top: -20px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
     white-space: nowrap;
-    opacity: 0;
-    animation: fall linear infinite;
     pointer-events: none;
     text-shadow: 0 0 5px currentColor;
+    animation: fall linear infinite;
+    font-weight: 500;
 }
 
 @keyframes fall {
@@ -788,7 +812,7 @@ body.no-scroll {
         transform: translateY(-100vh) rotate(0deg);
         opacity: 0;
     }
-    10% {
+    5% {
         opacity: 1;
     }
     90% {
@@ -800,11 +824,28 @@ body.no-scroll {
     }
 }
 
-.rare-common { color: #FFD700; text-shadow: 0 0 10px #FFD700; }
-.rare-uncommon { color: #00FFFF; text-shadow: 0 0 10px #00FFFF; }
-.rare-rare { color: #50C878; text-shadow: 0 0 10px #50C878; }
-.rare-legendary { color: #FF4444; text-shadow: 0 0 15px #FF4444; animation-duration: 4s !important; }
-.rare-divine { color: #FFFFFF; text-shadow: 0 0 20px #FFFFFF, 0 0 30px #FFFFFF; animation-duration: 3s !important; }
+.rare-common { 
+    color: #FFD700; 
+    text-shadow: 0 0 8px #FFD700; 
+}
+.rare-uncommon { 
+    color: #00FFFF; 
+    text-shadow: 0 0 8px #00FFFF; 
+}
+.rare-rare { 
+    color: #50C878; 
+    text-shadow: 0 0 10px #50C878; 
+}
+.rare-legendary { 
+    color: #FF4444; 
+    text-shadow: 0 0 12px #FF4444; 
+    animation-duration: 3s !important; 
+}
+.rare-divine { 
+    color: #FFFFFF; 
+    text-shadow: 0 0 15px #FFFFFF, 0 0 25px #FFFFFF; 
+    animation-duration: 2.5s !important; 
+}
 
 .glow-pulse {
     animation: glowPulse 1s ease-in-out infinite;
@@ -812,7 +853,7 @@ body.no-scroll {
 
 @keyframes glowPulse {
     0%, 100% { text-shadow: 0 0 10px #fff, 0 0 20px #fff; }
-    50% { text-shadow: 0 0 20px #fff, 0 0 40px #fff, 0 0 60px #fff; }
+    50% { text-shadow: 0 0 20px #fff, 0 0 40px #fff; }
 }
 
 .affirmation-center {
@@ -858,7 +899,7 @@ body.no-scroll {
 }
 
 /* =========================================
-   9. VIBE NOTES - SIMULATION 5080 STYLES
+   9. VIBE NOTES STYLES
    ========================================= */
 .notes-container {
     padding: 40px 20px;
@@ -989,7 +1030,6 @@ body.no-scroll {
     margin-top: 40px;
 }
 
-/* Note Modal */
 .note-modal {
     position: fixed;
     inset: 0;
