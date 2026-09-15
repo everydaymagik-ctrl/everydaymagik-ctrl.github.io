@@ -85,7 +85,10 @@ function ensurePlayerInitialized() {
 // ==========================================
 function openReader(event, pdfPath) {
     if (window.innerWidth <= 768) {
-        window.open(pdfPath, '_blank');
+        // let the native <a target="_blank"> navigation handle it here -
+        // a programmatic window.open() on top of it is redundant and gets
+        // silently blocked by popup blockers in some mobile browsers,
+        // which is why the PDF would sometimes just fail to open
         return;
     }
 
@@ -93,17 +96,13 @@ function openReader(event, pdfPath) {
 
     const overlay = document.getElementById('pdf-reader-overlay');
     const frame = document.getElementById('pdf-frame');
-    
+
     if (overlay && frame) {
-        let params = "";
-        if (pdfPath.includes('01-book')) {
-            params = "#page=1&zoom=90&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
-        } else if (pdfPath.includes('research')) {
-            params = "#page=1&view=FitH&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
-        } else {
-            params = "#page=1&zoom=50&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
-        }
-        
+        // fit-to-width for every document - the old per-file zoom values
+        // (zoom=50 for 8 of the 9 books) rendered the page tiny and stuck
+        // in the corner instead of filling the reader, which looked broken
+        const params = "#page=1&view=FitH&pagemode=none&scrollbar=0&toolbar=0&navpanes=0";
+
         frame.src = pdfPath + params;
         overlay.classList.remove('hidden-view');
         document.body.classList.add('no-scroll');
