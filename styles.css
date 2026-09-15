@@ -932,11 +932,20 @@ body.shake {
 .gem-diamond  {
     color: #ffffff;
     font-weight: 700;
-    animation: diamondShimmer 1.6s ease-in-out infinite;
 }
 
-.glow-pulse {
-    animation: glowPulse 1.9s ease-in-out infinite alternate;
+/* Drops with a secondary glow animation must keep matrixFall running
+   alongside it - the `animation` shorthand replaces the whole stack,
+   so these combos are declared explicitly rather than relying on
+   .glow-pulse / .gem-diamond alone (which would freeze the drop
+   off-screen forever). JS sets per-drop timing as comma-separated
+   values matching this animation-name order. */
+.matrix-drop.glow-pulse {
+    animation: matrixFall linear forwards, glowPulse 1.9s ease-in-out infinite alternate;
+}
+
+.matrix-drop.gem-diamond {
+    animation: matrixFall linear forwards, diamondShimmer 1.6s ease-in-out infinite;
 }
 
 @keyframes glowPulse {

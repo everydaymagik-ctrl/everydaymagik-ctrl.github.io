@@ -866,8 +866,14 @@ function initMatrixRain() {
         // rarer finds linger longer - easier to catch and admire
         duration *= rarityDurationMult;
 
-        drop.style.animationDuration = `${duration}s`;
-        drop.style.animationDelay = `-${Math.random() * duration}s`;
+        // drops with a second (glow) animation need per-animation timing,
+        // comma-separated in the same order as the CSS animation-name list,
+        // otherwise the single value would apply to both animations and the
+        // glow would inherit the fall's multi-second duration
+        const hasGlow = drop.classList.contains('glow-pulse') || drop.classList.contains('gem-diamond');
+        const glowDuration = drop.classList.contains('gem-diamond') ? '1.6s' : '1.9s';
+        drop.style.animationDuration = hasGlow ? `${duration}s, ${glowDuration}` : `${duration}s`;
+        drop.style.animationDelay = hasGlow ? `-${Math.random() * duration}s, 0s` : `-${Math.random() * duration}s`;
         drop.style.fontSize = `${baseFontSize * sizeMultiplier}px`;
 
         container.appendChild(drop);
