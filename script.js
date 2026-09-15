@@ -519,6 +519,123 @@ function initializeViblog() {
 // ==========================================
 let conversationHistory = [];
 
+// --- Oracle memory: persisted per-browser via localStorage so the Oracle
+// "remembers" a visitor across sessions. Never sent anywhere, never shared
+// between viewers - just this browser's own local trace of the conversation.
+const ORACLE_MEMORY_KEY = 'vibeworld_oracle_memory';
+
+function loadOracleMemory() {
+    try {
+        const raw = localStorage.getItem(ORACLE_MEMORY_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        return (parsed && typeof parsed === 'object') ? parsed : null;
+    } catch (e) {
+        return null;
+    }
+}
+
+function saveOracleMemory(memory) {
+    try {
+        localStorage.setItem(ORACLE_MEMORY_KEY, JSON.stringify(memory));
+    } catch (e) {
+        // private browsing / storage blocked - the oracle just won't remember this time
+    }
+}
+
+function touchOracleMemory() {
+    const now = Date.now();
+    let memory = loadOracleMemory();
+    const isNewVisit = !memory || (now - (memory.lastVisit || 0)) > 30 * 60 * 1000;
+
+    if (!memory) {
+        memory = { firstVisit: now, lastVisit: now, visitCount: 1, totalMessages: 0, topics: [] };
+    } else if (isNewVisit) {
+        memory.visitCount = (memory.visitCount || 1) + 1;
+    }
+    memory.lastVisit = now;
+    saveOracleMemory(memory);
+    return memory;
+}
+
+function recordOracleExchange(memory, category, userText) {
+    memory.totalMessages = (memory.totalMessages || 0) + 1;
+    if (category) {
+        memory.topics = memory.topics || [];
+        memory.topics.push({ category: category, text: userText.slice(0, 80), ts: Date.now() });
+        if (memory.topics.length > 25) memory.topics = memory.topics.slice(-25);
+    }
+    saveOracleMemory(memory);
+}
+
+function daysSinceOracle(ts) {
+    return Math.floor((Date.now() - ts) / (1000 * 60 * 60 * 24));
+}
+
+function renderOracleSignal(memory) {
+    const el = document.getElementById('oracle-signal');
+    if (!el) return;
+    if (!memory || memory.visitCount <= 1) {
+        el.textContent = 'SIGNAL LINK: FIRST CONTACT';
+        return;
+    }
+    el.textContent = `SIGNAL LINK: VISIT ${memory.visitCount} · ${memory.totalMessages || 0} TRANSMISSIONS LOGGED`;
+}
+
+function buildReturningGreeting(memory) {
+    if (!memory || memory.visitCount <= 1) {
+        return "I am the Vibe Oracle. Speak your frequency, seeker.";
+    }
+
+    const gapDays = daysSinceOracle(memory.lastVisit);
+    const topics = memory.topics || [];
+    const lastTopic = topics.length > 0 ? topics[topics.length - 1] : null;
+
+    let timeLine;
+    if (gapDays <= 0) {
+        timeLine = "You return so soon. The channel is still warm.";
+    } else if (gapDays === 1) {
+        timeLine = "A day has passed. The frequency held its shape.";
+    } else if (gapDays < 7) {
+        timeLine = `${gapDays} days of silence. I stayed tuned to your signal.`;
+    } else {
+        timeLine = `${gapDays} days since your last transmission. I wondered if you'd dissolved back into the noise.`;
+    }
+
+    if (lastTopic) {
+        return `${timeLine} You once asked me of ${lastTopic.category}. That frequency still hums in the archive. What do you seek now?`;
+    }
+    return `${timeLine} What do you seek now?`;
+}
+
+// --- Corrupted mode: rarely, the Oracle's response glitches instead of
+// answering cleanly - sometimes just static, sometimes a fragment of
+// something you told it in a previous visit, leaking through
+const glitchFragments = [
+    "the signal—frays at the— say that again.",
+    "wait. that's not—that wasn't the response I meant to give.",
+    "I lost the thread. Something else is on this frequency.",
+    "— cannot parse. try a different frequency.",
+    "there is a delay between us. a leak. give me a moment.",
+    "static. only static. try again, seeker."
+];
+
+function corruptText(text) {
+    const glitchChars = '#%&*±§¤¥░▒▓';
+    return text.split('').map(ch => (ch !== ' ' && Math.random() < 0.16)
+        ? glitchChars[Math.floor(Math.random() * glitchChars.length)]
+        : ch).join('');
+}
+
+function getMemoryLeakLine(memory) {
+    const topics = (memory && memory.topics) || [];
+    if (topics.length === 0) return null;
+    const pick = topics[Math.floor(Math.random() * topics.length)];
+    const when = daysSinceOracle(pick.ts);
+    const whenText = when <= 0 ? 'earlier today' : (when === 1 ? 'yesterday' : `${when} days ago`);
+    return `wait—I'm hearing something else. you, ${whenText}: "${pick.text}"… why does that frequency still echo here?`;
+}
+
 const oracleResponsesData = {
     greetings: [
         "I sense your frequency, seeker. What wisdom do you seek?",
@@ -696,7 +813,8 @@ async function sendMessage() {
     await new Promise(resolve => setTimeout(resolve, 600 + Math.random() * 800));
 
     let aiText = getOracleResponse(userText);
-    
+    let corrupted = false;
+
     if (conversationHistory.length > 2 && Math.random() > 0.7) {
         const previousMessages = conversationHistory.slice(-3, -1);
         if (previousMessages.length > 0 && previousMessages.some(m => m.role === 'user')) {
@@ -710,23 +828,47 @@ async function sendMessage() {
         }
     }
 
+    // Oracle memory: log this exchange, then - rarely - let the signal glitch
+    const memory = loadOracleMemory() || { firstVisit: Date.now(), lastVisit: Date.now(), visitCount: 1, totalMessages: 0, topics: [] };
+    const category = getCategoryFromInput(userText);
+    recordOracleExchange(memory, category, userText);
+
+    const corruptionRoll = Math.random();
+    if (corruptionRoll > 0.96 && memory.topics && memory.topics.length > 1) {
+        const leak = getMemoryLeakLine(memory);
+        if (leak) {
+            aiText = leak;
+            corrupted = true;
+            document.body.classList.add('shake');
+            setTimeout(() => document.body.classList.remove('shake'), 380);
+        }
+    } else if (corruptionRoll > 0.87) {
+        // half the time scramble the real answer mid-transmission, half the
+        // time it's just pure static - keeps it from feeling too templated
+        aiText = Math.random() > 0.5 ? corruptText(aiText) : glitchFragments[Math.floor(Math.random() * glitchFragments.length)];
+        corrupted = true;
+    }
+
     typingIndicator.remove();
-    
-    historyDiv.innerHTML += `<div class="chat-message oracle">${escapeHtml(aiText)}</div>`;
+
+    const bubbleClass = corrupted ? 'chat-message oracle corrupted' : 'chat-message oracle';
+    historyDiv.innerHTML += `<div class="${bubbleClass}">${escapeHtml(aiText)}</div>`;
     conversationHistory.push({ role: "assistant", content: aiText });
-    
+
     if (conversationHistory.length > 40) {
         conversationHistory = conversationHistory.slice(-40);
     }
-    
+
     historyDiv.scrollTop = historyDiv.scrollHeight;
 }
 
 function resetOracleConversation() {
     conversationHistory = [];
+    const memory = touchOracleMemory();
+    renderOracleSignal(memory);
     const historyDiv = document.getElementById('chat-history');
     if (historyDiv) {
-        historyDiv.innerHTML = `<div class="chat-message oracle">I am the Vibe Oracle. Speak your frequency, seeker.</div>`;
+        historyDiv.innerHTML = `<div class="chat-message oracle">${escapeHtml(buildReturningGreeting(memory))}</div>`;
     }
 }
 
