@@ -829,7 +829,7 @@ function initMatrixRain() {
     container.innerHTML = '';
 
     const fonts = ['Playfair Display', 'Inter', 'Cinzel', 'Cormorant Garamond', 'Julius Sans One', 'Tenor Sans'];
-    const totalDrops = 24;
+    const totalDrops = 55;
 
     function createDrop() {
         const drop = document.createElement('div');
@@ -839,18 +839,27 @@ function initMatrixRain() {
         drop.textContent = phrase;
 
         drop.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
-        drop.style.left = `${Math.random() * 92}%`;
-        drop.style.fontSize = `${16 + Math.random() * 19}px`;
-        drop.style.animationDuration = `${8 + Math.random() * 14}s`;
-        drop.style.animationDelay = `-${Math.random() * 28}s`;
-        drop.style.opacity = 0.45 + Math.random() * 0.55;
+        drop.style.left = `${Math.random() * 94}%`;
+
+        // depth simulates distance: closer drops are bigger, brighter, and fall faster
+        const depth = Math.random();
+        const baseFontSize = 6 + depth * 7; // 6-13px - tiny, drizzle-sized
+        const duration = 2.4 + (1 - depth) * 4.2; // 2.4-6.6s - heavy rain speed
+
+        drop.style.animationDuration = `${duration}s`;
+        drop.style.animationDelay = `-${Math.random() * duration}s`;
+        drop.style.opacity = 0.28 + depth * 0.5;
 
         const roll = Math.random() * 100;
-        if (roll > 99.3) drop.classList.add('rare-divine', 'glow-pulse');
-        else if (roll > 97.5) drop.classList.add('rare-legendary');
-        else if (roll > 94) drop.classList.add('rare-rare');
-        else if (roll > 82) drop.classList.add('rare-uncommon');
-        else drop.classList.add('rare-common');
+        let sizeMultiplier = 1;
+        if (roll > 99.7) { drop.classList.add('gem-diamond'); sizeMultiplier = 2; }
+        else if (roll > 99.0) { drop.classList.add('gem-ruby', 'glow-pulse'); sizeMultiplier = 1.75; }
+        else if (roll > 96.5) { drop.classList.add('gem-emerald', 'glow-pulse'); sizeMultiplier = 1.5; }
+        else if (roll > 90) { drop.classList.add('gem-sapphire'); sizeMultiplier = 1.3; }
+        else if (roll > 78) { drop.classList.add('gem-citrine'); sizeMultiplier = 1.15; }
+        else drop.classList.add('gem-quartz');
+
+        drop.style.fontSize = `${baseFontSize * sizeMultiplier}px`;
 
         container.appendChild(drop);
 
@@ -865,10 +874,11 @@ function initMatrixRain() {
 
     setInterval(() => {
         if (!document.getElementById('affirmation-view')?.classList.contains('active-view')) return;
-        if (container.children.length < totalDrops + 6) {
+        if (container.children.length < totalDrops + 15) {
             createDrop();
+            if (Math.random() > 0.55) createDrop();
         }
-    }, 720);
+    }, 130);
 }
 
 // ==========================================

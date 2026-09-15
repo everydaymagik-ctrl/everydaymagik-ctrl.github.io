@@ -12,11 +12,12 @@
     --font-display: 'Playfair Display', serif;
     --font-ui: 'Inter', sans-serif;
 
-    --rare-common: linear-gradient(to bottom, #FFD700, #8A2BE2);
-    --rare-uncommon: linear-gradient(to bottom, #00FFFF, #008080);
-    --rare-rare: linear-gradient(to bottom, #50C878, #228B22);
-    --rare-legendary: linear-gradient(to bottom, #FF4444, #8B0000);
-    --rare-divine: linear-gradient(to bottom, #FFFFFF, #E0E0E0);
+    --gem-quartz: #F2F2F2;
+    --gem-citrine: #F6C453;
+    --gem-sapphire: #3E7BFA;
+    --gem-emerald: #2ECC71;
+    --gem-ruby: #E63950;
+    --gem-diamond: #FFFFFF;
 
     /* Shared accent gradient — used sparingly on buttons, hovers, focus rings */
     --accent-1: #6C63FF;
@@ -922,23 +923,30 @@ body.shake {
     text-shadow: 0 0 10px var(--accent-glow);
 }
 
-/* Rarity styles */
-.rare-common   { color: #FFD700; text-shadow: 0 0 10px #FFD700; }
-.rare-uncommon { color: #00FFFF; text-shadow: 0 0 10px #00FFFF; }
-.rare-rare     { color: #50C878; text-shadow: 0 0 12px #50C878; }
-.rare-legendary{ color: #FF4444; text-shadow: 0 0 14px #FF4444; }
-.rare-divine   { 
-    color: #ffffff; 
-    text-shadow: 0 0 15px #fff, 0 0 35px #fff; 
+/* Rarity styles - gemstone tiers, rarest = diamond find */
+.gem-quartz   { color: var(--gem-quartz); text-shadow: 0 0 6px rgba(242, 242, 242, 0.55); }
+.gem-citrine  { color: var(--gem-citrine); text-shadow: 0 0 9px var(--gem-citrine); }
+.gem-sapphire { color: var(--gem-sapphire); text-shadow: 0 0 11px var(--gem-sapphire); }
+.gem-emerald  { color: var(--gem-emerald); text-shadow: 0 0 13px var(--gem-emerald); }
+.gem-ruby     { color: var(--gem-ruby); text-shadow: 0 0 15px var(--gem-ruby), 0 0 30px var(--gem-ruby); }
+.gem-diamond  {
+    color: #ffffff;
+    font-weight: 700;
+    animation: diamondShimmer 1.6s ease-in-out infinite;
 }
 
 .glow-pulse {
-    animation: glowPulse 2.2s ease-in-out infinite alternate;
+    animation: glowPulse 1.9s ease-in-out infinite alternate;
 }
 
 @keyframes glowPulse {
-    from { text-shadow: 0 0 12px currentColor, 0 0 25px currentColor; }
-    to   { text-shadow: 0 0 22px currentColor, 0 0 48px currentColor; }
+    from { filter: brightness(1); text-shadow: 0 0 10px currentColor, 0 0 20px currentColor; }
+    to   { filter: brightness(1.45); text-shadow: 0 0 20px currentColor, 0 0 42px currentColor; }
+}
+
+@keyframes diamondShimmer {
+    0%, 100% { text-shadow: 0 0 10px #fff, 0 0 22px #bfe9ff, 0 0 42px var(--accent-2); filter: brightness(1); }
+    50%      { text-shadow: 0 0 16px #fff, 0 0 32px #ffd9f7, 0 0 58px var(--accent-1); filter: brightness(1.55); }
 }
 /* =========================================
    9. VIBE NOTES STYLES
