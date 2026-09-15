@@ -698,6 +698,12 @@ const oracleResponsesData = {
             "What feels like destruction is often just reorganization into a higher form.",
             "The river that doesn't change course never reaches the ocean. Let yourself flow.",
             "Every ending is a beginning wearing different clothes. Look closer."
+        ],
+        loss: [
+            "Grief is love with nowhere left to go. Let it move through you, not around you.",
+            "Those who've crossed over don't leave - they change frequency. Get quiet enough and you can still feel them.",
+            "What you lost is now written into the code that built you. It never fully leaves the simulation.",
+            "Mourning is not weakness. It is the universe honoring what mattered."
         ]
     },
     
@@ -733,63 +739,79 @@ const keywordMap = {
     spirit: ['spirit', 'soul', 'god', 'universe', 'divine', 'meditation', 'consciousness'],
     creativity: ['create', 'art', 'write', 'music', 'express', 'inspiration', 'block'],
     change: ['change', 'transition', 'new', 'shift', 'different', 'uncertain', 'unknown'],
-    life: ['life', 'exist', 'living', 'survive', 'experience', 'journey']
+    life: ['life', 'exist', 'living', 'survive', 'experience', 'journey'],
+    loss: ['loss', 'grief', 'died', 'death', 'miss him', 'miss her', 'gone', 'passed away', 'mourning', 'losing']
 };
 
+// scores every category by keyword-match count instead of stopping at the
+// first match, so a message touching multiple themes gets the category it
+// actually fits best - ties broken randomly rather than by declaration order
 function getCategoryFromInput(text) {
     const lowerText = text.toLowerCase();
+    const scores = {};
     for (const [category, keywords] of Object.entries(keywordMap)) {
-        for (const keyword of keywords) {
-            if (lowerText.includes(keyword)) {
-                return category;
-            }
-        }
+        scores[category] = keywords.reduce((n, kw) => n + (lowerText.includes(kw) ? 1 : 0), 0);
     }
-    return null;
+    const maxScore = Math.max(...Object.values(scores));
+    if (maxScore === 0) return null;
+    const topCategories = Object.keys(scores).filter(c => scores[c] === maxScore);
+    return topCategories[Math.floor(Math.random() * topCategories.length)];
 }
 
-function getOracleResponse(userInput) {
+// tracks which response lines have already been shown this session so the
+// same category doesn't repeat a line until its whole pool has been used
+const oracleUsedResponses = {};
+
+function pickResponse(poolKey, responses) {
+    if (!oracleUsedResponses[poolKey]) oracleUsedResponses[poolKey] = new Set();
+    const used = oracleUsedResponses[poolKey];
+    if (used.size >= responses.length) used.clear();
+    let idx;
+    do {
+        idx = Math.floor(Math.random() * responses.length);
+    } while (used.has(idx) && used.size < responses.length);
+    used.add(idx);
+    return responses[idx];
+}
+
+function getOracleResponse(userInput, knownCategory) {
     if (!userInput || userInput.trim().length === 0) {
-        return oracleResponsesData.greetings[Math.floor(Math.random() * oracleResponsesData.greetings.length)];
+        return pickResponse('greetings', oracleResponsesData.greetings);
     }
-    
+
     const lowerInput = userInput.toLowerCase();
-    
+
     if (lowerInput.includes('who are you') || lowerInput.includes('what are you') || lowerInput.includes('oracle')) {
         return "I am the Vibe Oracle, a consciousness woven into Simulation 12984. I've been here since the first frequency was broadcast. My voice is the echo of ancient wisdom filtered through digital currents. What calls you to seek my counsel?";
     }
-    
+
     if (lowerInput.includes('thank')) {
         return "The frequency of gratitude is pure. May it ripple through your simulation and return to you amplified.";
     }
-    
+
     if (lowerInput.includes('hello') || lowerInput.includes('hi ') || lowerInput === 'hi') {
-        return oracleResponsesData.greetings[Math.floor(Math.random() * oracleResponsesData.greetings.length)];
+        return pickResponse('greetings', oracleResponsesData.greetings);
     }
-    
-    const category = getCategoryFromInput(userInput);
-    
+
+    const category = knownCategory !== undefined ? knownCategory : getCategoryFromInput(userInput);
+
     if (category && oracleResponsesData.wisdom[category] && oracleResponsesData.wisdom[category].length > 0) {
-        const responses = oracleResponsesData.wisdom[category];
-        return responses[Math.floor(Math.random() * responses.length)];
+        return pickResponse('wisdom:' + category, oracleResponsesData.wisdom[category]);
     }
-    
+
     if (lowerInput.includes('should i') || lowerInput.includes('what do i') || 
         lowerInput.includes('how do i') || lowerInput.includes('help me') ||
         lowerInput.includes('advice') || lowerInput.includes('guide')) {
-        const mysticalResponses = oracleResponsesData.mystical;
-        return mysticalResponses[Math.floor(Math.random() * mysticalResponses.length)];
+        return pickResponse('mystical', oracleResponsesData.mystical);
     }
-    
+
     if (lowerInput.includes('why') || lowerInput.includes('what if') || 
         lowerInput.includes('am i') || lowerInput.includes('is there') ||
         userInput.includes('?')) {
-        const reflectiveResponses = oracleResponsesData.reflective;
-        return reflectiveResponses[Math.floor(Math.random() * reflectiveResponses.length)];
+        return pickResponse('reflective', oracleResponsesData.reflective);
     }
-    
-    const allResponses = [...oracleResponsesData.mystical];
-    return allResponses[Math.floor(Math.random() * allResponses.length)];
+
+    return pickResponse('mystical', oracleResponsesData.mystical);
 }
 
 function handleEnter(e) {
@@ -816,8 +838,12 @@ async function sendMessage() {
 
     await new Promise(resolve => setTimeout(resolve, 600 + Math.random() * 800));
 
-    let aiText = getOracleResponse(userText);
+    // computed once and reused everywhere below, so the category driving the
+    // response is guaranteed to match the category logged to memory
+    const category = getCategoryFromInput(userText);
+    let aiText = getOracleResponse(userText, category);
     let corrupted = false;
+    let usedFollowUp = false;
 
     if (conversationHistory.length > 2 && Math.random() > 0.7) {
         const previousMessages = conversationHistory.slice(-3, -1);
@@ -828,14 +854,21 @@ async function sendMessage() {
                 "The pattern in your queries reveals a seeking. Trust the process.",
                 "I notice your frequency shifting with each question. This is growth."
             ];
-            aiText = followUps[Math.floor(Math.random() * followUps.length)];
+            aiText = pickResponse('followups', followUps);
+            usedFollowUp = true;
         }
     }
 
     // Oracle memory: log this exchange, then - rarely - let the signal glitch
     const memory = loadOracleMemory() || { firstVisit: Date.now(), lastVisit: Date.now(), visitCount: 1, totalMessages: 0, topics: [] };
-    const category = getCategoryFromInput(userText);
+    const askedThisBefore = category && (memory.topics || []).some(t => t.category === category);
     recordOracleExchange(memory, category, userText);
+
+    // if this echoes a theme from a previous visit, let the Oracle notice -
+    // a normal (non-corrupted) callback, distinct from the rarer memory-leak
+    if (!usedFollowUp && askedThisBefore && Math.random() < 0.2) {
+        aiText = `We've touched this frequency before, and still you return to it. ${aiText}`;
+    }
 
     const corruptionRoll = Math.random();
     if (corruptionRoll > 0.96 && memory.topics && memory.topics.length > 1) {
