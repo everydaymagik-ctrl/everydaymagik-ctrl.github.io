@@ -547,6 +547,9 @@ function touchOracleMemory() {
     const now = Date.now();
     let memory = loadOracleMemory();
     const isNewVisit = !memory || (now - (memory.lastVisit || 0)) > 30 * 60 * 1000;
+    // capture the PREVIOUS lastVisit before we overwrite it below - the
+    // greeting needs to know how long it's actually been, not "now"
+    const previousVisit = memory ? memory.lastVisit : now;
 
     if (!memory) {
         memory = { firstVisit: now, lastVisit: now, visitCount: 1, totalMessages: 0, topics: [] };
@@ -554,6 +557,7 @@ function touchOracleMemory() {
         memory.visitCount = (memory.visitCount || 1) + 1;
     }
     memory.lastVisit = now;
+    memory.previousVisit = previousVisit;
     saveOracleMemory(memory);
     return memory;
 }
@@ -587,7 +591,7 @@ function buildReturningGreeting(memory) {
         return "I am the Vibe Oracle. Speak your frequency, seeker.";
     }
 
-    const gapDays = daysSinceOracle(memory.lastVisit);
+    const gapDays = daysSinceOracle(memory.previousVisit != null ? memory.previousVisit : memory.lastVisit);
     const topics = memory.topics || [];
     const lastTopic = topics.length > 0 ? topics[topics.length - 1] : null;
 
