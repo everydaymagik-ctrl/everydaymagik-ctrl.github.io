@@ -844,21 +844,30 @@ function initMatrixRain() {
         // depth simulates distance: closer drops are bigger, brighter, and fall faster
         const depth = Math.random();
         const baseFontSize = 6 + depth * 7; // 6-13px - tiny, drizzle-sized
-        const duration = 2.4 + (1 - depth) * 4.2; // 2.4-6.6s - heavy rain speed
+        let duration = 3.2 + (1 - depth) * 5.3; // 3.2-8.5s - a touch slower, still rain not hail
 
-        drop.style.animationDuration = `${duration}s`;
-        drop.style.animationDelay = `-${Math.random() * duration}s`;
-        drop.style.opacity = 0.28 + depth * 0.5;
+        // multi-speed: some drops randomly drift by in slow motion so a few
+        // phrases are always easy to catch
+        const isSloMo = Math.random() < 0.1;
+        if (isSloMo) duration *= 2.6;
+
+        drop.style.opacity = isSloMo ? Math.min(0.9, 0.5 + depth * 0.5) : 0.28 + depth * 0.5;
 
         const roll = Math.random() * 100;
         let sizeMultiplier = 1;
-        if (roll > 99.7) { drop.classList.add('gem-diamond'); sizeMultiplier = 2; }
-        else if (roll > 99.0) { drop.classList.add('gem-ruby', 'glow-pulse'); sizeMultiplier = 1.75; }
-        else if (roll > 96.5) { drop.classList.add('gem-emerald', 'glow-pulse'); sizeMultiplier = 1.5; }
-        else if (roll > 90) { drop.classList.add('gem-sapphire'); sizeMultiplier = 1.3; }
+        let rarityDurationMult = 1;
+        if (roll > 99.7) { drop.classList.add('gem-diamond'); sizeMultiplier = 2; rarityDurationMult = 2.6; }
+        else if (roll > 99.0) { drop.classList.add('gem-ruby', 'glow-pulse'); sizeMultiplier = 1.75; rarityDurationMult = 2.1; }
+        else if (roll > 96.5) { drop.classList.add('gem-emerald', 'glow-pulse'); sizeMultiplier = 1.5; rarityDurationMult = 1.7; }
+        else if (roll > 90) { drop.classList.add('gem-sapphire'); sizeMultiplier = 1.3; rarityDurationMult = 1.35; }
         else if (roll > 78) { drop.classList.add('gem-citrine'); sizeMultiplier = 1.15; }
         else drop.classList.add('gem-quartz');
 
+        // rarer finds linger longer - easier to catch and admire
+        duration *= rarityDurationMult;
+
+        drop.style.animationDuration = `${duration}s`;
+        drop.style.animationDelay = `-${Math.random() * duration}s`;
         drop.style.fontSize = `${baseFontSize * sizeMultiplier}px`;
 
         container.appendChild(drop);
