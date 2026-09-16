@@ -52,6 +52,7 @@
                     <div id="digital-clock-hidden" aria-live="polite" class="sr-only"></div>
                 </div>
                 <div class="footer-link-container">
+                    <a href="#" onclick="switchView('equator-view')" class="description">Simulation 0000 <span class="link-arrow">→</span></a>
                     <a href="#" onclick="switchView('player-view')" class="description">Simulation 1171 <span class="link-arrow">→</span></a>
                     <a href="#" onclick="switchView('viblog-view')" class="description">Simulation 1895 <span class="link-arrow">→</span></a>
                     <a href="#" onclick="switchView('library-view')" class="description">Simulation 3066 <span class="link-arrow">→</span></a>
@@ -89,6 +90,7 @@
                 <div class="track-select-grid"></div>
                 <div class="player-footer">
                     <div class="player-footer-links">
+                        <a href="#" onclick="switchView('equator-view')" class="back-link">0000 →</a>
                         <a href="#" onclick="switchView('viblog-view')" class="back-link">1895 →</a>
                         <a href="#" onclick="switchView('library-view')" class="back-link">3066 →</a>
                         <a href="#" onclick="switchView('research-view')" class="back-link">4960 →</a>
@@ -108,6 +110,7 @@
             <div id="viblog-feed"><div style="color: var(--text-muted); font-family: var(--font-ui); margin-top: 20px;">[ Awaiting data transmission... ]</div></div>
             <div class="viblog-footer">
                 <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                    <a href="#" onclick="switchView('equator-view')" class="back-link">0000 →</a>
                     <a href="#" onclick="switchView('player-view')" class="back-link">1171 →</a>
                     <a href="#" onclick="switchView('library-view')" class="back-link">3066 →</a>
                     <a href="#" onclick="switchView('research-view')" class="back-link">4960 →</a>
@@ -136,6 +139,7 @@
                     <a href="pdfs/09-book.pdf" target="_blank" class="book-item" onclick="openReader(event, this.href)"><img src="images/covers/09-cover.jpg" alt="Book 9"></a>
                 </div>
                 <div class="simulation-nav">
+                    <a href="#" onclick="switchView('equator-view')">0000 →</a>
                     <a href="#" onclick="switchView('player-view')">1171 →</a>
                     <a href="#" onclick="switchView('viblog-view')">1895 →</a>
                     <a href="#" onclick="switchView('research-view')">4960 →</a>
@@ -168,6 +172,7 @@
                         </a>
                     </div>
                     <div class="simulation-nav research-sim-nav">
+                        <a href="#" onclick="switchView('equator-view')">0000 →</a>
                         <a href="#" onclick="switchView('player-view')">1171 →</a>
                         <a href="#" onclick="switchView('viblog-view')">1895 →</a>
                         <a href="#" onclick="switchView('library-view')">3066 →</a>
@@ -197,6 +202,7 @@
                 <button id="send-btn" onclick="sendMessage()">TRANSMIT</button>
             </div>
             <div class="oracle-footer">
+                <a href="#" onclick="switchView('equator-view')" class="back-link" style="margin-right: 16px;">Simulation 0000 →</a>
                 <a href="#" onclick="switchView('home-view')" class="back-link">← Return to Base (724)</a>
             </div>
         </div>
@@ -209,6 +215,7 @@
             <div class="affirmation-text-container">
                 <p class="affirmation-main-text">I AM A BIOLOGICAL SEMICONDUCTOR</p>
             </div>
+            <a href="#" onclick="switchView('equator-view')" class="affirmation-back-link" style="margin-right: 16px;">Simulation 0000 →</a>
             <a href="#" onclick="switchView('home-view')" class="affirmation-back-link">← Return to Base (724)</a>
         </div>
     </section>
@@ -221,6 +228,7 @@
             </div>
             <div id="notes-grid" class="notes-grid"></div>
             <div class="notes-footer">
+                <a href="#" onclick="switchView('equator-view')" class="back-link" style="margin-right: 16px;">Simulation 0000 →</a>
                 <a href="#" onclick="switchView('home-view')" class="back-link">← Return to Base (724)</a>
             </div>
         </div>
@@ -238,6 +246,52 @@
                     <button class="save-btn" onclick="saveNoteFromModal()">SAVE NOTE</button>
                     <button class="cancel-btn" onclick="closeNoteModal()">CANCEL</button>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="equator-view" class="hidden-view">
+        <div class="equator-container">
+            <div class="equator-heat-banner">
+                <div class="heat-band"></div>
+                <div class="heat-shimmer"></div>
+                <h1 class="equator-title">vibeEquator_</h1>
+                <p class="equator-subtitle">Simulation 0000 &middot; 0&deg; Latitude</p>
+            </div>
+
+            <div class="equator-content">
+                <p class="equator-ode">Here, the sun does not visit &mdash; it lives. Zero degrees latitude, the line drawn around the fattest part of the world, where the light falls straight down and burns everything into brilliance: the deepest greens, the richest soil, the darkest eyes, the longest memory of the species. This is not the edge of anything. This is the center everything else was measured from.</p>
+
+                <p class="equator-ode">Every empire that ever drew a map came looking for what grows here &mdash; gold, rubber, cacao, oil, diamonds, cotton, spice, sugar, and bodies to work it out of the ground. They called the heat a curse and the people primitive, then spent five centuries proving it was worth stealing. The wealth left. The heat stayed. That is not an accident of geography. That was the business model.</p>
+
+                <p class="equator-ode">Skin does not darken to survive the sun by accident. Melanin is the oldest technology on Earth &mdash; armor built from light itself, first worn here because this is where the light was strongest and the stakes were highest. Every human being alive descends from someone who wore it. The rest of the map is a dilution gradient, not an origin story. This is Simulation 0000: the place none of it left from, and the place none of it ever fully paid back.</p>
+
+                <div class="equator-belt-list" aria-label="The equatorial belt">
+                    <span>DR Congo</span><span>Brazil</span><span>Indonesia</span><span>Colombia</span><span>Kenya</span><span>Ecuador</span><span>Nigeria</span><span>Uganda</span><span>Gabon</span><span>Somalia</span><span>Malaysia</span><span>Rwanda</span><span>Peru</span><span>Papua New Guinea</span>
+                </div>
+
+                <div class="equator-fieldnotes">
+                    <h2 class="fieldnotes-title">Field Notes_</h2>
+                    <ul>
+                        <li><strong>1884&ndash;85, Berlin.</strong> European powers partitioned the equatorial belt of Africa at a conference table, with no African delegation present.</li>
+                        <li><strong>Congo Free State.</strong> Under King Leopold II&rsquo;s personal rule, the forced extraction of rubber from the Congo Basin is estimated to have killed millions through violence, forced labor, and famine.</li>
+                        <li><strong>The resource curse.</strong> The Democratic Republic of Congo holds some of the largest cobalt, coltan, gold, and diamond reserves on Earth &mdash; and remains one of the poorest nations by GDP per capita.</li>
+                        <li><strong>The fruit republics.</strong> Foreign corporations backed coups and military interventions across equatorial Latin America to protect banana and fruit export profits well into the 20th century.</li>
+                        <li><strong>The spice and rubber trade.</strong> Colonial plantation economies across equatorial Southeast Asia extracted rubber, palm oil, and spice wealth that funded European capitals an ocean away.</li>
+                        <li><strong>Debt after empire.</strong> Many equatorial nations inherited sovereign debt, extractive infrastructure, and drawn borders designed for export &mdash; not for the people living inside them &mdash; on the day the flags came down.</li>
+                    </ul>
+                </div>
+
+                <div class="simulation-nav">
+                    <a href="#" onclick="switchView('player-view')">1171 →</a>
+                    <a href="#" onclick="switchView('viblog-view')">1895 →</a>
+                    <a href="#" onclick="switchView('library-view')">3066 →</a>
+                    <a href="#" onclick="switchView('research-view')">4960 →</a>
+                    <a href="#" onclick="switchView('notes-view')">5080 →</a>
+                    <a href="#" onclick="switchView('oracle-view')">12984 →</a>
+                    <a href="#" onclick="switchView('affirmation-view')">21008 →</a>
+                </div>
+                <div style="margin-top: 20px;"><a href="#" onclick="switchView('home-view')" class="back-link" style="opacity: 0.5; font-size: 0.8rem;">← Return to Base (724)</a></div>
             </div>
         </div>
     </section>

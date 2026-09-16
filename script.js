@@ -16,7 +16,7 @@ function setAgeVerified(verified) {
 }
 
 function switchView(viewId) {
-    const views = ['preface-view', 'home-view', 'player-view', 'viblog-view', 'library-view', 'research-view', 'oracle-view', 'affirmation-view', 'notes-view'];
+    const views = ['preface-view', 'home-view', 'player-view', 'viblog-view', 'library-view', 'research-view', 'oracle-view', 'affirmation-view', 'notes-view', 'equator-view'];
     
     views.forEach(id => {
         const el = document.getElementById(id);

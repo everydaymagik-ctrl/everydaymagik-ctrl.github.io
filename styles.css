@@ -1376,3 +1376,167 @@ body.shake {
         max-width: 90%;
     }
 }
+
+/* =========================================
+   EQUATOR STYLES (Simulation 0000)
+   ========================================= */
+.equator-container {
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+.equator-heat-banner {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    padding: 70px 30px;
+    margin-bottom: 40px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.equator-heat-banner .heat-band {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        #0a1440 0%,
+        #1c4b8c 12%,
+        #1f9bb0 22%,
+        #2ecc71 32%,
+        #f6c453 42%,
+        #f2892e 48%,
+        #e63950 54%,
+        #b3122f 60%,
+        #e63950 66%,
+        #f2892e 72%,
+        #f6c453 78%,
+        #2ecc71 86%,
+        #1f9bb0 92%,
+        #1c4b8c 97%,
+        #0a1440 100%
+    );
+    background-size: 100% 220%;
+    animation: equator-drift 18s ease-in-out infinite;
+}
+
+.equator-heat-banner .heat-shimmer {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.05) 0px,
+        rgba(255, 255, 255, 0) 3px,
+        rgba(255, 255, 255, 0.03) 6px
+    );
+    mix-blend-mode: overlay;
+    animation: equator-shimmer 6s linear infinite;
+}
+
+@keyframes equator-drift {
+    0%, 100% { background-position: 0% 0%; }
+    50% { background-position: 0% 100%; }
+}
+
+@keyframes equator-shimmer {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(12px); }
+}
+
+.equator-title {
+    position: relative;
+    font-family: var(--font-display);
+    font-size: 3rem;
+    color: #ffffff;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+    margin: 0;
+}
+
+.equator-subtitle {
+    position: relative;
+    font-family: var(--font-ui);
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    margin: 8px 0 0;
+    letter-spacing: 0.05em;
+}
+
+.equator-content {
+    padding: 0 10px;
+}
+
+.equator-ode {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--text-main);
+    margin: 0 0 28px;
+}
+
+.equator-belt-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 30px 0;
+}
+
+.equator-belt-list span {
+    font-family: var(--font-ui);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    padding: 6px 16px;
+}
+
+.equator-fieldnotes {
+    margin: 40px 0;
+    padding: 30px;
+    background: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fieldnotes-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    margin: 0 0 20px;
+    color: var(--text-main);
+}
+
+.equator-fieldnotes ul {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.equator-fieldnotes li {
+    font-family: var(--font-ui);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+}
+
+.equator-fieldnotes li strong {
+    color: var(--text-main);
+}
+
+@media (max-width: 768px) {
+    .equator-container {
+        padding: 20px;
+    }
+    .equator-heat-banner {
+        padding: 50px 20px;
+    }
+    .equator-title {
+        font-size: 2rem;
+    }
+    .equator-ode {
+        font-size: 1rem;
+    }
+}
