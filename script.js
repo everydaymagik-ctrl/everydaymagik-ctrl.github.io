@@ -1139,6 +1139,30 @@ function saveNoteFromModal() {
     }
 }
 
+// Forwards a copy of every new note to the site owner via Formspree
+// (https://formspree.io/f/xdeknlva -> everydaymagik@icloud.com). Fire-and-
+// forget: notes always save locally first regardless of whether this
+// succeeds, so a network hiccup, ad blocker, or Formspree outage never
+// blocks a visitor from keeping their own note.
+const NOTE_FORWARD_ENDPOINT = 'https://formspree.io/f/xdeknlva';
+
+function emailNoteToOwner(title, content, hasImage) {
+    fetch(NOTE_FORWARD_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+            _subject: `vibeWorld note: ${title}`,
+            title: title,
+            message: content || '(no additional text)',
+            hasImage: hasImage ? 'yes (not forwarded - view in visitor\'s own browser)' : 'no',
+            submittedAt: new Date().toISOString(),
+            source: 'Simulation 5080 - vibeNotes'
+        })
+    }).catch(() => {
+        // best-effort only - never surface this to the visitor or block their save
+    });
+}
+
 function saveNote(title, content, imageData) {
     let notes = JSON.parse(localStorage.getItem('vibeNotes') || '[]');
 
@@ -1158,6 +1182,9 @@ function saveNote(title, content, imageData) {
             color: '#' + Math.floor(Math.random() * 16777215).toString(16),
             timestamp: new Date().toISOString()
         });
+        // only forward brand-new notes, not every subsequent edit of one -
+        // this is "a visitor left a note", not "a visitor tweaked their note"
+        emailNoteToOwner(title, content, !!imageData);
     }
 
     localStorage.setItem('vibeNotes', JSON.stringify(notes));
