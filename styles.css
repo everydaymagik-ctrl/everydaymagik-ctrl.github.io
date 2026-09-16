@@ -1492,38 +1492,36 @@ body.shake {
     padding: 6px 16px;
 }
 
-.equator-fieldnotes {
-    margin: 40px 0;
+.equator-spectrum {
+    margin: 30px 0 40px;
     padding: 30px;
     background: var(--card-bg);
     border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.fieldnotes-title {
+.spectrum-title {
     font-family: var(--font-display);
     font-size: 1.4rem;
-    margin: 0 0 20px;
+    margin: 0 0 16px;
     color: var(--text-main);
 }
 
-.equator-fieldnotes ul {
+.equator-spectrum .equator-ode {
     margin: 0;
-    padding-left: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
 }
 
-.equator-fieldnotes li {
+.equator-belt-group {
+    margin: 26px 0;
+}
+
+.belt-group-title {
     font-family: var(--font-ui);
-    font-size: 0.95rem;
-    line-height: 1.6;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     color: var(--text-muted);
-}
-
-.equator-fieldnotes li strong {
-    color: var(--text-main);
+    margin: 0 0 12px;
 }
 
 @media (max-width: 768px) {
