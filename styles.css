@@ -1098,6 +1098,15 @@ body.shake {
     opacity: 1;
 }
 
+/* Touch devices never fire :hover, so without this the Delete button on
+   every note card stayed permanently invisible (opacity: 0) and completely
+   unreachable on mobile - there was no other way to delete a note. */
+@media (hover: none), (max-width: 768px) {
+    .note-card .note-actions {
+        opacity: 1;
+    }
+}
+
 .delete-btn {
     background: #ff3366;
     color: white;
