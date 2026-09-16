@@ -294,6 +294,10 @@ let flashInterval, flashTimeout;
 
 if (mainImage) {
     const originalSrc = 'images/simulation-scales.jpg';
+    // true while a touch-driven flash is in progress, so the synthetic
+    // mouseover/mouseout a touch tap fires ~300ms after touchend doesn't
+    // re-trigger or cut off the effect a second time
+    let touchDriven = false;
 
     function resetFlash() {
         if (flashInterval) clearInterval(flashInterval);
@@ -306,7 +310,7 @@ if (mainImage) {
         return flashImages[Math.floor(Math.random() * flashImages.length)];
     }
 
-    mainImage.addEventListener('mouseover', () => {
+    function startFlash() {
         resetFlash();
         let shouldShake = false;
         flashInterval = setInterval(() => {
@@ -316,9 +320,29 @@ if (mainImage) {
         }, 100);
 
         flashTimeout = setTimeout(resetFlash, 2000);
+    }
+
+    mainImage.addEventListener('mouseover', () => {
+        if (touchDriven) return;
+        startFlash();
     });
 
-    mainImage.addEventListener('mouseout', resetFlash);
+    mainImage.addEventListener('mouseout', () => {
+        if (touchDriven) return;
+        resetFlash();
+    });
+
+    // Touch devices never fire a real hover state, so without this the
+    // shaky randomizer effect only ever showed up by luck (a stray
+    // synthetic mouseover) instead of on an actual tap. A tap now starts
+    // the same flash/shake sequence directly.
+    mainImage.addEventListener('touchstart', (e) => {
+        touchDriven = true;
+        startFlash();
+        // let the 2s auto-reset run its course instead of preventing default,
+        // so the tap still behaves like a normal tap for anything else on the page
+        setTimeout(() => { touchDriven = false; }, 2200);
+    }, { passive: true });
 }
 
 // ==========================================
