@@ -1024,9 +1024,18 @@ function toggleHum(enable) {
     }
 }
 
+let matrixRainInterval = null;
+
 function initMatrixRain() {
     const container = document.getElementById('matrix-rain');
     if (!container) return;
+
+    // every visit to the affirmation view called this again, and the spawn
+    // interval below was never cleared - so leaving and returning to this
+    // view repeatedly left one more setInterval ticking forever in the
+    // background for the rest of the page's life, each one an independent
+    // (if individually cheap) source of extra work and churn
+    if (matrixRainInterval) clearInterval(matrixRainInterval);
 
     container.innerHTML = '';
 
@@ -1089,7 +1098,7 @@ function initMatrixRain() {
         createDrop();
     }
 
-    setInterval(() => {
+    matrixRainInterval = setInterval(() => {
         if (!document.getElementById('affirmation-view')?.classList.contains('active-view')) return;
         if (container.children.length < totalDrops + 15) {
             createDrop();
