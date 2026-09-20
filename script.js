@@ -370,6 +370,17 @@ const playlist = [
     { name: "Track 19", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/19-track.wav" },
     { name: "Track 20", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/20-track.wav" },
     { name: "Track 21", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/21-track.wav" },
+    { name: "Track 38", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/38-track.wav" },
+    { name: "Luv On Me", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/39-track.mp3" },
+    { name: "HEXAGON", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/40-track.mp3" },
+    { name: "ALOE VERA", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/41-track.mp3" },
+    { name: "CANDID", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/42-track.mp3" },
+    { name: "SANGRIA", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/43-track.mp3" },
+    { name: "Ph", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/44-track.mp3" },
+    { name: "ELENA", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/45-track.mp3" },
+    { name: "SEMICONDUCTOR", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/46-track.mp3" },
+    { name: "4am", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/47-track.mp3" },
+    { name: "underWater", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/48-track.mp3" },
     { name: "Track 22", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/22-track.mp3" },
     { name: "Track 23", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/23-track.mp3" },
     { name: "Track 24", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/24-track.mp3" },
@@ -385,18 +396,7 @@ const playlist = [
     { name: "Track 34", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/34-track.mp3" },
     { name: "Track 35", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/35-track.mp3" },
     { name: "Track 36", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/36-track.mp3" },
-    { name: "Track 37", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/37-track.mp3" },
-    { name: "Track 38", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/38-track.wav" },
-    { name: "Luv On Me", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/39-track.mp3" },
-    { name: "HEXAGON", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/40-track.mp3" },
-    { name: "ALOE VERA", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/41-track.mp3" },
-    { name: "CANDID", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/42-track.mp3" },
-    { name: "SANGRIA", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/43-track.mp3" },
-    { name: "Ph", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/44-track.mp3" },
-    { name: "ELENA", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/45-track.mp3" },
-    { name: "SEMICONDUCTOR", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/46-track.mp3" },
-    { name: "4am", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/47-track.mp3" },
-    { name: "underWater", artist: "Jacky Toussaint", album: "She", year: "2023", src: "audio/48-track.mp3" }
+    { name: "Track 37", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/37-track.mp3" }
 ];
 
 let currentTrackIndex = 0;
