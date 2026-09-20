@@ -386,7 +386,17 @@ const playlist = [
     { name: "Track 35", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/35-track.mp3" },
     { name: "Track 36", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/36-track.mp3" },
     { name: "Track 37", artist: "Jahki Magik", album: "No Sight Trust", year: "2016", src: "audio/37-track.mp3" },
-    { name: "Track 38", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/38-track.wav" }
+    { name: "Track 38", artist: "Jacky Toussaint", album: "MADE IN CHINA", year: "2024", src: "audio/38-track.wav" },
+    { name: "Luv On Me", artist: "Jacky Toussaint", album: "She", year: "2025", src: "audio/39-track.mp3" },
+    { name: "HEXAGON", artist: "Jacky Toussaint", album: "She", year: "2025", src: "audio/40-track.mp3" },
+    { name: "ALOE VERA", artist: "Jacky Toussaint", album: "She", year: "2025", src: "audio/41-track.mp3" },
+    { name: "CANDID", artist: "Jacky Toussaint", album: "She", year: "2025", src: "audio/42-track.mp3" },
+    { name: "SANGRIA", artist: "Jacky Toussaint", album: "She", year: "2025", src: "audio/43-track.mp3" },
+    { name: "Ph", artist: "Jacky Toussaint", album: "She", year: "2025", src: "audio/44-track.mp3" },
+    { name: "ELENA", artist: "Jacky Toussaint", album: "She", year: "2025", src: "audio/45-track.mp3" },
+    { name: "SEMICONDUCTOR", artist: "Jacky Toussaint", album: "She", year: "2025", src: "audio/46-track.mp3" },
+    { name: "4am", artist: "Jacky Toussaint", album: "She", year: "2025", src: "audio/47-track.mp3" },
+    { name: "underWater", artist: "Jacky Toussaint", album: "She", year: "2025", src: "audio/48-track.mp3" }
 ];
 
 let currentTrackIndex = 0;
@@ -444,6 +454,7 @@ function loadTrack(index, autoPlay = true) {
         albumArt.classList.remove('yellow-mode', 'white-mode');
         if (track.album === "MADE IN CHINA") albumArt.classList.add('yellow-mode');
         else if (track.album === "No Sight Trust") albumArt.classList.add('white-mode');
+        else if (track.album === "She") albumArt.classList.add('rose-mode');
     }
 
     if (trackInfo) trackInfo.textContent = "0:00 / 0:00";

@@ -341,6 +341,10 @@ body.shake {
     background: linear-gradient(135deg, #FFFFFF, #CCCCCC);
 }
 
+.album-art-large.rose-mode {
+    background: linear-gradient(135deg, #E8B4BC, #7A3B4E);
+}
+
 .track-details {
     text-align: center;
     margin-bottom: 30px;
