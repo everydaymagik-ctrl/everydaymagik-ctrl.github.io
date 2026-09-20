@@ -418,6 +418,12 @@ function seek(e) {
     audio.currentTime = (clickX / width) * audio.duration;
 }
 
+function updateActiveTrackRow() {
+    document.querySelectorAll('.track-row').forEach(row => {
+        row.classList.toggle('active', Number(row.dataset.index) === currentTrackIndex);
+    });
+}
+
 function loadTrack(index, autoPlay = true) {
     if (!audio) return;
     if (index < 0) index = playlist.length - 1;
@@ -425,6 +431,7 @@ function loadTrack(index, autoPlay = true) {
 
     currentTrackIndex = index;
     const track = playlist[index];
+    updateActiveTrackRow();
 
     audio.src = track.src;
     if (songTitle) songTitle.textContent = track.name;
@@ -483,13 +490,55 @@ function initializePlayer() {
     const grid = document.querySelector('.track-select-grid');
     if (grid) {
         grid.innerHTML = '';
-        playlist.forEach((_, i) => {
-            const btn = document.createElement('button');
-            btn.textContent = i + 1;
-            btn.className = 'track-number-btn';
-            btn.onclick = () => loadTrack(i, true);
-            grid.appendChild(btn);
+
+        // Group tracks by album, preserving first-appearance order,
+        // even when a track for an album appears out of sequence (e.g. a bonus track).
+        const albumOrder = [];
+        const albumMap = {};
+        playlist.forEach((track, i) => {
+            if (!albumMap[track.album]) {
+                albumMap[track.album] = [];
+                albumOrder.push(track.album);
+            }
+            albumMap[track.album].push(i);
         });
+
+        albumOrder.forEach(albumName => {
+            const indices = albumMap[albumName];
+            const firstTrack = playlist[indices[0]];
+
+            const group = document.createElement('div');
+            group.className = 'album-group';
+
+            const header = document.createElement('div');
+            header.className = 'album-group-header';
+            header.innerHTML = `
+                <span class="album-group-name">${albumName}</span>
+                <span class="album-group-meta">${firstTrack.artist} &middot; ${firstTrack.year} &middot; ${indices.length} track${indices.length === 1 ? '' : 's'}</span>
+            `;
+            group.appendChild(header);
+
+            const trackWrap = document.createElement('div');
+            trackWrap.className = 'album-group-tracks';
+
+            indices.forEach((playlistIndex, localPos) => {
+                const track = playlist[playlistIndex];
+                const btn = document.createElement('button');
+                btn.className = 'track-row';
+                btn.dataset.index = playlistIndex;
+                btn.innerHTML = `
+                    <span class="track-row-num">${String(localPos + 1).padStart(2, '0')}</span>
+                    <span class="track-row-name">${track.name}</span>
+                `;
+                btn.onclick = () => loadTrack(playlistIndex, true);
+                trackWrap.appendChild(btn);
+            });
+
+            group.appendChild(trackWrap);
+            grid.appendChild(group);
+        });
+
+        updateActiveTrackRow();
     }
 
     if (audio && playPauseBtn) {
