@@ -321,7 +321,8 @@ const flashImages = [
     'images/flash-136.jpg',
     'images/flash-137.jpg',
     'images/flash-138.jpg',
-    'images/flash-139.jpg'
+    'images/flash-139.jpg',
+    'images/flash-140.jpg'
 ];
 
 const vibeWorld = document.querySelector('.sub-title');
