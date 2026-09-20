@@ -566,7 +566,7 @@ body.shake {
    4. VIBLOG STYLES
    ========================================= */
 .viblog-wrapper {
-    max-width: 800px;
+    max-width: 720px;
     width: 100%;
     padding: 40px;
 }
@@ -575,55 +575,98 @@ body.shake {
     font-family: var(--font-display);
     font-size: 3rem;
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 4px;
     color: var(--text-main);
+}
+
+.viblog-subtitle {
+    display: block;
+    text-align: center;
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 44px;
 }
 
 #viblog-feed {
     display: flex;
     flex-direction: column;
-    gap: 30px;
 }
 
 .viblog-entry {
-    background: var(--card-bg);
-    border-radius: 20px;
-    padding: 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.entry-toggle {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    width: 100%;
+    background: transparent;
+    border: none;
     cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px 4px;
+    text-align: left;
+    font-family: inherit;
+    transition: opacity 0.2s ease;
 }
 
-.viblog-entry:hover {
-    transform: translateY(-5px);
-    border-color: rgba(108, 99, 255, 0.35);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 24px var(--accent-glow);
-}
-
-.entry-title {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    margin: 0 0 10px 0;
-    color: var(--text-main);
+.entry-toggle:hover {
+    opacity: 0.7;
 }
 
 .entry-date {
+    flex: none;
+    font-family: monospace;
+    font-size: 0.75rem;
     color: var(--text-muted);
-    font-size: 0.85rem;
-    display: block;
-    margin-bottom: 15px;
+    white-space: nowrap;
+    padding-top: 4px;
+}
+
+.entry-title {
+    flex: 1;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    color: var(--text-main);
+    line-height: 1.4;
+}
+
+.entry-chevron {
+    flex: none;
+    font-family: monospace;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    transition: transform 0.25s ease;
+}
+
+.viblog-entry.expanded .entry-chevron {
+    transform: rotate(45deg);
+}
+
+.entry-body-wrap {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+.viblog-entry.expanded .entry-body-wrap {
+    max-height: 3000px;
 }
 
 .entry-body {
     color: #ccc;
-    line-height: 1.6;
-    margin: 0 0 15px 0;
+    line-height: 1.7;
+    margin: 0 4px 16px;
 }
 
 .entry-image {
     max-width: 100%;
     border-radius: 12px;
-    margin-top: 15px;
+    margin: 0 4px 20px;
+    display: block;
 }
 
 .viblog-footer {

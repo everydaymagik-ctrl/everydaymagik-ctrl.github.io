@@ -579,15 +579,25 @@ function initializeViblog() {
                 feedContainer.innerHTML = `<div style="color: #555; margin-top: 20px;">[ No entries found in the archives. ]</div>`;
                 return;
             }
-            vlogs.forEach(vlog => {
+            // Newest first, regardless of the order entries were added to the file.
+            const sorted = [...vlogs].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            sorted.forEach((vlog, i) => {
                 const dateObj = new Date(vlog.date + "T12:00:00");
                 const dateStr = dateObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                // Supports multi-paragraph entries: blank line in the source text becomes a paragraph break.
+                const paragraphs = vlog.text.split(/\n\s*\n/).map(p => `<p class="entry-body">${escapeHtml(p.trim()).replace(/\n/g, '<br>')}</p>`).join('');
                 const entryHTML = `
-                    <div class="viblog-entry" onclick="this.classList.toggle('active')">
-                        <h2 class="entry-title">${escapeHtml(vlog.title)}</h2>
-                        <span class="entry-date">${dateStr}</span>
-                        <p class="entry-body">${escapeHtml(vlog.text)}</p>
-                        ${vlog.image ? `<img src="${vlog.image}" class="entry-image">` : ''}
+                    <div class="viblog-entry">
+                        <button class="entry-toggle" onclick="this.closest('.viblog-entry').classList.toggle('expanded')" aria-expanded="false">
+                            <span class="entry-date">${dateStr}</span>
+                            <span class="entry-title">${escapeHtml(vlog.title)}</span>
+                            <span class="entry-chevron">+</span>
+                        </button>
+                        <div class="entry-body-wrap">
+                            ${paragraphs}
+                            ${vlog.image ? `<img src="${vlog.image}" class="entry-image" loading="lazy">` : ''}
+                        </div>
                     </div>
                 `;
                 feedContainer.insertAdjacentHTML('beforeend', entryHTML);
