@@ -1663,13 +1663,23 @@ body.shake {
 }
 
 /* =========================================
-   HOME — MINIMAL SKIN (continues the entry page)
-   Scoped to #home-view; simulations keep their own looks.
+   HOME — dark editorial skin, mood-ring accents
    ========================================= */
+@property --mood-a { syntax: '<color>'; inherits: true; initial-value: #d4af37; }
+@property --mood-b { syntax: '<color>'; inherits: true; initial-value: #ff3b00; }
+
+@keyframes moodring {
+    0%, 100% { --mood-a: #d4af37; --mood-b: #ff3b00; }
+    20%      { --mood-a: #16b8a8; --mood-b: #c0c5ce; }
+    40%      { --mood-a: #1f7a5a; --mood-b: #d4af37; }
+    60%      { --mood-a: #9b2335; --mood-b: #ff3b00; }
+    80%      { --mood-a: #c0c5ce; --mood-b: #16b8a8; }
+}
+
 #home-view {
-    background: #fff;
-    color: #0a0a0a;
+    color: #fff;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    animation: fadeIn 0.5s ease, moodring 64s linear infinite;
 }
 #home-view .hero-section {
     max-width: 1200px;
@@ -1679,31 +1689,31 @@ body.shake {
 #home-view .main-title,
 #home-view .sub-title {
     font-family: inherit;
-    color: #0a0a0a;
+    color: #fff;
     font-weight: 700;
     letter-spacing: -0.045em;
     font-size: clamp(3rem, 7vw, 6rem);
     transition: color 0.2s ease;
 }
 #home-view .clock-container-left { opacity: 1; margin: 26px 0 6px; }
-#home-view #digital-clock { filter: brightness(0); max-width: 340px; height: 56px; }
+#home-view #digital-clock { filter: none; max-width: 340px; height: 56px; }
 #home-view .footer-link-container {
     margin-top: 26px;
     gap: 0;
     width: 100%;
     max-width: 420px;
-    border-top: 1px solid #0a0a0a;
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
 }
 #home-view .description {
     width: 100%;
     justify-content: space-between;
     padding: 13px 0;
-    border-bottom: 1px solid #0a0a0a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.22);
     font-family: inherit;
     font-size: 0.7rem;
     font-weight: 500;
     letter-spacing: 0.18em;
-    color: #0a0a0a;
+    color: #fff;
     text-shadow: none;
 }
 #home-view .description::after { display: none; }
@@ -1713,17 +1723,18 @@ body.shake {
     text-shadow: none;
 }
 #home-view .link-arrow {
-    opacity: 0.3;
+    opacity: 0.7;
+    color: var(--mood-a);
     transform: none;
     margin-left: 0;
     font-size: 0.9rem;
     transition: opacity 0.2s ease, transform 0.2s ease;
 }
-#home-view .description:hover .link-arrow { opacity: 1; transform: translateX(4px); }
+#home-view .description:hover .link-arrow { opacity: 1; color: #ff3b00; transform: translateX(4px); }
 #home-view .hero-image-right {
     border-radius: 0;
-    border: 1px solid #0a0a0a;
-    box-shadow: none;
+    border: 1px solid var(--mood-a);
+    box-shadow: 0 0 70px color-mix(in srgb, var(--mood-a) 28%, transparent);
     background: #111;
 }
 #home-view .hero-image-right img { opacity: 1; }
@@ -1733,13 +1744,50 @@ body.shake {
    One signal color, one typeface, crisp edges.
    ========================================= */
 :root {
+    /* palette: black / white / anunnaki gold, with moods */
+    --black: #0a0a0a;
+    --white: #ffffff;
+    --gold: #d4af37;
+    --green: #1f7a5a;
+    --silver: #c0c5ce;
+    --wine: #9b2335;
+    --teal: #16b8a8;
+    --orange: #ff3b00;
+
     --bg-dark: #0a0a0a;
+    --text-muted: #9ca0a8;
     --font-ui: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    --accent-1: #ff3b00;
-    --accent-2: #ff3b00;
-    --accent-gradient: #ff3b00;
-    --accent-glow: rgba(255, 59, 0, 0.28);
+
+    /* fallback accents for anything outside a view */
+    --accent-1: var(--gold);
+    --accent-2: var(--orange);
+    --accent-gradient: linear-gradient(135deg, #d4af37, #ff3b00);
+    --accent-glow: rgba(212, 175, 55, 0.3);
 }
+
+/* every view runs on its own mood (set --mood-a/--mood-b); accents follow */
+[id$="-view"] {
+    --accent-1: var(--mood-a);
+    --accent-2: var(--mood-b);
+    --accent-gradient: linear-gradient(135deg, var(--mood-a), var(--mood-b));
+    --accent-glow: color-mix(in srgb, var(--mood-a) 32%, transparent);
+}
+/* ambient mood glow behind each page */
+[id$="-view"].active-view {
+    background-image:
+        radial-gradient(75vw 55vh at 12% -12%, color-mix(in srgb, var(--mood-a) 22%, transparent), transparent 70%),
+        radial-gradient(65vw 55vh at 96% 112%, color-mix(in srgb, var(--mood-b) 18%, transparent), transparent 70%);
+    background-attachment: fixed;
+}
+
+#equator-view     { --mood-a: var(--orange); --mood-b: var(--gold); }
+#player-view      { --mood-a: var(--teal);   --mood-b: var(--silver); }
+#viblog-view      { --mood-a: var(--silver); --mood-b: var(--green); }
+#library-view     { --mood-a: var(--gold);   --mood-b: var(--wine); }
+#research-view    { --mood-a: var(--green);  --mood-b: var(--gold); }
+#notes-view       { --mood-a: var(--teal);   --mood-b: var(--wine); }
+#oracle-view      { --mood-a: var(--wine);   --mood-b: var(--orange); }
+#affirmation-view { --mood-a: var(--teal);   --mood-b: var(--green); }
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -1794,8 +1842,6 @@ body.shake {
 .entry-title { min-width: 0; overflow-wrap: anywhere; }
 #user-input { min-width: 0; }
 #send-btn { flex: none; padding-left: 22px; padding-right: 22px; }
-
-#affirmation-view { --accent-2: #00D9C0; }
 
 ::selection { background: #ff3b00; color: #fff; }
 
