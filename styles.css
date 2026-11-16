@@ -1661,3 +1661,162 @@ body.shake {
         font-size: 1rem;
     }
 }
+
+/* =========================================
+   HOME — MINIMAL SKIN (continues the entry page)
+   Scoped to #home-view; simulations keep their own looks.
+   ========================================= */
+#home-view {
+    background: #fff;
+    color: #0a0a0a;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+#home-view .hero-section {
+    max-width: 1200px;
+    padding: clamp(24px, 6vw, 72px);
+    gap: clamp(32px, 6vw, 96px);
+}
+#home-view .main-title,
+#home-view .sub-title {
+    font-family: inherit;
+    color: #0a0a0a;
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    font-size: clamp(3rem, 7vw, 6rem);
+    transition: color 0.2s ease;
+}
+#home-view .clock-container-left { opacity: 1; margin: 26px 0 6px; }
+#home-view #digital-clock { filter: brightness(0); max-width: 340px; height: 56px; }
+#home-view .footer-link-container {
+    margin-top: 26px;
+    gap: 0;
+    width: 100%;
+    max-width: 420px;
+    border-top: 1px solid #0a0a0a;
+}
+#home-view .description {
+    width: 100%;
+    justify-content: space-between;
+    padding: 13px 0;
+    border-bottom: 1px solid #0a0a0a;
+    font-family: inherit;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: #0a0a0a;
+    text-shadow: none;
+}
+#home-view .description::after { display: none; }
+#home-view .description:hover {
+    color: #ff3b00;
+    letter-spacing: 0.18em;
+    text-shadow: none;
+}
+#home-view .link-arrow {
+    opacity: 0.3;
+    transform: none;
+    margin-left: 0;
+    font-size: 0.9rem;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+#home-view .description:hover .link-arrow { opacity: 1; transform: translateX(4px); }
+#home-view .hero-image-right {
+    border-radius: 0;
+    border: 1px solid #0a0a0a;
+    box-shadow: none;
+    background: #111;
+}
+#home-view .hero-image-right img { opacity: 1; }
+
+/* =========================================
+   HIGH-END POLISH — whole-site finish
+   One signal color, one typeface, crisp edges.
+   ========================================= */
+:root {
+    --bg-dark: #0a0a0a;
+    --font-ui: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --accent-1: #ff3b00;
+    --accent-2: #ff3b00;
+    --accent-gradient: #ff3b00;
+    --accent-glow: rgba(255, 59, 0, 0.28);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* crisp edges instead of 12-50px bubbles */
+#music-player-container,
+.album-art-large,
+.track-select-grid::-webkit-scrollbar-thumb,
+.entry-image,
+.book-item img,
+.research-image-right img,
+.paper-item,
+/* =========================================
+   7. ORACLE STYLES
+   ========================================= */
+.oracle-container,
+.chat-history,
+.chat-message,
+#user-input,
+#send-btn,
+.gallery-art,
+.new-note-btn,
+.note-card,
+.note-card .note-image,
+.delete-btn,
+.modal-content,
+#note-content,
+.modal-image-preview img,
+.save-btn, .cancel-btn,
+.close-reader-btn,
+#pdf-frame,
+.equator-heat-banner,
+.equator-belt-list span,
+.equator-spectrum {
+    border-radius: 2px;
+}
+
+/* navigation links: quiet, no glow, no layout shift */
+.back-link:hover,
+.simulation-nav a:hover {
+    color: #ff3b00;
+    letter-spacing: 0.1em;
+    text-shadow: none;
+}
+
+.oracle-title {
+    background: none;
+    -webkit-text-fill-color: #fff;
+    color: #fff;
+}
+
+/* let flex children shrink on phones */
+.entry-title { min-width: 0; overflow-wrap: anywhere; }
+#user-input { min-width: 0; }
+#send-btn { flex: none; padding-left: 22px; padding-right: 22px; }
+
+#affirmation-view { --accent-2: #00D9C0; }
+
+::selection { background: #ff3b00; color: #fff; }
+
+@media (max-width: 1024px) {
+    #home-view .hero-section {
+        align-items: stretch;
+        padding: 40px 20px;
+        text-align: left;
+    }
+    #home-view .hero-content-left {
+        text-align: left;
+        width: 100%;
+        max-width: none;
+    }
+    #home-view .footer-link-container {
+        align-items: stretch;
+        max-width: none;
+    }
+    #home-view .hero-image-right {
+        max-width: none;
+        height: 60vw;
+        min-height: 280px;
+    }
+}
