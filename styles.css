@@ -2012,3 +2012,82 @@ body.shake {
         min-height: 280px;
     }
 }
+
+/* =========================================
+   PLAYER: shuffle / lock controls, records panel, floating sound button
+   ========================================= */
+.bottom-controls { align-items: center; }
+.control-btn.side-btn { width: 40px; height: 40px; color: var(--text-muted); }
+.control-btn.side-btn svg { width: 20px; height: 20px; }
+.control-btn.side-btn.on { color: var(--mood-a, var(--gold)); }
+#lock-btn.on { color: var(--gold); }
+
+.vault-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin: -6px auto 22px;
+}
+.vault-panel[hidden] { display: none; }
+.vault-panel label {
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+.vault-panel input {
+    width: 10.5em;
+    max-width: 80%;
+    text-align: center;
+    font: inherit;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.45em;
+    padding: 8px 0 8px 0.45em;
+    background: transparent;
+    color: #fff;
+    border: 0;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.6);
+    outline: none;
+}
+.vault-panel input::placeholder { font-size: 0.7rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); }
+.vault-panel input:focus { border-bottom-color: #ff3b00; }
+.vault-msg { min-height: 1em; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: #ff3b00; }
+.vault-panel.shake { animation: vaultShake 0.35s; }
+@keyframes vaultShake {
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+}
+
+.sound-btn {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 900;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: rgba(10, 10, 10, 0.72);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+.sound-btn[hidden] { display: none; }
+.sound-btn:hover, .sound-btn:focus-visible { color: #ff3b00; border-color: #ff3b00; outline: none; }
+.sound-btn svg { width: 20px; height: 20px; }
+.sound-btn .off { display: none; }
+.sound-btn:not(.playing) .on { display: none; }
+.sound-btn:not(.playing) .off { display: block; }
+
+@media (max-width: 480px) {
+    .bottom-controls { gap: 12px; }
+}
